@@ -1,5 +1,0 @@
-JDesrosiers\App\Foo\Foo:
-  properties:
-    fooBar:
-      type: string
-      serialized_name: bar

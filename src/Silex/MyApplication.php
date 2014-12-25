@@ -8,6 +8,7 @@ use JDesrosiers\Silex\Provider\CorsServiceProvider;
 use JDesrosiers\Silex\Provider\JmsSerializerServiceProvider;
 use Silex\Application;
 use Silex\Provider\ServiceControllerServiceProvider;
+use Silex\Provider\UrlGeneratorServiceProvider;
 
 class MyApplication extends Application
 {
@@ -16,6 +17,8 @@ class MyApplication extends Application
         parent::__construct($config);
 
         // Middleware
+        $this->register(new UrlGeneratorServiceProvider());
+
         $this->register(new JmsSerializerServiceProvider(), array(
             "serializer.cacheDir" => __DIR__ . "/../../cache",
             "serializer.namingStrategy" => "IdenticalProperty",
