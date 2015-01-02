@@ -30,9 +30,7 @@ class MyApplication extends Application
             "conneg.defaultFormat" => "json",
         ));
 
-        $this->register(new CorsServiceProvider(), array(
-            "cors.allowOrigin" => "http://jsonary.com",
-        ));
+        $this->register(new CorsServiceProvider());
 
         // Configuration.  Make sure you register ConfigServiceProvider last.
         $env = getenv("APP_ENV") ?: "prod";
