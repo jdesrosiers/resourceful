@@ -5,7 +5,9 @@
         "jdesrosiers/silex-conneg-provider": "~0.1",
         "jdesrosiers/silex-cors-provider": "~0.1",
         "jdesrosiers/silex-jms-serializer-provider": "~0.1",
-        "silex/silex": "~1.2"
+        "silex/silex": "~1.2",
+        "symfony/finder": "~2.6",
+        "symfony/filesystem": "~2.6"
     },
     "require-dev": {
         "phpunit/phpunit": "~4.3",
