@@ -30,7 +30,7 @@ class GenericControllerProviderTest extends \PHPUnit_Framework_TestCase
     public function testGet()
     {
         $foo = new \stdClass();
-        $foo->fooId = "4ee8e29d45851";
+        $foo->id = "4ee8e29d45851";
 
         $this->service->method("get")
             ->with("4ee8e29d45851")
@@ -44,7 +44,7 @@ class GenericControllerProviderTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
         $this->assertEquals("application/json; profile=/schema/foo", $response->headers->get("Content-Type"));
-        $this->assertJsonStringEqualsJsonString('{"fooId":"4ee8e29d45851"}', $response->getContent());
+        $this->assertJsonStringEqualsJsonString('{"id":"4ee8e29d45851"}', $response->getContent());
     }
 
     public function testGetNotFound()
@@ -65,7 +65,7 @@ class GenericControllerProviderTest extends \PHPUnit_Framework_TestCase
     public function testQuery()
     {
         $foo = new \stdClass();
-        $foo->fooId = "4ee8e29d45851";
+        $foo->id = "4ee8e29d45851";
 
         $query = array($foo);
 
@@ -90,11 +90,11 @@ class GenericControllerProviderTest extends \PHPUnit_Framework_TestCase
     public function testCreate()
     {
         $foo = new \stdClass();
-        $foo->fooId = "4ee8e29d45851";
+        $foo->id = "4ee8e29d45851";
 
-        $this->app["genericService.uniqid"] = $foo->fooId;
+        $this->app["genericService.uniqid"] = $foo->id;
         $this->service->method("put")
-            ->with($foo->fooId, $foo)
+            ->with($foo->id, $foo)
             ->willReturn(GenericService::CREATED);
 
         $headers = array(
@@ -106,7 +106,7 @@ class GenericControllerProviderTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(Response::HTTP_CREATED, $response->getStatusCode());
         $this->assertEquals("application/json; profile=/schema/foo", $response->headers->get("Content-Type"));
-        $this->assertEquals("/foo/$foo->fooId", $response->headers->get("Location"));
-        $this->assertJsonStringEqualsJsonString("{\"fooId\":\"$foo->fooId\"}", $response->getContent());
+        $this->assertEquals("/foo/$foo->id", $response->headers->get("Location"));
+        $this->assertJsonStringEqualsJsonString("{\"id\":\"$foo->id\"}", $response->getContent());
     }
 }

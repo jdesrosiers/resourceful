@@ -68,7 +68,7 @@ class GenericControllerProvider implements ControllerProviderInterface
     {
         $object = json_decode($request->getContent());
         $id = $this->app["genericService.uniqid"];
-        $object->{$this->type . "Id"} = $id;
+        $object->id = $id;
 
         return $this->write($id, $object);
     }
