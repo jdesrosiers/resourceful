@@ -6,6 +6,7 @@ use Igorw\Silex\ConfigServiceProvider;
 use JDesrosiers\Silex\Generic\GenericServiceProvider;
 use JDesrosiers\Silex\Provider\ContentNegotiationServiceProvider;
 use JDesrosiers\Silex\Provider\CorsServiceProvider;
+use JDesrosiers\Silex\Schema\JsonSchemaServiceProvider;
 use Silex\Application;
 use Silex\Provider\UrlGeneratorServiceProvider;
 
@@ -19,7 +20,10 @@ class MyApplication extends Application
         $this->register(new UrlGeneratorServiceProvider());
         $this->register(new ContentNegotiationServiceProvider());
         $this->register(new CorsServiceProvider());
+
+        // App specific
         $this->register(new GenericServiceProvider());
+        $this->register(new JsonSchemaServiceProvider());
 
         // Configuration.  Make sure you register ConfigServiceProvider last.
         $env = getenv("APP_ENV") ?: "prod";

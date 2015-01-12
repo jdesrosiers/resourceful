@@ -1,13 +1,14 @@
 <?php
 
-namespace JDesrosiers\Silex\Generic;
+namespace JDesrosiers\Silex\Generic\Test;
 
 use JDesrosiers\App\Service\GenericService;
+use JDesrosiers\Silex\Generic\GenericControllerProvider;
 use JDesrosiers\Silex\MyApplication;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Client;
 
-require __DIR__ . "/../../../vendor/autoload.php";
+require __DIR__ . "/../../../../vendor/autoload.php";
 
 class GenericControllerProviderTest extends \PHPUnit_Framework_TestCase
 {
@@ -19,6 +20,7 @@ class GenericControllerProviderTest extends \PHPUnit_Framework_TestCase
     {
         $this->app = new MyApplication();
         $this->app["debug"] = true;
+        $this->app["schemaPath"] = __DIR__ . "/.";
 
         $this->service = $this->getMock("JDesrosiers\App\Service\GenericService");
 
@@ -108,5 +110,17 @@ class GenericControllerProviderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals("application/json; profile=/schema/foo", $response->headers->get("Content-Type"));
         $this->assertEquals("/foo/$foo->id", $response->headers->get("Location"));
         $this->assertJsonStringEqualsJsonString("{\"id\":\"$foo->id\"}", $response->getContent());
+    }
+
+    public function testBadCreateRequest()
+    {
+        $headers = array(
+            "HTTP_ACCEPT" => "application/json",
+            "CONTENT_TYPE" => "application/json"
+        );
+        $this->client->request("POST", "/foo/", array(), array(), $headers, '{"illegalField":"illegal"}');
+        $response = $this->client->getResponse();
+
+        $this->assertEquals(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
     }
 }

@@ -7,11 +7,11 @@ use Silex\Application;
 use Silex\ControllerProviderInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class GenericControllerProvider implements ControllerProviderInterface
 {
-    private $app;
     private $type;
     private $service;
 
@@ -23,9 +23,7 @@ class GenericControllerProvider implements ControllerProviderInterface
 
     public function connect(Application $app)
     {
-        $this->app = $app;
-
-        $controller = $this->app["controllers_factory"];
+        $controller = $app["controllers_factory"];
 
         $controller->get("/", array($this, "query"));
         $controller->get("/{id}", array($this, "get"))->bind($this->type);
@@ -33,23 +31,32 @@ class GenericControllerProvider implements ControllerProviderInterface
         $controller->put("/{id}", array($this, "put"));
         $controller->delete("/{id}", array($this, "delete"));
 
+        $app["schema-store"]->add(
+            "/schema/$this->type",
+            json_decode(file_get_contents("{$app["schemaPath"]}/$this->type.json"))
+        );
+        $app["schema-store"]->add(
+            "/schema/{$this->type}Collection",
+            json_decode(file_get_contents("{$app["schemaPath"]}/{$this->type}Collection.json"))
+        );
+
         return $controller;
     }
 
-    public function query()
+    public function query(Application $app)
     {
         $collection = array(
             "collection" => array_values($this->service->query()),
         );
 
-        return $this->app->json(
+        return $app->json(
             $collection,
             Response::HTTP_OK,
             array("Content-Type" => "application/json; profile=/schema/{$this->type}Collection")
       );
     }
 
-    public function get($id)
+    public function get(Application $app, $id)
     {
         $resource = $this->service->get($id);
 
@@ -57,40 +64,45 @@ class GenericControllerProvider implements ControllerProviderInterface
             throw new NotFoundHttpException();
         }
 
-        return $this->app->json(
+        return $app->json(
             $resource,
             Response::HTTP_OK,
             array("Content-Type" => "application/json; profile=/schema/$this->type")
         );
     }
 
-    public function create(Request $request)
+    public function create(Application $app, Request $request)
     {
-        $object = json_decode($request->getContent());
-        $id = $this->app["genericService.uniqid"];
-        $object->id = $id;
+        $data = json_decode($request->getContent());
+        $id = $app["genericService.uniqid"];
+        $data->id = $id;
 
-        return $this->write($id, $object);
+        return $this->write($app, $id, $data);
     }
 
-    public function put(Request $request, $id)
+    public function put(Application $app, Request $request, $id)
     {
-        return $this->write($id, json_decode($request->getContent()));
+        return $this->write($app, $id, json_decode($request->getContent()));
     }
 
-    private function write($id, $object)
+    private function write(Application $app, $id, $data)
     {
-        $result = $this->service->put($id, $object);
+        $validation = $app["validator"]->validate($data, $app["schema-store"]->get("/schema/$this->type"));
+        if (!$validation->valid) {
+            throw new BadRequestHttpException(json_encode($validation->errors));
+        }
 
-        $response = $this->app->json(
-            $object,
+        $result = $this->service->put($id, $data);
+
+        $response = $app->json(
+            $data,
             Response::HTTP_OK,
             array("Content-Type" => "application/json; profile=/schema/$this->type")
         );
 
         if ($result === GenericService::CREATED) {
             $response->setStatusCode(Response::HTTP_CREATED);
-            $response->headers->set("Location", $this->app["url_generator"]->generate($this->type, array("id" => $id)));
+            $response->headers->set("Location", $app["url_generator"]->generate($this->type, array("id" => $id)));
         }
 
         return $response;

@@ -1,13 +1,15 @@
 <?php
 
+namespace JDesrosiers\App\Service\Test;
+
 use JDesrosiers\App\Service\FileService;
 use JDesrosiers\App\Service\GenericService;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 
-require __DIR__ . "/../../../vendor/autoload.php";
+require __DIR__ . "/../../../../vendor/autoload.php";
 
-class FileServiceTest extends PHPUnit_Framework_TestCase
+class FileServiceTest extends \PHPUnit_Framework_TestCase
 {
     private $service;
     private $testDir;

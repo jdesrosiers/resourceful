@@ -1,0 +1,23 @@
+{
+    "$schema": "http://json-schema.org/draft-04/hyper-schema#",
+    "title": "Foo Collection",
+    "type": "object",
+    "properties": {
+        "collection": {
+            "type": "array",
+            "items": {
+                "$ref": "/schema/foo"
+            }
+        }
+    },
+    "links": [
+        {
+            "rel": "create",
+            "method": "POST",
+            "href": "/foo/",
+            "schema": {
+                "$ref": "/schema/foo"
+            }
+        }
+    ]
+}

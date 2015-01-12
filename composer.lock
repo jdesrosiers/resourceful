@@ -4,8 +4,51 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "ac7f0f7241a4b12408206323ded064a2",
+    "hash": "81e9994db6561ea4ddc78e46f9d9848d",
     "packages": [
+        {
+            "name": "geraintluff/jsv4",
+            "version": "v1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/geraintluff/jsv4-php.git",
+                "reference": "1d4306d39030aa288979d6822070777e4034722e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/geraintluff/jsv4-php/zipball/1d4306d39030aa288979d6822070777e4034722e",
+                "reference": "1d4306d39030aa288979d6822070777e4034722e",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "jsv4.php",
+                    "schema-store.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Geraint Luff",
+                    "email": "luffgd@gmail.com"
+                }
+            ],
+            "description": "A (coercive) JSON Schema v4 Validator for PHP",
+            "keywords": [
+                "Geraint Luff",
+                "JSON Schema",
+                "geraintluff",
+                "json",
+                "schema",
+                "v4",
+                "validator"
+            ],
+            "time": "2014-10-07 13:36:26"
+        },
         {
             "name": "igorw/config-service-provider",
             "version": "v1.2.2",
