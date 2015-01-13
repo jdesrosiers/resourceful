@@ -2,7 +2,6 @@
     "name": "jdesrosiers/silex",
     "require": {
         "geraintluff/jsv4": "~1.0",
-        "igorw/config-service-provider": "~1.2",
         "jdesrosiers/silex-conneg-provider": "~0.1",
         "jdesrosiers/silex-cors-provider": "~0.1",
         "silex/silex": "~1.2",
