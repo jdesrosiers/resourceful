@@ -14,6 +14,7 @@ class IndexControllerProvider implements ControllerProviderInterface
 
         $controller->get("/", array($this, "get"));
 
+        $app["schema-store"]->add("/schema/framework-index", json_decode(file_get_contents(__DIR__ . "/index.json")));
         $app["schema-store"]->add("/schema/index", json_decode(file_get_contents("{$app["schemaPath"]}/index.json")));
 
         return $controller;
@@ -22,8 +23,8 @@ class IndexControllerProvider implements ControllerProviderInterface
     public function get(Application $app)
     {
         $index = array(
-            "title" => "My API",
-            "description" => "Some stuff",
+            "title" => $app["api.title"],
+            "description" => $app["api.description"],
         );
 
         return $app->json(

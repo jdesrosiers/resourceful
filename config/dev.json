@@ -5,5 +5,7 @@
     "conneg.requestFormats": ["json"],
     "conneg.defaultFormat": "json",
     "cors.allowOrigin": "http://jsonary.com",
-    "genericService.location": "%rootPath%/data"
+    "genericService.location": "%rootPath%/data",
+    "api.title": "My API",
+    "api.description": "This is my fantastic API"
 }
