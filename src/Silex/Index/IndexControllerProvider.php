@@ -23,8 +23,8 @@ class IndexControllerProvider implements ControllerProviderInterface
     public function get(Application $app)
     {
         $index = array(
-            "title" => $app["api.title"],
-            "description" => $app["api.description"],
+            "title" => $app["index.title"],
+            "description" => $app["index.description"],
         );
 
         return $app->json(

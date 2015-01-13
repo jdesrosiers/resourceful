@@ -17,7 +17,7 @@ class GenericServiceProvider implements ServiceProviderInterface
         };
 
         $app["genericService.file"] = $app->protect(function ($namespace) use ($app) {
-            return new FileService(new Filesystem(), new Finder(), "{$app["genericService.location"]}/$namespace");
+            return new FileService(new Filesystem(), new Finder(), "{$app["genericService.storagePath"]}/$namespace");
         });
     }
 
