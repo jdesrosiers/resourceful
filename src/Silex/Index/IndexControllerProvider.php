@@ -14,7 +14,10 @@ class IndexControllerProvider implements ControllerProviderInterface
 
         $controller->get("/", array($this, "get"));
 
-        $app["schema-store"]->add("/schema/framework-index", json_decode(file_get_contents(__DIR__ . "/index.json")));
+        if (!$app["schemaService"]->has("index")) {
+            $app["schemaService"]->put("index", json_decode(file_get_contents(__DIR__ . "/index.json")));
+        }
+
         $app["schema-store"]->add("/schema/index", $app["schemaService"]->get("index"));
 
         return $controller;

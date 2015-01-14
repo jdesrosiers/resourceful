@@ -45,9 +45,14 @@ class FileService implements GenericService
         return null;
     }
 
+    public function has($id)
+    {
+        return $this->filesystem->exists("$this->location/$id.json");
+    }
+
     public function put($id, $object)
     {
-        $exists = $this->filesystem->exists("$this->location/$id.json");
+        $exists = $this->has($id);
         $this->filesystem->dumpFile("$this->location/$id.json", json_encode($object));
 
         return $exists ? self::UPDATED : self::CREATED;
@@ -55,7 +60,7 @@ class FileService implements GenericService
 
     public function delete($id)
     {
-        if ($this->filesystem->exists("$this->location/$id.json")) {
+        if ($this->has($id)) {
             unlink("$this->location/$id.json");
             return self::DELETED;
         } else {

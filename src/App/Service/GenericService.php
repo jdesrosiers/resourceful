@@ -13,6 +13,7 @@ interface GenericService
 
     function query();
     function get($id);
+    function has($id);
     function put($id, $object);
     function delete($id);
 }
