@@ -5,8 +5,6 @@ namespace JDesrosiers\Silex\Generic;
 use JDesrosiers\App\Service\FileService;
 use Silex\Application;
 use Silex\ServiceProviderInterface;
-use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Finder\Finder;
 
 class GenericServiceProvider implements ServiceProviderInterface
 {
@@ -16,8 +14,9 @@ class GenericServiceProvider implements ServiceProviderInterface
             return uniqid();
         };
 
-        $app["genericService.file"] = $app->protect(function ($namespace) use ($app) {
-            return new FileService(new Filesystem(), new Finder(), "{$app["genericService.storagePath"]}/$namespace");
+        $app["genericService.file"] = $app->protect(function ($namespace, $storagePath = null) use ($app) {
+            $storagePath = $storagePath ?: $app["genericService.storagePath"];
+            return new FileService("$storagePath/$namespace");
         });
     }
 

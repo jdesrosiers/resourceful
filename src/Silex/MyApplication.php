@@ -29,7 +29,10 @@ class MyApplication extends Application
         $this->register(new GenericServiceProvider());
         $this->register(new JsonSchemaServiceProvider());
 
-        // Add standard controllers
+        // Serving Schemas
+        $this["schemaService"] = $this->share(function (Application $app) {
+            return $this["genericService.file"]("schema", $app["rootPath"]);
+        });
         $this->mount("/schema", new SchemaControllerProvider());
 
         // Initialize CORS support

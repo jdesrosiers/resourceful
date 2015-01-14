@@ -5,7 +5,6 @@ namespace JDesrosiers\App\Service\Test;
 use JDesrosiers\App\Service\FileService;
 use JDesrosiers\App\Service\GenericService;
 use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Finder\Finder;
 
 require __DIR__ . "/../../../../vendor/autoload.php";
 
@@ -23,7 +22,7 @@ class FileServiceTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->cleanUp();
-        $this->service = new FileService(new Filesystem(), new Finder(), $this->testDir);
+        $this->service = new FileService($this->testDir);
     }
 
     public function tearDown()

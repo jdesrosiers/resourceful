@@ -20,7 +20,7 @@ class GenericControllerProviderTest extends \PHPUnit_Framework_TestCase
     {
         $this->app = new MyApplication();
         $this->app["debug"] = true;
-        $this->app["schemaPath"] = __DIR__ . "/schema";
+        $this->app["rootPath"] = __DIR__;
 
         $this->service = $this->getMock("JDesrosiers\App\Service\GenericService");
 

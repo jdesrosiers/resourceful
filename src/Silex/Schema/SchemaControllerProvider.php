@@ -22,15 +22,11 @@ class SchemaControllerProvider implements ControllerProviderInterface
 
     public function get(Application $app, $path)
     {
-        $schema = $app["schema-store"]->get("/schema/$path");
+        $schema = $app["schemaService"]->get($path);
         if ($schema === null) {
             throw new NotFoundHttpException();
         }
 
-        return $app->json(
-            $schema,
-            Response::HTTP_OK,
-            array("Content-Type" => "application/schema+json")
-        );
+        return $app->json($schema, Response::HTTP_OK, array("Content-Type" => "application/schema+json"));
     }
 }

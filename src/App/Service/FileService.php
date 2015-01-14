@@ -8,13 +8,11 @@ use Symfony\Component\Finder\Finder;
 class FileService implements GenericService
 {
     private $filesystem;
-    private $finder;
     private $location;
 
-    public function __construct(Filesystem $filesystem, Finder $finder, $location)
+    public function __construct($location)
     {
-        $this->filesystem = $filesystem;
-        $this->finder = $finder;
+        $this->filesystem = new Filesystem();
         $this->location = $location;
 
         if (!$this->filesystem->exists($this->location)) {
@@ -26,9 +24,10 @@ class FileService implements GenericService
     {
         $objects = array();
 
-        $this->finder->files()->in($this->location);
+        $finder = new Finder();
+        $finder->files()->in($this->location);
 
-        foreach ($this->finder as $file) {
+        foreach ($finder as $file) {
             $objects[] = json_decode($file->getContents());
         }
 
@@ -37,8 +36,9 @@ class FileService implements GenericService
 
     public function get($id)
     {
-        $this->finder->files()->in($this->location)->name("$id.json");
-        foreach ($this->finder as $file) {
+        $finder = new Finder();
+        $finder->files()->in($this->location)->name("$id.json");
+        foreach ($finder as $file) {
             return json_decode($file->getContents());
         }
 

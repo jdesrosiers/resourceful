@@ -31,13 +31,10 @@ class GenericControllerProvider implements ControllerProviderInterface
         $controller->put("/{id}", array($this, "put"));
         $controller->delete("/{id}", array($this, "delete"));
 
-        $app["schema-store"]->add(
-            "/schema/$this->type",
-            json_decode(file_get_contents("{$app["schemaPath"]}/$this->type.json"))
-        );
+        $app["schema-store"]->add("/schema/$this->type", $app["schemaService"]->get($this->type));
         $app["schema-store"]->add(
             "/schema/{$this->type}Collection",
-            json_decode(file_get_contents("{$app["schemaPath"]}/{$this->type}Collection.json"))
+            $app["schemaService"]->get("{$this->type}Collection")
         );
 
         return $controller;
