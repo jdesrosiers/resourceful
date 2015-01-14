@@ -1,0 +1,30 @@
+{
+    "$schema": "http://json-schema.org/draft-04/hyper-schema#",
+    "title": "%Generic%",
+    "type": "object",
+    "properties": {
+        "id": {
+            "type": "string",
+            "readOnly": true,
+            "links": [
+                {
+                    "rel": "self",
+                    "href": "/%generic%/{$}"
+                }
+            ]
+        }
+    },
+    "required": [],
+    "links": [
+        {
+            "rel": "delete",
+            "method": "DELETE",
+            "href": "/%generic%/{id}"
+        },
+        {
+            "rel": "put",
+            "method": "PUT",
+            "href": "/%generic%/{id}"
+        }
+    ]
+}

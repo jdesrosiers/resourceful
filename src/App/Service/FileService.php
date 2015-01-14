@@ -53,7 +53,8 @@ class FileService implements GenericService
     public function put($id, $object)
     {
         $exists = $this->has($id);
-        $this->filesystem->dumpFile("$this->location/$id.json", json_encode($object));
+        $json = json_encode($object, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+        $this->filesystem->dumpFile("$this->location/$id.json", $json);
 
         return $exists ? self::UPDATED : self::CREATED;
     }
