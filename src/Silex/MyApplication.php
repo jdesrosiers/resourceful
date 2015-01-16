@@ -31,7 +31,7 @@ class MyApplication extends Application
 
         // Serving Schemas
         $this["schemaService"] = $this->share(function (Application $app) {
-            return $this["genericService.file"]("schema", $app["rootPath"]);
+            return $app["genericService.file"]("schema", $app["rootPath"]);
         });
         $this->mount("/schema", new SchemaControllerProvider());
 
