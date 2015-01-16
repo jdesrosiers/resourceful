@@ -31,31 +31,24 @@ class GenericControllerProvider implements ControllerProviderInterface
         $controller->put("/{id}", array($this, "put"));
         $controller->delete("/{id}", array($this, "delete"));
 
+        $replacements = array(
+            "%generic%" => $this->type,
+            "%Generic%" => ucfirst($this->type),
+        );
+
         if (!$app["schemaService"]->has($this->type)) {
-            $this->generateSchema($app["schemaService"], $this->type, "generic");
+            $app["generateSchema"]($this->type, __DIR__ . "/generic.json", $replacements);
         }
         $app["schema-store"]->add("/schema/$this->type", $app["schemaService"]->get($this->type));
 
         if (!$app["schemaService"]->has("{$this->type}Collection")) {
-            $this->generateSchema($app["schemaService"], "{$this->type}Collection", "genericCollection");
+            $app["generateSchema"]("{$this->type}Collection", __DIR__ . "/genericCollection.json", $replacements);
         }
         $app["schema-store"]->add(
-            "/schema/{$this->type}Collection",
-            $app["schemaService"]->get("{$this->type}Collection")
+            "/schema/{$this->type}Collection", $app["schemaService"]->get("{$this->type}Collection")
         );
 
         return $controller;
-    }
-
-    private function generateSchema($schemaService, $schema, $template)
-    {
-        $genericSchemaJson = str_replace(
-                array("%generic%", "%Generic%"),
-                array($this->type, ucfirst($this->type)),
-                file_get_contents(__DIR__ . "/$template.json")
-            );
-
-        $schemaService->put($schema, json_decode($genericSchemaJson));
     }
 
     public function query(Application $app)
@@ -68,7 +61,7 @@ class GenericControllerProvider implements ControllerProviderInterface
             $collection,
             Response::HTTP_OK,
             array("Content-Type" => "application/json; profile=/schema/{$this->type}Collection")
-      );
+        );
     }
 
     public function get(Application $app, $id)

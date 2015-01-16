@@ -7,6 +7,7 @@ use JDesrosiers\Silex\Provider\ContentNegotiationServiceProvider;
 use JDesrosiers\Silex\Provider\CorsServiceProvider;
 use JDesrosiers\Silex\Schema\JsonSchemaServiceProvider;
 use JDesrosiers\Silex\Schema\SchemaControllerProvider;
+use JDesrosiers\Silex\Schema\SchemaGeneratorProvider;
 use Silex\Application;
 use Silex\Provider\UrlGeneratorServiceProvider;
 
@@ -27,6 +28,7 @@ class MyApplication extends Application
 
         // App specific
         $this->register(new GenericServiceProvider());
+        $this->register(new SchemaGeneratorProvider());
         $this->register(new JsonSchemaServiceProvider());
 
         // Serving Schemas
