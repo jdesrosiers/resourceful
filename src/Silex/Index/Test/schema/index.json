@@ -1,0 +1,13 @@
+{
+    "$schema": "http://json-schema.org/draft-04/hyper-schema#",
+    "title": "Index",
+    "type": "object",
+    "properties": {
+        "title": {
+            "type": "string"
+        },
+        "description": {
+            "type": "string"
+        }
+    }
+}

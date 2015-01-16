@@ -123,4 +123,39 @@ class GenericControllerProviderTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
     }
+
+    public function testPut()
+    {
+        $foo = new \stdClass();
+        $foo->id = "4ee8e29d45851";
+
+        $this->app["genericService.uniqid"] = $foo->id;
+        $this->service->method("put")
+            ->with($foo->id, $foo)
+            ->willReturn(GenericService::CREATED);
+
+        $headers = array(
+            "HTTP_ACCEPT" => "application/json",
+            "CONTENT_TYPE" => "application/json"
+        );
+        $this->client->request("PUT", "/foo/$foo->id", array(), array(), $headers, "{\"id\":\"$foo->id\"}");
+        $response = $this->client->getResponse();
+
+        $this->assertEquals(Response::HTTP_CREATED, $response->getStatusCode());
+        $this->assertEquals("application/json; profile=/schema/foo", $response->headers->get("Content-Type"));
+        $this->assertEquals("/foo/$foo->id", $response->headers->get("Location"));
+        $this->assertJsonStringEqualsJsonString("{\"id\":\"$foo->id\"}", $response->getContent());
+    }
+
+    public function testDelete()
+    {
+        $headers = array(
+            "HTTP_ACCEPT" => "application/json",
+        );
+        $this->client->request("DELETE", "/foo/4ee8e29d45851", array(), array(), $headers);
+        $response = $this->client->getResponse();
+
+        $this->assertEquals(Response::HTTP_NO_CONTENT, $response->getStatusCode());
+        $this->assertEquals("", $response->getContent());
+    }
 }

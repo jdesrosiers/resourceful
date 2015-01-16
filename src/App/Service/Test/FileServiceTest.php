@@ -13,14 +13,10 @@ class FileServiceTest extends \PHPUnit_Framework_TestCase
     private $service;
     private $testDir;
 
-    public function __construct($name = null, array $data = array(), $dataName = '')
-    {
-        parent::__construct($name, $data, $dataName);
-        $this->testDir = __DIR__ . "/test";
-    }
-
     public function setUp()
     {
+        $this->testDir = __DIR__ . "/test";
+
         $this->cleanUp();
         $this->service = new FileService($this->testDir);
     }
@@ -66,6 +62,24 @@ class FileServiceTest extends \PHPUnit_Framework_TestCase
         $this->service->put($id, "bar");
 
         $this->assertEquals("bar", $this->service->get($id));
+    }
+
+    public function testRetrieveNonexistentObject()
+    {
+        $this->assertEquals(null, $this->service->get("non-existent-id"));
+    }
+
+    public function testQueryEmpty()
+    {
+        $this->assertEquals(array(), $this->service->query());
+    }
+
+    public function testQueryNonEmpty()
+    {
+        $id = uniqid();
+        $this->service->put($id, "foo");
+
+        $this->assertEquals(array("foo"), $this->service->query());
     }
 
     public function testDeleteObject()
