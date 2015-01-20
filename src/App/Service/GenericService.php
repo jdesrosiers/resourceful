@@ -11,7 +11,6 @@ interface GenericService
     const DELETED = 1;
     const NO_SUCH_ITEM = 2;
 
-    function query();
     function get($id);
     function has($id);
     function put($id, $object);

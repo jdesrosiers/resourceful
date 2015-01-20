@@ -20,20 +20,6 @@ class FileService implements GenericService
         }
     }
 
-    public function query()
-    {
-        $objects = array();
-
-        $finder = new Finder();
-        $finder->files()->in($this->location);
-
-        foreach ($finder as $file) {
-            $objects[] = json_decode($file->getContents());
-        }
-
-        return $objects;
-    }
-
     public function get($id)
     {
         $finder = new Finder();

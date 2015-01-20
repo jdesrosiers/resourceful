@@ -69,19 +69,6 @@ class FileServiceTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(null, $this->service->get("non-existent-id"));
     }
 
-    public function testQueryEmpty()
-    {
-        $this->assertEquals(array(), $this->service->query());
-    }
-
-    public function testQueryNonEmpty()
-    {
-        $id = uniqid();
-        $this->service->put($id, "foo");
-
-        $this->assertEquals(array("foo"), $this->service->query());
-    }
-
     public function testDeleteObject()
     {
         $id = uniqid();

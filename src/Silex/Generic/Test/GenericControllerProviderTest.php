@@ -64,31 +64,6 @@ class GenericControllerProviderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(Response::HTTP_NOT_FOUND, $response->getStatusCode());
     }
 
-    public function testQuery()
-    {
-        $foo = new \stdClass();
-        $foo->id = "4ee8e29d45851";
-
-        $query = array($foo);
-
-        $collection = array(
-            "collection" => $query,
-        );
-
-        $this->service->method("query")
-            ->willReturn($query);
-
-        $headers = array(
-            "HTTP_ACCEPT" => "application/json",
-        );
-        $this->client->request("GET", "/foo/", array(), array(), $headers);
-        $response = $this->client->getResponse();
-
-        $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
-        $this->assertEquals("application/json; profile=/schema/fooCollection", $response->headers->get("Content-Type"));
-        $this->assertJsonStringEqualsJsonString(json_encode($collection), $response->getContent());
-    }
-
     public function testCreate()
     {
         $foo = new \stdClass();
