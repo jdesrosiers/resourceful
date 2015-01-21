@@ -4,6 +4,7 @@ namespace JDesrosiers\Silex\Index;
 
 use Silex\Application;
 use Silex\ControllerProviderInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class IndexControllerProvider implements ControllerProviderInterface
@@ -14,10 +15,13 @@ class IndexControllerProvider implements ControllerProviderInterface
 
         $controller->get("/", array($this, "get"));
 
-        if (!$app["schemaService"]->has("index")) {
-            $app["generateSchema"]("index", __DIR__ . "/index.json");
-        }
-        $app["schema-store"]->add("/schema/index", $app["schemaService"]->get("index"));
+        $app->before(function (Request $request, Application $app) {
+            if (!$app["schemaService"]->has("index")) {
+                $app["generateSchema"]("index", __DIR__ . "/index.json");
+            }
+
+            $app["schema-store"]->add("/schema/index", $app["schemaService"]->get("index"));
+        });
 
         return $controller;
     }

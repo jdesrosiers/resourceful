@@ -3,6 +3,7 @@
 namespace JDesrosiers\Silex;
 
 use JDesrosiers\Silex\Generic\GenericServiceProvider;
+use JDesrosiers\Silex\Index\IndexControllerProvider;
 use JDesrosiers\Silex\Provider\ContentNegotiationServiceProvider;
 use JDesrosiers\Silex\Provider\CorsServiceProvider;
 use JDesrosiers\Silex\Schema\JsonSchemaServiceProvider;
@@ -31,11 +32,12 @@ class MyApplication extends Application
         $this->register(new SchemaGeneratorProvider());
         $this->register(new JsonSchemaServiceProvider());
 
-        // Serving Schemas
+        // Supporting Controllers
         $this["schemaService"] = $this->share(function (Application $app) {
             return $app["genericService.file"]("schema", $app["rootPath"]);
         });
         $this->mount("/schema", new SchemaControllerProvider());
+        $this->mount("/", new IndexControllerProvider());
 
         // Initialize CORS support
         $this->after($this["cors"]);

@@ -23,11 +23,8 @@ class SchemaControllerProviderTest extends \PHPUnit_Framework_TestCase
 
     public function testGet()
     {
-        $fooSchema = new \stdClass();
-
         $this->app["schemaService"]->method("get")
-            ->with("foo")
-            ->willReturn($fooSchema);
+            ->willReturn(new \stdClass());
 
         $headers = array(
             "HTTP_ACCEPT" => "application/json",
@@ -43,7 +40,6 @@ class SchemaControllerProviderTest extends \PHPUnit_Framework_TestCase
     public function testGetNotFound()
     {
         $this->app["schemaService"]->method("get")
-            ->with("foo")
             ->willReturn(null);
 
         $headers = array(

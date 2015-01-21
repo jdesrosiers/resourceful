@@ -31,15 +31,17 @@ class GenericControllerProvider implements ControllerProviderInterface
         $controller->put("/{id}", array($this, "put"));
         $controller->delete("/{id}", array($this, "delete"));
 
-        $replacements = array(
-            "%generic%" => $this->type,
-            "%Generic%" => ucfirst($this->type),
-        );
+        $app->before(function (Request $request, Application $app) {
+            if (!$app["schemaService"]->has($this->type)) {
+                $replacements = array(
+                    "%generic%" => $this->type,
+                    "%Generic%" => ucfirst($this->type),
+                );
+                $app["generateSchema"]($this->type, __DIR__ . "/generic.json", $replacements);
+            }
 
-        if (!$app["schemaService"]->has($this->type)) {
-            $app["generateSchema"]($this->type, __DIR__ . "/generic.json", $replacements);
-        }
-        $app["schema-store"]->add("/schema/$this->type", $app["schemaService"]->get($this->type));
+            $app["schema-store"]->add("/schema/$this->type", $app["schemaService"]->get($this->type));
+        });
 
         return $controller;
     }
