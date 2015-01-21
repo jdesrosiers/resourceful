@@ -15,14 +15,14 @@ class SchemaGeneratorProvider implements ServiceProviderInterface
     public function register(Application $app)
     {
         $app["generateSchema"] = $app->protect(
-            function ($schema, $template, array $replacements = array()) use ($app) {
+            function ($template, array $replacements = array()) {
                 $genericSchemaJson = str_replace(
                     array_keys($replacements),
                     array_values($replacements),
                     file_get_contents($template)
                 );
 
-                $app["schemaService"]->put($schema, json_decode($genericSchemaJson));
+                return json_decode($genericSchemaJson);
             }
         );
     }

@@ -32,15 +32,19 @@ class GenericControllerProvider implements ControllerProviderInterface
         $controller->delete("/{id}", array($this, "delete"));
 
         $app->before(function (Request $request, Application $app) {
-            if (!$app["schemaService"]->has($this->type)) {
+            list($status, $schema) = $app["schemaService"]->get($this->type);
+
+            if ($status === GenericService::NOT_FOUND) {
                 $replacements = array(
                     "%generic%" => $this->type,
                     "%Generic%" => ucfirst($this->type),
                 );
-                $app["generateSchema"]($this->type, __DIR__ . "/generic.json", $replacements);
+                $schema = $app["generateSchema"](__DIR__ . "/generic.json", $replacements);
+
+                $app["schemaService"]->put($this->type, $schema);
             }
 
-            $app["schema-store"]->add("/schema/$this->type", $app["schemaService"]->get($this->type));
+            $app["schema-store"]->add("/schema/$this->type", $schema);
         });
 
         return $controller;
@@ -48,9 +52,9 @@ class GenericControllerProvider implements ControllerProviderInterface
 
     public function get(Application $app, $id)
     {
-        $resource = $this->service->get($id);
+        list($status, $resource) = $this->service->get($id);
 
-        if ($resource === null) {
+        if ($status === GenericService::NOT_FOUND) {
             throw new NotFoundHttpException();
         }
 

@@ -4,12 +4,9 @@ namespace JDesrosiers\App\Service;
 
 interface GenericService
 {
-    const FAILURE = -1;
-    const SUCCESS = 0;
-    const CREATED = 1;
-    const UPDATED = 2;
-    const DELETED = 1;
-    const NO_SUCH_ITEM = 2;
+    const OK = 200;
+    const CREATED = 201;
+    const NOT_FOUND = 404;
 
     function get($id);
     function has($id);

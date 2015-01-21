@@ -36,7 +36,7 @@ class GenericControllerProviderTest extends \PHPUnit_Framework_TestCase
 
         $this->service->method("get")
             ->with("4ee8e29d45851")
-            ->willReturn($foo);
+            ->willReturn(array(GenericService::OK, $foo));
 
         $headers = array(
             "HTTP_ACCEPT" => "application/json",
@@ -53,7 +53,7 @@ class GenericControllerProviderTest extends \PHPUnit_Framework_TestCase
     {
         $this->service->method("get")
             ->with("4ee8e29d45851")
-            ->willReturn(null);
+            ->willReturn(array(GenericService::NOT_FOUND, null));
 
         $headers = array(
             "HTTP_ACCEPT" => "application/json",

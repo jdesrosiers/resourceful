@@ -3,7 +3,6 @@
 namespace JDesrosiers\App\Service;
 
 use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Finder\Finder;
 
 class FileService implements GenericService
 {
@@ -22,13 +21,11 @@ class FileService implements GenericService
 
     public function get($id)
     {
-        $finder = new Finder();
-        $finder->files()->in($this->location)->name("$id.json");
-        foreach ($finder as $file) {
-            return json_decode($file->getContents());
+        if (!$this->has($id)) {
+            return array(GenericService::NOT_FOUND, null);
         }
 
-        return null;
+        return array(GenericService::OK, json_decode(file_get_contents("$this->location/$id.json")));
     }
 
     public function has($id)
@@ -42,16 +39,16 @@ class FileService implements GenericService
         $json = json_encode($object, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
         $this->filesystem->dumpFile("$this->location/$id.json", $json);
 
-        return $exists ? self::UPDATED : self::CREATED;
+        return $exists ? self::OK : self::CREATED;
     }
 
     public function delete($id)
     {
-        if ($this->has($id)) {
-            unlink("$this->location/$id.json");
-            return self::DELETED;
-        } else {
-            return self::NO_SUCH_ITEM;
+        if (!$this->has($id)) {
+            return self::NOT_FOUND;
         }
+
+        $this->filesystem->remove("$this->location/$id.json");
+        return self::OK;
     }
 }

@@ -44,7 +44,7 @@ class FileServiceTest extends \PHPUnit_Framework_TestCase
         $id = uniqid();
         $this->service->put($id, "foo");
 
-        $this->assertEquals(GenericService::UPDATED, $this->service->put($id, "bar"));
+        $this->assertEquals(GenericService::OK, $this->service->put($id, "bar"));
     }
 
     public function testRetrieveObject()
@@ -52,7 +52,9 @@ class FileServiceTest extends \PHPUnit_Framework_TestCase
         $id = uniqid();
         $this->service->put($id, "foo");
 
-        $this->assertEquals("foo", $this->service->get($id));
+        list($status, $object) = $this->service->get($id);
+        $this->assertEquals(GenericService::OK, $status);
+        $this->assertEquals("foo", $object);
     }
 
     public function testRetrieveUpdatedObject()
@@ -61,12 +63,15 @@ class FileServiceTest extends \PHPUnit_Framework_TestCase
         $this->service->put($id, "foo");
         $this->service->put($id, "bar");
 
-        $this->assertEquals("bar", $this->service->get($id));
+        list($status, $object) = $this->service->get($id);
+        $this->assertEquals(GenericService::OK, $status);
+        $this->assertEquals("bar", $object);
     }
 
     public function testRetrieveNonexistentObject()
     {
-        $this->assertEquals(null, $this->service->get("non-existent-id"));
+        list($status) = $this->service->get("non-existent-id");
+        $this->assertEquals(GenericService::NOT_FOUND, $status);
     }
 
     public function testDeleteObject()
@@ -74,11 +79,11 @@ class FileServiceTest extends \PHPUnit_Framework_TestCase
         $id = uniqid();
         $this->service->put($id, "foo");
 
-        $this->assertEquals(GenericService::DELETED, $this->service->delete($id));
+        $this->assertEquals(GenericService::OK, $this->service->delete($id));
     }
 
     public function testDeleteNonExistentObject()
     {
-        $this->assertEquals(GenericService::NO_SUCH_ITEM, $this->service->delete(uniqid()));
+        $this->assertEquals(GenericService::NOT_FOUND, $this->service->delete(uniqid()));
     }
 }
