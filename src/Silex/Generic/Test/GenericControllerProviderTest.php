@@ -4,7 +4,11 @@ namespace JDesrosiers\Silex\Generic\Test;
 
 use JDesrosiers\App\Service\GenericService;
 use JDesrosiers\Silex\Generic\GenericControllerProvider;
-use JDesrosiers\Silex\MyApplication;
+use JDesrosiers\Silex\Generic\GenericServiceProvider;
+use JDesrosiers\Silex\Schema\JsonSchemaServiceProvider;
+use JDesrosiers\Silex\Schema\SchemaGeneratorProvider;
+use Silex\Application;
+use Silex\Provider\UrlGeneratorServiceProvider;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Client;
 
@@ -18,9 +22,15 @@ class GenericControllerProviderTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->app = new MyApplication();
+        $this->app = new Application();
         $this->app["debug"] = true;
-        $this->app["rootPath"] = __DIR__;
+
+        $this->app["schemaService"] = $this->getMock("JDesrosiers\App\Service\GenericService");
+
+        $this->app->register(new UrlGeneratorServiceProvider());
+        $this->app->register(new GenericServiceProvider());
+        $this->app->register(new SchemaGeneratorProvider());
+        $this->app->register(new JsonSchemaServiceProvider());
 
         $this->service = $this->getMock("JDesrosiers\App\Service\GenericService");
 
@@ -89,6 +99,11 @@ class GenericControllerProviderTest extends \PHPUnit_Framework_TestCase
 
     public function testBadCreateRequest()
     {
+        $schema = file_get_contents(__DIR__ . "/foo.json");
+        $this->app["schemaService"]->method("get")
+            ->with("foo")
+            ->willReturn(array(GenericService::OK, json_decode($schema)));
+
         $headers = array(
             "HTTP_ACCEPT" => "application/json",
             "CONTENT_TYPE" => "application/json"

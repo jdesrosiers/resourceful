@@ -36,8 +36,8 @@ class GenericControllerProvider implements ControllerProviderInterface
 
             if ($status === GenericService::NOT_FOUND) {
                 $replacements = array(
-                    "%generic%" => $this->type,
-                    "%Generic%" => ucfirst($this->type),
+                    "generic" => $this->type,
+                    "Generic" => ucfirst($this->type),
                 );
                 $schema = $app["generateSchema"](__DIR__ . "/generic.json", $replacements);
 

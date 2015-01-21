@@ -16,8 +16,12 @@ class SchemaGeneratorProvider implements ServiceProviderInterface
     {
         $app["generateSchema"] = $app->protect(
             function ($template, array $replacements = array()) {
+                $find = array_map(function ($string) {
+                    return "%$string%";
+                }, array_keys($replacements));
+
                 $genericSchemaJson = str_replace(
-                    array_keys($replacements),
+                    $find,
                     array_values($replacements),
                     file_get_contents($template)
                 );
