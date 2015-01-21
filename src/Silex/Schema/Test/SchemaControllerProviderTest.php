@@ -2,7 +2,6 @@
 
 namespace JDesrosiers\Silex\Schema\Test;
 
-use JDesrosiers\App\Service\GenericService;
 use JDesrosiers\Silex\MyApplication;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Client;
@@ -17,15 +16,12 @@ class SchemaControllerProviderTest extends \PHPUnit_Framework_TestCase
         $this->app["debug"] = true;
         $this->app["rootPath"] = __DIR__;
 
-        $this->app["schemaService"] = $this->getMock("JDesrosiers\App\Service\GenericService");
-
         $this->client = new Client($this->app);
     }
 
     public function testGet()
     {
-        $this->app["schemaService"]->method("get")
-            ->willReturn(array(GenericService::OK, new \stdClass()));
+        list(, $schema) = $this->app["schemaService"]->get("foo");
 
         $headers = array(
             "HTTP_ACCEPT" => "application/json",
@@ -35,18 +31,15 @@ class SchemaControllerProviderTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
         $this->assertEquals("application/schema+json", $response->headers->get("Content-Type"));
-        $this->assertJsonStringEqualsJsonString('{}', $response->getContent());
+        $this->assertJsonStringEqualsJsonString(json_encode($schema), $response->getContent());
     }
 
     public function testGetNotFound()
     {
-        $this->app["schemaService"]->method("get")
-            ->willReturn(array(GenericService::NOT_FOUND, null));
-
         $headers = array(
             "HTTP_ACCEPT" => "application/json",
         );
-        $this->client->request("GET", "/schema/foo", array(), array(), $headers);
+        $this->client->request("GET", "/schema/bar", array(), array(), $headers);
         $response = $this->client->getResponse();
 
         $this->assertEquals(Response::HTTP_NOT_FOUND, $response->getStatusCode());
