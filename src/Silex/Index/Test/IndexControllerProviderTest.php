@@ -2,7 +2,6 @@
 
 namespace JDesrosiers\Silex\Index\Test;
 
-use JDesrosiers\App\Service\GenericService;
 use JDesrosiers\Silex\Index\IndexControllerProvider;
 use JDesrosiers\Silex\Schema\JsonSchemaServiceProvider;
 use JDesrosiers\Silex\Schema\SchemaGeneratorProvider;
@@ -24,6 +23,9 @@ class IndexControllerProviderTest extends \PHPUnit_Framework_TestCase
         $this->app["index.description"] = "This is my fantastic API";
 
         $this->app["schemaService"] = $this->getMock("JDesrosiers\App\Service\GenericService");
+        $this->app["schemaService"]->method("contains")
+            ->with("index")
+            ->willReturn(true);
 
         $this->app->register(new SchemaGeneratorProvider());
         $this->app->register(new JsonSchemaServiceProvider());
@@ -35,10 +37,6 @@ class IndexControllerProviderTest extends \PHPUnit_Framework_TestCase
 
     public function testGet()
     {
-        $this->app["schemaService"]->method("get")
-            ->with("index")
-            ->willReturn(array(GenericService::OK, new \stdClass()));
-
         $index = new \stdClass();
         $index->title = $this->app["index.title"];
         $index->description = $this->app["index.description"];

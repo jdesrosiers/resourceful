@@ -2,7 +2,6 @@
 
 namespace JDesrosiers\Silex\Generic\Test;
 
-use JDesrosiers\App\Service\GenericService;
 use JDesrosiers\Silex\Generic\GenericControllerProvider;
 use JDesrosiers\Silex\Generic\GenericServiceProvider;
 use JDesrosiers\Silex\Schema\JsonSchemaServiceProvider;
@@ -26,6 +25,9 @@ class GenericControllerProviderTest extends \PHPUnit_Framework_TestCase
         $this->app["debug"] = true;
 
         $this->app["schemaService"] = $this->getMock("JDesrosiers\App\Service\GenericService");
+        $this->app["schemaService"]->method("contains")
+            ->with("foo")
+            ->willReturn(true);
 
         $this->app->register(new UrlGeneratorServiceProvider());
         $this->app->register(new GenericServiceProvider());
@@ -44,9 +46,13 @@ class GenericControllerProviderTest extends \PHPUnit_Framework_TestCase
         $foo = new \stdClass();
         $foo->id = "4ee8e29d45851";
 
-        $this->service->method("get")
+        $this->service->method("contains")
             ->with("4ee8e29d45851")
-            ->willReturn(array(GenericService::OK, $foo));
+            ->willReturn(true);
+
+        $this->service->method("fetch")
+            ->with("4ee8e29d45851")
+            ->willReturn($foo);
 
         $headers = array(
             "HTTP_ACCEPT" => "application/json",
@@ -61,9 +67,9 @@ class GenericControllerProviderTest extends \PHPUnit_Framework_TestCase
 
     public function testGetNotFound()
     {
-        $this->service->method("get")
+        $this->service->method("contains")
             ->with("4ee8e29d45851")
-            ->willReturn(array(GenericService::NOT_FOUND, null));
+            ->willReturn(false);
 
         $headers = array(
             "HTTP_ACCEPT" => "application/json",
@@ -80,9 +86,10 @@ class GenericControllerProviderTest extends \PHPUnit_Framework_TestCase
         $foo->id = "4ee8e29d45851";
 
         $this->app["genericService.uniqid"] = $foo->id;
-        $this->service->method("put")
-            ->with($foo->id, $foo)
-            ->willReturn(GenericService::CREATED);
+
+        $this->service->method("contains")
+            ->with($foo->id)
+            ->willReturn(false);
 
         $headers = array(
             "HTTP_ACCEPT" => "application/json",
@@ -100,9 +107,9 @@ class GenericControllerProviderTest extends \PHPUnit_Framework_TestCase
     public function testBadCreateRequest()
     {
         $schema = file_get_contents(__DIR__ . "/foo.json");
-        $this->app["schemaService"]->method("get")
+        $this->app["schemaService"]->method("fetch")
             ->with("foo")
-            ->willReturn(array(GenericService::OK, json_decode($schema)));
+            ->willReturn(json_decode($schema));
 
         $headers = array(
             "HTTP_ACCEPT" => "application/json",
@@ -119,10 +126,9 @@ class GenericControllerProviderTest extends \PHPUnit_Framework_TestCase
         $foo = new \stdClass();
         $foo->id = "4ee8e29d45851";
 
-        $this->app["genericService.uniqid"] = $foo->id;
-        $this->service->method("put")
-            ->with($foo->id, $foo)
-            ->willReturn(GenericService::CREATED);
+        $this->service->method("contains")
+            ->with($foo->id)
+            ->willReturn(false);
 
         $headers = array(
             "HTTP_ACCEPT" => "application/json",

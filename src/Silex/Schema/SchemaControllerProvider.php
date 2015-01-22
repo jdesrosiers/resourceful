@@ -2,7 +2,6 @@
 
 namespace JDesrosiers\Silex\Schema;
 
-use JDesrosiers\App\Service\GenericService;
 use Silex\Application;
 use Silex\ControllerProviderInterface;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,11 +22,14 @@ class SchemaControllerProvider implements ControllerProviderInterface
 
     public function get(Application $app, $path)
     {
-        list($status, $schema) = $app["schemaService"]->get($path);
-        if ($status === GenericService::NOT_FOUND) {
+        if (!$app["schemaService"]->contains($path)) {
             throw new NotFoundHttpException();
         }
 
-        return $app->json($schema, Response::HTTP_OK, array("Content-Type" => "application/schema+json"));
+        return $app->json(
+            $app["schemaService"]->fetch($path),
+            Response::HTTP_OK,
+            array("Content-Type" => "application/schema+json")
+        );
     }
 }

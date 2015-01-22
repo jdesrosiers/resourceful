@@ -32,19 +32,19 @@ class GenericControllerProvider implements ControllerProviderInterface
         $controller->delete("/{id}", array($this, "delete"));
 
         $app->before(function (Request $request, Application $app) {
-            list($status, $schema) = $app["schemaService"]->get($this->type);
-
-            if ($status === GenericService::NOT_FOUND) {
+            if (!$app["schemaService"]->contains($this->type)) {
                 $replacements = array(
                     "generic" => $this->type,
                     "Generic" => ucfirst($this->type),
                 );
-                $schema = $app["generateSchema"](__DIR__ . "/generic.json", $replacements);
 
-                $app["schemaService"]->put($this->type, $schema);
+                $app["schemaService"]->save(
+                    $this->type,
+                    $app["generateSchema"](__DIR__ . "/generic.json", $replacements)
+                );
             }
 
-            $app["schema-store"]->add("/schema/$this->type", $schema);
+            $app["schema-store"]->add("/schema/$this->type", $app["schemaService"]->fetch($this->type));
         });
 
         return $controller;
@@ -52,9 +52,9 @@ class GenericControllerProvider implements ControllerProviderInterface
 
     public function get(Application $app, $id)
     {
-        list($status, $resource) = $this->service->get($id);
+        $resource = $this->service->fetch($id);
 
-        if ($status === GenericService::NOT_FOUND) {
+        if (!$this->service->contains($id)) {
             throw new NotFoundHttpException();
         }
 
@@ -68,10 +68,9 @@ class GenericControllerProvider implements ControllerProviderInterface
     public function create(Application $app, Request $request)
     {
         $data = json_decode($request->getContent());
-        $id = $app["genericService.uniqid"];
-        $data->id = $id;
+        $data->id = $app["genericService.uniqid"];
 
-        return $this->write($app, $id, $data);
+        return $this->write($app, $data->id, $data);
     }
 
     public function put(Application $app, Request $request, $id)
@@ -86,7 +85,8 @@ class GenericControllerProvider implements ControllerProviderInterface
             throw new BadRequestHttpException(json_encode($validation->errors));
         }
 
-        $result = $this->service->put($id, $data);
+        $isCreated = !$this->service->contains($id);
+        $this->service->save($id, $data);
 
         $response = $app->json(
             $data,
@@ -94,7 +94,7 @@ class GenericControllerProvider implements ControllerProviderInterface
             array("Content-Type" => "application/json; profile=/schema/$this->type")
         );
 
-        if ($result === GenericService::CREATED) {
+        if ($isCreated) {
             $response->setStatusCode(Response::HTTP_CREATED);
             $response->headers->set("Location", $app["url_generator"]->generate($this->type, array("id" => $id)));
         }

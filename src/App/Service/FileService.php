@@ -19,36 +19,28 @@ class FileService implements GenericService
         }
     }
 
-    public function get($id)
+    public function fetch($id)
     {
-        if (!$this->has($id)) {
-            return array(GenericService::NOT_FOUND, null);
+        if (!$this->contains($id)) {
+            return false;
         }
 
-        return array(GenericService::OK, json_decode(file_get_contents("$this->location/$id.json")));
+        return json_decode(file_get_contents("$this->location/$id.json"));
     }
 
-    public function has($id)
+    public function contains($id)
     {
         return $this->filesystem->exists("$this->location/$id.json");
     }
 
-    public function put($id, $object)
+    public function save($id, $object)
     {
-        $exists = $this->has($id);
         $json = json_encode($object, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
         $this->filesystem->dumpFile("$this->location/$id.json", $json);
-
-        return $exists ? self::OK : self::CREATED;
     }
 
     public function delete($id)
     {
-        if (!$this->has($id)) {
-            return self::NOT_FOUND;
-        }
-
         $this->filesystem->remove("$this->location/$id.json");
-        return self::OK;
     }
 }

@@ -2,7 +2,6 @@
 
 namespace JDesrosiers\Silex\Index;
 
-use JDesrosiers\App\Service\GenericService;
 use Silex\Application;
 use Silex\ControllerProviderInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,14 +16,11 @@ class IndexControllerProvider implements ControllerProviderInterface
         $controller->get("/", array($this, "get"));
 
         $app->before(function (Request $request, Application $app) {
-            list($status, $schema) = $app["schemaService"]->get("index");
-
-            if ($status === GenericService::NOT_FOUND) {
-                $schema = $app["generateSchema"](__DIR__ . "/index.json");
-                $app["schemaService"]->put("index", $schema);
+            if (!$app["schemaService"]->contains("index")) {
+                $app["schemaService"]->save("index", $app["generateSchema"](__DIR__ . "/index.json"));
             }
 
-            $app["schema-store"]->add("/schema/index", $schema);
+            $app["schema-store"]->add("/schema/index", $app["schemaService"]->fetch("index"));
         });
 
         return $controller;

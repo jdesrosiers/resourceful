@@ -36,54 +36,34 @@ class FileServiceTest extends \PHPUnit_Framework_TestCase
 
     public function testStoreNewObject()
     {
-        $this->assertEquals(GenericService::CREATED, $this->service->put(uniqid(), "foo"));
+        $this->service->save("foo", "bar");
+
+        $this->assertEquals("bar", $this->service->fetch("foo"));
     }
 
     public function testReplaceObject()
     {
-        $id = uniqid();
-        $this->service->put($id, "foo");
+        $this->service->save("foo", "foo");
+        $this->service->save("foo", "bar");
 
-        $this->assertEquals(GenericService::OK, $this->service->put($id, "bar"));
-    }
-
-    public function testRetrieveObject()
-    {
-        $id = uniqid();
-        $this->service->put($id, "foo");
-
-        list($status, $object) = $this->service->get($id);
-        $this->assertEquals(GenericService::OK, $status);
-        $this->assertEquals("foo", $object);
-    }
-
-    public function testRetrieveUpdatedObject()
-    {
-        $id = uniqid();
-        $this->service->put($id, "foo");
-        $this->service->put($id, "bar");
-
-        list($status, $object) = $this->service->get($id);
-        $this->assertEquals(GenericService::OK, $status);
-        $this->assertEquals("bar", $object);
+        $this->assertEquals("bar", $this->service->fetch("foo"));
     }
 
     public function testRetrieveNonexistentObject()
     {
-        list($status) = $this->service->get("non-existent-id");
-        $this->assertEquals(GenericService::NOT_FOUND, $status);
+        $this->assertFalse($this->service->fetch("foo"));
     }
 
     public function testDeleteObject()
     {
-        $id = uniqid();
-        $this->service->put($id, "foo");
+        $this->service->save("foo", "bar");
+        $this->service->delete("foo");
 
-        $this->assertEquals(GenericService::OK, $this->service->delete($id));
+        $this->assertFalse($this->service->fetch("foo"));
     }
 
     public function testDeleteNonExistentObject()
     {
-        $this->assertEquals(GenericService::NOT_FOUND, $this->service->delete(uniqid()));
+        $this->service->delete("foo");
     }
 }

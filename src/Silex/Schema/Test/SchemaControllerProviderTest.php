@@ -2,7 +2,6 @@
 
 namespace JDesrosiers\Silex\Schema\Test;
 
-use JDesrosiers\App\Service\GenericService;
 use JDesrosiers\Silex\Schema\SchemaControllerProvider;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Response;
@@ -26,9 +25,13 @@ class SchemaControllerProviderTest extends \PHPUnit_Framework_TestCase
 
     public function testGet()
     {
-        $this->app["schemaService"]->method("get")
+        $this->app["schemaService"]->method("contains")
             ->with("foo")
-            ->willReturn(array(GenericService::OK, new \stdClass()));
+            ->willReturn(true);
+
+        $this->app["schemaService"]->method("fetch")
+            ->with("foo")
+            ->willReturn(new \stdClass());
 
         $headers = array(
             "HTTP_ACCEPT" => "application/json",
@@ -43,9 +46,9 @@ class SchemaControllerProviderTest extends \PHPUnit_Framework_TestCase
 
     public function testGetNotFound()
     {
-        $this->app["schemaService"]->method("get")
+        $this->app["schemaService"]->method("fetch")
             ->with("bar")
-            ->willReturn(array(GenericService::NOT_FOUND, null));
+            ->willReturn(false);
 
         $headers = array(
             "HTTP_ACCEPT" => "application/json",
