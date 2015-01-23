@@ -3,7 +3,6 @@
 namespace JDesrosiers\Silex\Generic\Test;
 
 use JDesrosiers\Silex\Generic\GenericControllerProvider;
-use JDesrosiers\Silex\Generic\GenericServiceProvider;
 use JDesrosiers\Silex\Schema\JsonSchemaServiceProvider;
 use JDesrosiers\Silex\Schema\SchemaGeneratorProvider;
 use Silex\Application;
@@ -30,7 +29,6 @@ class GenericControllerProviderTest extends \PHPUnit_Framework_TestCase
             ->willReturn(true);
 
         $this->app->register(new UrlGeneratorServiceProvider());
-        $this->app->register(new GenericServiceProvider());
         $this->app->register(new SchemaGeneratorProvider());
         $this->app->register(new JsonSchemaServiceProvider());
 
@@ -85,7 +83,7 @@ class GenericControllerProviderTest extends \PHPUnit_Framework_TestCase
         $foo = new \stdClass();
         $foo->id = "4ee8e29d45851";
 
-        $this->app["genericService.uniqid"] = $foo->id;
+        $this->app["uniqid"] = $foo->id;
 
         $this->service->method("contains")
             ->with($foo->id)
@@ -106,6 +104,8 @@ class GenericControllerProviderTest extends \PHPUnit_Framework_TestCase
 
     public function testBadCreateRequest()
     {
+        $this->app["uniqid"] = uniqid();
+
         $schema = file_get_contents(__DIR__ . "/foo.json");
         $this->app["schemaService"]->method("fetch")
             ->with("foo")

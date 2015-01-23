@@ -2,7 +2,7 @@
 
 namespace JDesrosiers\Silex;
 
-use JDesrosiers\Silex\Generic\GenericServiceProvider;
+use JDesrosiers\App\Service\FileService;
 use JDesrosiers\Silex\Index\IndexControllerProvider;
 use JDesrosiers\Silex\Provider\ContentNegotiationServiceProvider;
 use JDesrosiers\Silex\Provider\CorsServiceProvider;
@@ -28,13 +28,16 @@ class MyApplication extends Application
         $this->register(new CorsServiceProvider());
 
         // App specific
-        $this->register(new GenericServiceProvider());
         $this->register(new SchemaGeneratorProvider());
         $this->register(new JsonSchemaServiceProvider());
 
+        $this["uniqid"] = function () {
+            return uniqid();
+        };
+
         // Supporting Controllers
         $this["schemaService"] = $this->share(function (Application $app) {
-            return $app["genericService.file"]("schema", $app["rootPath"]);
+            return new FileService("{$app["rootPath"]}/schema");
         });
         $this->mount("/schema", new SchemaControllerProvider());
         $this->mount("/", new IndexControllerProvider());
