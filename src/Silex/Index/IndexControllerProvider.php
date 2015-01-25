@@ -6,18 +6,21 @@ use Silex\Application;
 use Silex\ControllerProviderInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Twig_Loader_Filesystem;
 
 class IndexControllerProvider implements ControllerProviderInterface
 {
     public function connect(Application $app)
     {
+        $app["twig.loader"]->addLoader(new Twig_Loader_Filesystem(__DIR__ . "/templates"));
+
         $controller = $app["controllers_factory"];
 
         $controller->get("/", array($this, "get"));
 
         $app->before(function (Request $request, Application $app) {
             if (!$app["schemaService"]->contains("index")) {
-                $app["schemaService"]->save("index", $app["generateSchema"](__DIR__ . "/index.json"));
+                $app["schemaService"]->save("index", json_decode($app["twig"]->render("index.json.twig")));
             }
 
             $app["schema-store"]->add("/schema/index", $app["schemaService"]->fetch("index"));

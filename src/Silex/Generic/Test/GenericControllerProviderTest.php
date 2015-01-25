@@ -4,8 +4,8 @@ namespace JDesrosiers\Silex\Generic\Test;
 
 use JDesrosiers\Silex\Generic\GenericControllerProvider;
 use JDesrosiers\Silex\Schema\JsonSchemaServiceProvider;
-use JDesrosiers\Silex\Schema\SchemaGeneratorProvider;
 use Silex\Application;
+use Silex\Provider\TwigServiceProvider;
 use Silex\Provider\UrlGeneratorServiceProvider;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Client;
@@ -29,8 +29,8 @@ class GenericControllerProviderTest extends \PHPUnit_Framework_TestCase
             ->willReturn(true);
 
         $this->app->register(new UrlGeneratorServiceProvider());
-        $this->app->register(new SchemaGeneratorProvider());
         $this->app->register(new JsonSchemaServiceProvider());
+        $this->app->register(new TwigServiceProvider());
 
         $this->service = $this->getMock("JDesrosiers\App\Service\GenericService");
 

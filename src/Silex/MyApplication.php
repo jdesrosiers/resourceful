@@ -8,8 +8,8 @@ use JDesrosiers\Silex\Provider\ContentNegotiationServiceProvider;
 use JDesrosiers\Silex\Provider\CorsServiceProvider;
 use JDesrosiers\Silex\Schema\JsonSchemaServiceProvider;
 use JDesrosiers\Silex\Schema\SchemaControllerProvider;
-use JDesrosiers\Silex\Schema\SchemaGeneratorProvider;
 use Silex\Application;
+use Silex\Provider\TwigServiceProvider;
 use Silex\Provider\UrlGeneratorServiceProvider;
 
 class MyApplication extends Application
@@ -20,6 +20,7 @@ class MyApplication extends Application
 
         // Middleware
         $this->register(new UrlGeneratorServiceProvider());
+        $this->register(new TwigServiceProvider());
         $this->register(new ContentNegotiationServiceProvider(), array(
             "conneg.responseFormats" => array("json"),
             "conneg.requestFormats" => array("json"),
@@ -28,7 +29,6 @@ class MyApplication extends Application
         $this->register(new CorsServiceProvider());
 
         // App specific
-        $this->register(new SchemaGeneratorProvider());
         $this->register(new JsonSchemaServiceProvider());
 
         $this["uniqid"] = function () {

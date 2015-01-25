@@ -13,6 +13,7 @@
         <testsuite name="RestPrototype Test Suite">
             <directory>src/App/*/Test</directory>
             <directory>src/Silex/*/Test</directory>
+            <directory>src/Silex/Test</directory>
         </testsuite>
     </testsuites>
     <filter>
@@ -21,6 +22,7 @@
             <exclude>
                 <directory>src/App/*/Test</directory>
                 <directory>src/Silex/*/Test</directory>
+                <directory>src/Silex/Test</directory>
             </exclude>
         </whitelist>
     </filter>

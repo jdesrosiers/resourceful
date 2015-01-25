@@ -6,7 +6,8 @@
         "jdesrosiers/silex-cors-provider": "~0.1",
         "silex/silex": "~1.2",
         "symfony/finder": "~2.6",
-        "symfony/filesystem": "~2.6"
+        "symfony/filesystem": "~2.6",
+        "twig/twig": "~1.17"
     },
     "require-dev": {
         "phpunit/phpunit": "~4.4",

@@ -1,6 +1,6 @@
 {
     "$schema": "http://json-schema.org/draft-04/hyper-schema#",
-    "title": "%Generic%",
+    "title": "{{ title }}",
     "type": "object",
     "properties": {
         "id": {
@@ -9,7 +9,7 @@
             "links": [
                 {
                     "rel": "self",
-                    "href": "/%generic%/{$}"
+                    "href": "/{{ type }}/{$}"
                 }
             ]
         }
@@ -19,12 +19,12 @@
         {
             "rel": "delete",
             "method": "DELETE",
-            "href": "/%generic%/{id}"
+            "href": "/{{ type }}/{id}"
         },
         {
             "rel": "put",
             "method": "PUT",
-            "href": "/%generic%/{id}"
+            "href": "/{{ type }}/{id}"
         }
     ]
 }

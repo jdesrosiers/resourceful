@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Twig_Loader_Filesystem;
 
 class GenericControllerProvider implements ControllerProviderInterface
 {
@@ -23,6 +24,8 @@ class GenericControllerProvider implements ControllerProviderInterface
 
     public function connect(Application $app)
     {
+        $app["twig.loader"]->addLoader(new Twig_Loader_Filesystem(__DIR__ . "/templates"));
+
         $controller = $app["controllers_factory"];
 
         $controller->get("/", array($this, "query"));
@@ -34,13 +37,13 @@ class GenericControllerProvider implements ControllerProviderInterface
         $app->before(function (Request $request, Application $app) {
             if (!$app["schemaService"]->contains($this->type)) {
                 $replacements = array(
-                    "generic" => $this->type,
-                    "Generic" => ucfirst($this->type),
+                    "type" => $this->type,
+                    "title" => ucfirst($this->type),
                 );
 
                 $app["schemaService"]->save(
                     $this->type,
-                    $app["generateSchema"](__DIR__ . "/generic.json", $replacements)
+                    json_decode($app["twig"]->render("generic.json.twig", $replacements))
                 );
             }
 
