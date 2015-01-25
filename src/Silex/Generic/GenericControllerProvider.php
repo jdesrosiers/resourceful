@@ -2,7 +2,7 @@
 
 namespace JDesrosiers\Silex\Generic;
 
-use JDesrosiers\App\Service\GenericService;
+use Doctrine\Common\Cache\CacheProvider;
 use Silex\Application;
 use Silex\ControllerProviderInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -16,7 +16,7 @@ class GenericControllerProvider implements ControllerProviderInterface
     private $type;
     private $service;
 
-    public function __construct($type, GenericService $service)
+    public function __construct($type, CacheProvider $service)
     {
         $this->type = strtolower($type);
         $this->service = $service;
@@ -28,7 +28,6 @@ class GenericControllerProvider implements ControllerProviderInterface
 
         $controller = $app["controllers_factory"];
 
-        $controller->get("/", array($this, "query"));
         $controller->get("/{id}", array($this, "get"))->bind($this->type);
         $controller->post("/", array($this, "create"));
         $controller->put("/{id}", array($this, "put"));
