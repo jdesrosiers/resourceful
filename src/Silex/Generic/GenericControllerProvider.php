@@ -57,7 +57,7 @@ class GenericControllerProvider implements ControllerProviderInterface
         $resource = $this->service->fetch($id);
 
         if (!$this->service->contains($id)) {
-            throw new NotFoundHttpException();
+            throw new NotFoundHttpException("Not Found");
         }
 
         return $app->json(

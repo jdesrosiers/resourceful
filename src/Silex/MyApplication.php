@@ -3,6 +3,7 @@
 namespace JDesrosiers\Silex;
 
 use JDesrosiers\App\Service\FileService;
+use JDesrosiers\Silex\Error\ErrorHandlerServiceProvider;
 use JDesrosiers\Silex\Index\IndexControllerProvider;
 use JDesrosiers\Silex\Provider\ContentNegotiationServiceProvider;
 use JDesrosiers\Silex\Provider\CorsServiceProvider;
@@ -11,6 +12,7 @@ use JDesrosiers\Silex\Schema\SchemaControllerProvider;
 use Silex\Application;
 use Silex\Provider\TwigServiceProvider;
 use Silex\Provider\UrlGeneratorServiceProvider;
+use Symfony\Component\HttpKernel\Debug\ErrorHandler;
 
 class MyApplication extends Application
 {
@@ -19,6 +21,7 @@ class MyApplication extends Application
         parent::__construct($config);
 
         // Middleware
+        ErrorHandler::register();
         $this->register(new UrlGeneratorServiceProvider());
         $this->register(new TwigServiceProvider());
         $this->register(new ContentNegotiationServiceProvider(), array(
@@ -30,6 +33,8 @@ class MyApplication extends Application
 
         // App specific
         $this->register(new JsonSchemaServiceProvider());
+
+        $this->register(new ErrorHandlerServiceProvider());
 
         $this["uniqid"] = function () {
             return uniqid();
