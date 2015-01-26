@@ -14,7 +14,7 @@ use Silex\Provider\TwigServiceProvider;
 use Silex\Provider\UrlGeneratorServiceProvider;
 use Symfony\Component\HttpKernel\Debug\ErrorHandler;
 
-class MyApplication extends Application
+class QuickRest extends Application
 {
     public function __construct($config = array())
     {
