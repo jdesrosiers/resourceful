@@ -2,13 +2,14 @@
 
 namespace JDesrosiers\Silex\Generic;
 
-use Doctrine\Common\Cache\CacheProvider;
+use Doctrine\Common\Cache\Cache;
 use Silex\Application;
 use Silex\ControllerProviderInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
 use Twig_Loader_Filesystem;
 
 class GenericControllerProvider implements ControllerProviderInterface
@@ -16,7 +17,7 @@ class GenericControllerProvider implements ControllerProviderInterface
     private $type;
     private $service;
 
-    public function __construct($type, CacheProvider $service)
+    public function __construct($type, Cache $service)
     {
         $this->type = strtolower($type);
         $this->service = $service;
@@ -54,10 +55,13 @@ class GenericControllerProvider implements ControllerProviderInterface
 
     public function get(Application $app, $id)
     {
-        $resource = $this->service->fetch($id);
-
         if (!$this->service->contains($id)) {
             throw new NotFoundHttpException("Not Found");
+        }
+
+        $resource = $this->service->fetch($id);
+        if ($resource === false) {
+            throw new ServiceUnavailableHttpException(null, "Failed to retrieve resource");
         }
 
         return $app->json(
@@ -88,7 +92,11 @@ class GenericControllerProvider implements ControllerProviderInterface
         }
 
         $isCreated = !$this->service->contains($id);
-        $this->service->save($id, $data);
+
+        $success = $this->service->save($id, $data);
+        if ($success === false) {
+            throw new ServiceUnavailableHttpException(null, "Failed to save resource");
+        }
 
         $response = $app->json(
             $data,
@@ -106,7 +114,10 @@ class GenericControllerProvider implements ControllerProviderInterface
 
     public function delete($id)
     {
-        $this->service->delete($id);
+        $success = $this->service->delete($id);
+        if ($success === false) {
+            throw new ServiceUnavailableHttpException(null, "Failed to delete resource");
+        }
 
         return Response::create("", Response::HTTP_NO_CONTENT);
     }

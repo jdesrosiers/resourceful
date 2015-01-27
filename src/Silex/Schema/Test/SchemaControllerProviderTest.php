@@ -17,7 +17,7 @@ class SchemaControllerProviderTest extends \PHPUnit_Framework_TestCase
         $this->app["debug"] = true;
         $this->app["rootPath"] = __DIR__;
 
-        $this->app["schemaService"] = $this->getMock("JDesrosiers\App\Service\GenericService");
+        $this->app["schemaService"] = $this->getMock("Doctrine\Common\Cache\Cache");
         $this->app->mount("/schema", new SchemaControllerProvider());
 
         $this->client = new Client($this->app);

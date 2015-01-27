@@ -23,7 +23,7 @@ class GenericControllerProviderTest extends \PHPUnit_Framework_TestCase
         $this->app = new Application();
         $this->app["debug"] = true;
 
-        $this->app["schemaService"] = $this->getMock("JDesrosiers\App\Service\GenericService");
+        $this->app["schemaService"] = $this->getMock("Doctrine\Common\Cache\Cache");
         $this->app["schemaService"]->method("contains")
             ->with("foo")
             ->willReturn(true);
@@ -32,7 +32,7 @@ class GenericControllerProviderTest extends \PHPUnit_Framework_TestCase
         $this->app->register(new JsonSchemaServiceProvider());
         $this->app->register(new TwigServiceProvider());
 
-        $this->service = $this->getMock("JDesrosiers\App\Service\GenericService");
+        $this->service = $this->getMock("Doctrine\Common\Cache\Cache");
 
         $this->app->mount("/foo", new GenericControllerProvider("foo", $this->service));
 

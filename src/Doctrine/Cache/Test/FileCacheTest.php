@@ -1,14 +1,13 @@
 <?php
 
-namespace JDesrosiers\App\Service\Test;
+namespace JDesrosiers\Doctrine\Cache\Test;
 
-use JDesrosiers\App\Service\FileService;
-use JDesrosiers\App\Service\GenericService;
+use JDesrosiers\Doctrine\Cache\FileCache;
 use Symfony\Component\Filesystem\Filesystem;
 
 require __DIR__ . "/../../../../vendor/autoload.php";
 
-class FileServiceTest extends \PHPUnit_Framework_TestCase
+class FileCacheTest extends \PHPUnit_Framework_TestCase
 {
     private $service;
     private $testDir;
@@ -18,7 +17,7 @@ class FileServiceTest extends \PHPUnit_Framework_TestCase
         $this->testDir = __DIR__ . "/test";
 
         $this->cleanUp();
-        $this->service = new FileService($this->testDir);
+        $this->service = new FileCache($this->testDir);
     }
 
     public function tearDown()

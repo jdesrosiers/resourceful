@@ -2,7 +2,7 @@
 
 namespace JDesrosiers\Silex;
 
-use JDesrosiers\App\Service\FileService;
+use JDesrosiers\Doctrine\Cache\FileCache;
 use JDesrosiers\Silex\Error\ErrorHandlerServiceProvider;
 use JDesrosiers\Silex\Index\IndexControllerProvider;
 use JDesrosiers\Silex\Provider\ContentNegotiationServiceProvider;
@@ -42,7 +42,7 @@ class QuickRest extends Application
 
         // Supporting Controllers
         $this["schemaService"] = $this->share(function (Application $app) {
-            return new FileService("{$app["rootPath"]}/schema");
+            return new FileCache("{$app["rootPath"]}/schema");
         });
         $this->mount("/schema", new SchemaControllerProvider());
         $this->mount("/", new IndexControllerProvider());
