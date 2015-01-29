@@ -21,7 +21,10 @@ class ErrorHandlerServiceProvider implements ServiceProviderInterface
                 "trace" => $e->getTraceAsString(),
             );
 
-            return $app->json($error);
+            $response = $app->json($error);
+            $response->headers->set("Content-Type", "application/json; profile=\"/schema/error\"");
+
+            return $response;
         });
     }
 }

@@ -39,7 +39,7 @@ class IndexControllerProvider implements ControllerProviderInterface
         return $app->json(
             $index,
             Response::HTTP_OK,
-            array("Content-Type" => "application/json; profile=/schema/index")
+            array("Content-Type" => "application/json; profile=\"/schema/index\"")
         );
     }
 }

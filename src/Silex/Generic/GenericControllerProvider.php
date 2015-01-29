@@ -67,7 +67,7 @@ class GenericControllerProvider implements ControllerProviderInterface
         return $app->json(
             $resource,
             Response::HTTP_OK,
-            array("Content-Type" => "application/json; profile=/schema/$this->type")
+            array("Content-Type" => "application/json; profile=\"/schema/$this->type\"")
         );
     }
 
@@ -101,7 +101,7 @@ class GenericControllerProvider implements ControllerProviderInterface
         $response = $app->json(
             $data,
             Response::HTTP_OK,
-            array("Content-Type" => "application/json; profile=/schema/$this->type")
+            array("Content-Type" => "application/json; profile=\"/schema/$this->type\"")
         );
 
         if ($isCreated) {
