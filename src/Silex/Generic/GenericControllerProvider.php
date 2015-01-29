@@ -73,7 +73,8 @@ class GenericControllerProvider implements ControllerProviderInterface
 
     public function create(Application $app, Request $request)
     {
-        $data = json_decode($request->getContent());
+        $requestJson = $request->getContent() ?: "{}";
+        $data = json_decode($requestJson);
         $data->id = $app["uniqid"];
 
         return $this->write($app, $data->id, $data);
@@ -81,7 +82,9 @@ class GenericControllerProvider implements ControllerProviderInterface
 
     public function put(Application $app, Request $request, $id)
     {
-        return $this->write($app, $id, json_decode($request->getContent()));
+        $requestJson = $request->getContent() ?: "{}";
+
+        return $this->write($app, $id, json_decode($requestJson));
     }
 
     private function write(Application $app, $id, $data)
