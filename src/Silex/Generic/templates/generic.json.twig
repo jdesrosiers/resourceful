@@ -4,8 +4,18 @@
     "type": "object",
     "properties": {
         "id": {
+            "allOf": [
+                {
+                    "$ref": "#/definitions/id"
+                }
+            ],
+            "readOnly": true
+        }
+    },
+    "required": [],
+    "definitions": {
+        "id": {
             "type": "string",
-            "readOnly": true,
             "links": [
                 {
                     "rel": "self",
@@ -14,7 +24,6 @@
             ]
         }
     },
-    "required": [],
     "links": [
         {
             "rel": "delete",
