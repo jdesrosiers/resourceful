@@ -1,18 +1,18 @@
-QuickRest
-==============
-QuickRest is a simple framework designed for rapid prototyping REST/HTTP applications that are mostly CRUD operations.
+Resourceful
+===========
+Resourceful is a simple framework designed for rapid prototyping REST/HTTP applications that are mostly CRUD operations.
 It is driven off of JSON Hyper-Schemas.  You use Hyper-Schemas to define your resources and their relationships with
 each other.  No coding other than writing Hyper-Schemas and registering new resources is required.  You only need to
 worry about your API and not it's implementation.  Good HTTP responses and headers are managed automatically.
 
 Rapid Prototyping
 -----------------
-I've tried to make QuickRest as flexible as possible, but it's primary goal is rapid prototyping, so it may not have the
+I've tried to make Resourceful as flexible as possible, but it's primary goal is rapid prototyping, so it may not have the
 flexibility needed for a production quality application.
 
 How it Works
 ------------
-Install QuickRest using composer
+Install Resourceful using composer
 ```
 > composer require jdesrosiers/quick-rest
 ```
@@ -23,7 +23,7 @@ Define your front controller.
 
 require __DIR__ . "/../vendor/autoload.php";
 
-$app = new JDesrosiers\Silex\QuickRest();
+$app = new JDesrosiers\Silex\Resourceful();
 $app["debug"] = true;
 $app["rootPath"] = __DIR__ . "/..";
 
@@ -67,7 +67,7 @@ Thats all.  Just keep adding resources and links between those resources to make
 Features
 --------------------
 ### The Index Schema
-it is largely up to you to make your REST/HTTP application discoverable, but QuickRest gets you off to a good start by
+it is largely up to you to make your REST/HTTP application discoverable, but Resourceful gets you off to a good start by
 automatically creating an index schema that point to the root of you app.  The index should be updated to direct your
 users in what they can do with your application.
 
@@ -108,7 +108,7 @@ silex-conneg-provider service provider.
 
 ### Support for OPTIONS requests
 I don't think anyone cares about OPTIONS request support unless they need it for CORS, but it is good to have for HTTP
-compliance anyway.  QuickRest gets OPTIONS request support for free by using the silex-cors-provider.
+compliance anyway.  Resourceful gets OPTIONS request support for free by using the silex-cors-provider.
 
 ### CORS Support
 Support for CORS is built in automatically via the silex-cors-provider service provider.
@@ -116,7 +116,7 @@ Support for CORS is built in automatically via the silex-cors-provider service p
 Supporting Projects
 -------------------
 ### Silex
-QuickRest is a Silex application with some service providers and controllers configured.
+Resourceful is a Silex application with some service providers and controllers configured.
 
 ### JSON Hyper-Schema
 JSON Hyper-Schema is the basis of this project.  JSON Hyper-Schema is the only proposal I have found that can do both
@@ -127,7 +127,7 @@ Jsonary is a generic Hyper-Schema browser.  It isn't perfect and it certainly is
 to view and manipulate any Hyper-Schema driven resource without the need to write any front-end code.
 
 ### Jsv4
-Jsv4 is a JSON Schema validator.  QuickRest uses it validate request JSON based on the Hyper-Schemas you write.
+Jsv4 is a JSON Schema validator.  Resourceful uses it validate request JSON based on the Hyper-Schemas you write.
 
 ### silex-conneg-provider
 No silex REST/HTTP application is complete without the silex-conneg-provider or something like it.  This service
