@@ -1,5 +1,8 @@
 Resourceful
 ===========
+[![Build Status](https://travis-ci.org/jdesrosiers/resourceful.svg)](https://travis-ci.org/jdesrosiers/resourceful)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/jdesrosiers/resourceful/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/jdesrosiers/resourceful/?branch=master)
+
 Resourceful is a simple framework designed for rapid prototyping REST/HTTP applications that are mostly CRUD operations.
 It is driven off of JSON Hyper-Schemas.  You use Hyper-Schemas to define your resources and their relationships with
 each other.  No coding other than writing Hyper-Schemas and registering new resources is required.  You only need to
@@ -14,7 +17,7 @@ How it Works
 ------------
 Install Resourceful using composer
 ```
-> composer require jdesrosiers/quick-rest
+> composer require jdesrosiers/resourceful
 ```
 
 Define your front controller.
@@ -53,11 +56,11 @@ $app->mount("/foo", new GenericControllerProvider("foo", new FilesystemCache(__D
 ```
 
 This controller adds the "foo" resource using the GenericControllerProvider.  The first argument is the name of the
-type.  The second argument is any Doctrine CacheProvider implementation.  Storing files on the filesystem is usually
+type.  The second argument is any Doctrine Cache implementation.  Storing files on the filesystem is usually
 good enough for a rapid prototype, but you can choose something like memcache or redis if you prefer.  A centralized
 data storage can be useful if you are collaborating with others on this application.
 
-Once the resource is registered, a good next step is the add a link to your index to create a "foo".  Refresh your
+Once the resource is registered, a good next step is to add a link to your index to create a "foo".  Refresh your
 Jsonary browser and you should see the link you added to the index.  Also, a default "foo" schema was generated in your
 `/schema` folder.  Fill out your "foo" schema how you like and then use the index link you created to create a "foo".
 All CRUD operations are available for the resource.
@@ -68,7 +71,7 @@ Features
 --------------------
 ### The Index Schema
 it is largely up to you to make your REST/HTTP application discoverable, but Resourceful gets you off to a good start by
-automatically creating an index schema that point to the root of you app.  The index should be updated to direct your
+automatically creating an index schema that points to the root of you app.  The index should be updated to direct your
 users in what they can do with your application.
 
 ### Schema Generation
@@ -85,7 +88,7 @@ Resource creation can happen in a couple different ways, but no matter which pat
 `201 Created` and a `Location` header identifying URI of the new resource.  One way a resource can be created is by
 making a POST request to the root of a resource.  This will generate an ID for the resource and then create it.  The
 other way a resource can be created is by PUTing to a URI that doesn't contain a resource.  In this case, the `Location`
-header will always echo the request URI and the resource passed will be save unmodified as it was passed in the request.
+header will always echo the request URI and the resource passed will be saved unmodified as it was passed in the request.
 The created resource will be returned with the response.
 
 ### Modifying a Resource
@@ -101,7 +104,7 @@ All input JSON is automatically validated for compliance with the JSON Schema th
 Validation failures result in `400 Bad Request` responses.
 
 ### Content Negotiation
-Considering that QucikREST is based on JSON Hyper-Schema and Jsonary, the only format supported is JSON.  So, any
+Considering that Resourceful is based on JSON Hyper-Schema and Jsonary, the only format supported is JSON.  So, any
 requests for a format other than JSON will result in a `406 Not Acceptable` response.  Any requests that pass content
 that is not JSON will result in a `415 Unsupported Media Type` response.  This is all handled by the
 silex-conneg-provider service provider.
@@ -136,11 +139,11 @@ problem.
 
 ### silex-cors-provider
 I included the silex-cors-provider for CORS support because I prefer to have a Jsonary browser setup as an independent
-project.  CORS allows my project to communicate with the independently deployed Jsonary browser.  Buy even you choose to
+project.  CORS allows my project to communicate with the independently deployed Jsonary browser.  But, even you choose to
 install Jsonary in your application, the silex-cors-provider is still nice to have because it defines OPTIONS routes for
 HTTP compliance.
 
 ### Doctrine Cache
-I chose to use Doctrine CacheProviders for data storage.  They have a wide range of implementations, so you can choose
+I chose to use Doctrine Cache for data storage.  They have a wide range of implementations, so you can choose
 how you want to store your data.  Some options include the filesystem, memcache, or redis.  If none of these meet your
 needs you can always define your own CacheProvider.
