@@ -1,5 +1,8 @@
 {
-    "name": "jdesrosiers/silex",
+    "name": "jdesrosiers/resourceful",
+    "description": "A framework for rapid prototyping REST applications",
+    "keywords": ["REST", "HTTP", "JSON Hyper-Schema", "Jsonary", "rapid prototype", "resource", "silex", "Content Negotiation", "CORS"],
+    "license": "MIT",
     "require": {
         "doctrine/cache": "~1.4",
         "geraintluff/jsv4": "~1.0",
