@@ -59,7 +59,7 @@ class GenericControllerProviderTest extends \PHPUnit_Framework_TestCase
         $response = $this->client->getResponse();
 
         $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
-        $this->assertEquals("application/json; profile=/schema/foo", $response->headers->get("Content-Type"));
+        $this->assertEquals("application/json; profile=\"/schema/foo\"", $response->headers->get("Content-Type"));
         $this->assertJsonStringEqualsJsonString('{"id":"4ee8e29d45851"}', $response->getContent());
     }
 
@@ -76,6 +76,25 @@ class GenericControllerProviderTest extends \PHPUnit_Framework_TestCase
         $response = $this->client->getResponse();
 
         $this->assertEquals(Response::HTTP_NOT_FOUND, $response->getStatusCode());
+    }
+
+    public function testGetError()
+    {
+        $this->service->method("contains")
+            ->with("4ee8e29d45851")
+            ->willReturn(true);
+
+        $this->service->method("fetch")
+            ->with("4ee8e29d45851")
+            ->willReturn(false);
+
+        $headers = array(
+            "HTTP_ACCEPT" => "application/json",
+        );
+        $this->client->request("GET", "/foo/4ee8e29d45851", array(), array(), $headers);
+        $response = $this->client->getResponse();
+
+        $this->assertEquals(Response::HTTP_SERVICE_UNAVAILABLE, $response->getStatusCode());
     }
 
     public function testCreate()
@@ -97,7 +116,7 @@ class GenericControllerProviderTest extends \PHPUnit_Framework_TestCase
         $response = $this->client->getResponse();
 
         $this->assertEquals(Response::HTTP_CREATED, $response->getStatusCode());
-        $this->assertEquals("application/json; profile=/schema/foo", $response->headers->get("Content-Type"));
+        $this->assertEquals("application/json; profile=\"/schema/foo\"", $response->headers->get("Content-Type"));
         $this->assertEquals("/foo/$foo->id", $response->headers->get("Location"));
         $this->assertJsonStringEqualsJsonString("{\"id\":\"$foo->id\"}", $response->getContent());
     }
@@ -138,9 +157,31 @@ class GenericControllerProviderTest extends \PHPUnit_Framework_TestCase
         $response = $this->client->getResponse();
 
         $this->assertEquals(Response::HTTP_CREATED, $response->getStatusCode());
-        $this->assertEquals("application/json; profile=/schema/foo", $response->headers->get("Content-Type"));
+        $this->assertEquals("application/json; profile=\"/schema/foo\"", $response->headers->get("Content-Type"));
         $this->assertEquals("/foo/$foo->id", $response->headers->get("Location"));
         $this->assertJsonStringEqualsJsonString("{\"id\":\"$foo->id\"}", $response->getContent());
+    }
+
+    public function testSaveError()
+    {
+        $foo = new \stdClass();
+        $foo->id = "4ee8e29d45851";
+
+        $this->service->method("contains")
+            ->with($foo->id)
+            ->willReturn(false);
+
+        $this->service->method("save")
+            ->willReturn(false);
+
+        $headers = array(
+            "HTTP_ACCEPT" => "application/json",
+            "CONTENT_TYPE" => "application/json"
+        );
+        $this->client->request("PUT", "/foo/$foo->id", array(), array(), $headers, "{\"id\":\"$foo->id\"}");
+        $response = $this->client->getResponse();
+
+        $this->assertEquals(Response::HTTP_SERVICE_UNAVAILABLE, $response->getStatusCode());
     }
 
     public function testDelete()
@@ -153,5 +194,19 @@ class GenericControllerProviderTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(Response::HTTP_NO_CONTENT, $response->getStatusCode());
         $this->assertEquals("", $response->getContent());
+    }
+
+    public function testDeleteError()
+    {
+        $this->service->method("delete")
+            ->willReturn(false);
+
+        $headers = array(
+            "HTTP_ACCEPT" => "application/json",
+        );
+        $this->client->request("DELETE", "/foo/4ee8e29d45851", array(), array(), $headers);
+        $response = $this->client->getResponse();
+
+        $this->assertEquals(Response::HTTP_SERVICE_UNAVAILABLE, $response->getStatusCode());
     }
 }
