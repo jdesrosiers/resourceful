@@ -5,8 +5,6 @@ namespace JDesrosiers\Doctrine\Cache\Test;
 use JDesrosiers\Doctrine\Cache\FileCache;
 use Symfony\Component\Filesystem\Filesystem;
 
-require __DIR__ . "/../../../../vendor/autoload.php";
-
 class FileCacheTest extends \PHPUnit_Framework_TestCase
 {
     private $service;

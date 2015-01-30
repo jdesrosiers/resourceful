@@ -10,8 +10,6 @@ use Silex\Provider\UrlGeneratorServiceProvider;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Client;
 
-require __DIR__ . "/../../../../vendor/autoload.php";
-
 class GenericControllerProviderTest extends \PHPUnit_Framework_TestCase
 {
     private $app;
