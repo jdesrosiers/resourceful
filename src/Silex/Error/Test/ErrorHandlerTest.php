@@ -45,7 +45,6 @@ class ErrorHandlerTest extends \PHPUnit_Framework_TestCase
         $this->client->request("GET", "/foo", array(), array(), $headers);
         $response = $this->client->getResponse();
         $content = json_decode($response->getContent());
-//        print_r((string) $response);
 
         $this->assertEquals(Response::HTTP_NOT_FOUND, $response->getStatusCode());
         $this->assertEquals("application/json; profile=\"/schema/error\"", $response->headers->get("Content-Type"));
