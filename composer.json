@@ -9,7 +9,6 @@
         "jdesrosiers/silex-conneg-provider": "~0.1",
         "jdesrosiers/silex-cors-provider": "~0.1",
         "silex/silex": "~1.2",
-        "symfony/finder": "~2.6",
         "symfony/filesystem": "~2.6",
         "twig/twig": "~1.17"
     },

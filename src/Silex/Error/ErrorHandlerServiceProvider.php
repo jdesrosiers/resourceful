@@ -5,6 +5,7 @@ namespace JDesrosiers\Silex\Error;
 use Silex\Application;
 use Silex\ServiceProviderInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Twig_Loader_Filesystem;
 
 class ErrorHandlerServiceProvider implements ServiceProviderInterface
@@ -33,10 +34,11 @@ class ErrorHandlerServiceProvider implements ServiceProviderInterface
                 "trace" => $e->getTraceAsString(),
             );
 
-            $response = $app->json($error);
-            $response->headers->set("Content-Type", "application/json; profile=\"/schema/error\"");
-
-            return $response;
+            return $app->json(
+                $error,
+                Response::HTTP_OK,
+                array("Content-Type" => "application/json; profile=\"/schema/error\"")
+            );
         });
     }
 }
