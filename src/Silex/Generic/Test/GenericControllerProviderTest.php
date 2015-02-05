@@ -100,49 +100,6 @@ class GenericControllerProviderTest extends \PHPUnit_Framework_TestCase
         $foo = new \stdClass();
         $foo->id = "4ee8e29d45851";
 
-        $this->app["uniqid"] = $foo->id;
-
-        $this->service->method("contains")
-            ->with($foo->id)
-            ->willReturn(false);
-
-        $headers = array(
-            "HTTP_ACCEPT" => "application/json",
-            "CONTENT_TYPE" => "application/json"
-        );
-        $this->client->request("POST", "/foo/", array(), array(), $headers, '{}');
-        $response = $this->client->getResponse();
-
-        $this->assertEquals(Response::HTTP_CREATED, $response->getStatusCode());
-        $this->assertEquals("application/json; profile=\"/schema/foo\"", $response->headers->get("Content-Type"));
-        $this->assertEquals("/foo/$foo->id", $response->headers->get("Location"));
-        $this->assertJsonStringEqualsJsonString("{\"id\":\"$foo->id\"}", $response->getContent());
-    }
-
-    public function testBadCreateRequest()
-    {
-        $this->app["uniqid"] = uniqid();
-
-        $schema = file_get_contents(__DIR__ . "/foo.json");
-        $this->app["schemaService"]->method("fetch")
-            ->with("foo")
-            ->willReturn(json_decode($schema));
-
-        $headers = array(
-            "HTTP_ACCEPT" => "application/json",
-            "CONTENT_TYPE" => "application/json"
-        );
-        $this->client->request("POST", "/foo/", array(), array(), $headers, '{"illegalField":"illegal"}');
-        $response = $this->client->getResponse();
-
-        $this->assertEquals(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
-    }
-
-    public function testPut()
-    {
-        $foo = new \stdClass();
-        $foo->id = "4ee8e29d45851";
-
         $this->service->method("contains")
             ->with($foo->id)
             ->willReturn(false);
@@ -157,6 +114,45 @@ class GenericControllerProviderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(Response::HTTP_CREATED, $response->getStatusCode());
         $this->assertEquals("application/json; profile=\"/schema/foo\"", $response->headers->get("Content-Type"));
         $this->assertEquals("/foo/$foo->id", $response->headers->get("Location"));
+        $this->assertJsonStringEqualsJsonString("{\"id\":\"$foo->id\"}", $response->getContent());
+    }
+
+    public function testBadRequest()
+    {
+        $schema = file_get_contents(__DIR__ . "/foo.json");
+        $this->app["schemaService"]->method("fetch")
+            ->with("foo")
+            ->willReturn(json_decode($schema));
+
+        $headers = array(
+            "HTTP_ACCEPT" => "application/json",
+            "CONTENT_TYPE" => "application/json"
+        );
+        $this->client->request("PUT", "/foo/4ee8e29d45851", array(), array(), $headers, '{"illegalField":"illegal"}');
+        $response = $this->client->getResponse();
+
+        $this->assertEquals(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+    }
+
+    public function testUpdate()
+    {
+        $foo = new \stdClass();
+        $foo->id = "4ee8e29d45851";
+
+        $this->service->method("contains")
+            ->with($foo->id)
+            ->willReturn(true);
+
+        $headers = array(
+            "HTTP_ACCEPT" => "application/json",
+            "CONTENT_TYPE" => "application/json"
+        );
+        $this->client->request("PUT", "/foo/$foo->id", array(), array(), $headers, "{\"id\":\"$foo->id\"}");
+        $response = $this->client->getResponse();
+
+        $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
+        $this->assertEquals("application/json; profile=\"/schema/foo\"", $response->headers->get("Content-Type"));
+        $this->assertFalse($response->headers->has("Location"));
         $this->assertJsonStringEqualsJsonString("{\"id\":\"$foo->id\"}", $response->getContent());
     }
 

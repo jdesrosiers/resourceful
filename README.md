@@ -6,7 +6,7 @@ Resourceful
 Resourceful is a simple framework designed for rapid prototyping REST/HTTP applications that are mostly CRUD operations.
 It is driven off of JSON Hyper-Schemas.  You use Hyper-Schemas to define your resources and their relationships with
 each other.  No coding other than writing Hyper-Schemas and registering new resources is required.  You only need to
-worry about your API and not it's implementation.  Good HTTP responses and headers are managed automatically.
+worry about your API and not it's implementation.  Good HTTP response codes and headers are managed automatically.
 
 Rapid Prototyping
 -----------------
@@ -45,10 +45,10 @@ That's it.  You are ready to get started.  Run the application using the builtin
 > php -S localhost:8000 front.php
 ```
 
-You can use the generic browser implementation on Jsonary's website to view your application.
-http://jsonary.com/walkthrough-basic/browser.html#http://localhost:8000/.  You should see a default index.  A folder
-called schema is created on this first run and a default index schema is created.  You are expected to add links to this
-default index schema as you add resources.
+You can use the json browser implementation at
+http://json-browser.s3-website-us-west-1.amazonaws.com/?url=http%3A//localhost%3A8000/.  You should see a default index.
+A folder called schema is created on this first run and a default index schema is created.  You are expected to add
+links to this default index schema as you add resources.
 
 Adding a new resource to your application, requires only one line of code in your front controller.
 ```php
@@ -84,12 +84,10 @@ resource will use the JSON Hyper-Schema suggestion of including a `profile` attr
 that defines the resource in the response.
 
 ### Creating a Resource
-Resource creation can happen in a couple different ways, but no matter which path is taken, it will always respond with
-`201 Created` and a `Location` header identifying URI of the new resource.  One way a resource can be created is by
-making a POST request to the root of a resource.  This will generate an ID for the resource and then create it.  The
-other way a resource can be created is by PUTing to a URI that doesn't contain a resource.  In this case, the `Location`
-header will always echo the request URI and the resource passed will be saved unmodified as it was passed in the request.
-The created resource will be returned with the response.
+A resource can be created by making a PUT request on a URI that doesn't contain a resource.  Resource creation will
+always respond with `201 Created` and a `Location` header identifying URI of the new resource.  The `Location` header
+will always echo the request URI and the resource passed will be saved unmodified as it was passed in the request.  The
+new resource will be returned with the response.
 
 ### Modifying a Resource
 A resource can be modified using a PUT request.  PUT requests do not do partial updates.  The resource passed will be

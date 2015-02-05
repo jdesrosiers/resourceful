@@ -30,25 +30,12 @@ class GenericControllerProvider implements ControllerProviderInterface
         $controller = $app["controllers_factory"];
 
         $controller->get("/{id}", array($this, "get"))->bind($this->type);
-        $controller->post("/", array($this, "create"));
         $controller->put("/{id}", array($this, "put"));
         $controller->delete("/{id}", array($this, "delete"));
 
-        $app->before(function (Request $request, Application $app) {
-            if (!$app["schemaService"]->contains($this->type)) {
-                $replacements = array(
-                    "type" => $this->type,
-                    "title" => ucfirst($this->type),
-                );
-
-                $app["schemaService"]->save(
-                    $this->type,
-                    json_decode($app["twig"]->render("generic.json.twig", $replacements))
-                );
-            }
-
-            $app["schema-store"]->add("/schema/$this->type", $app["schemaService"]->fetch($this->type));
-        });
+        $replacements = array("type" => $this->type, "title" => ucfirst($this->type));
+        $controller->before(new AddSchema($this->type, $replacements));
+        $controller->after(new SetProfile("/schema/$this->type"));
 
         return $controller;
     }
@@ -64,31 +51,14 @@ class GenericControllerProvider implements ControllerProviderInterface
             throw new ServiceUnavailableHttpException(null, "Failed to retrieve resource");
         }
 
-        return $app->json(
-            $resource,
-            Response::HTTP_OK,
-            array("Content-Type" => "application/json; profile=\"/schema/$this->type\"")
-        );
-    }
-
-    public function create(Application $app, Request $request)
-    {
-        $requestJson = $request->getContent() ?: "{}";
-        $data = json_decode($requestJson);
-        $data->id = $app["uniqid"];
-
-        return $this->write($app, $data->id, $data);
+        return $app->json($resource);
     }
 
     public function put(Application $app, Request $request, $id)
     {
         $requestJson = $request->getContent() ?: "{}";
+        $data = json_decode($requestJson);
 
-        return $this->write($app, $id, json_decode($requestJson));
-    }
-
-    private function write(Application $app, $id, $data)
-    {
         $validation = $app["validator"]->validate($data, $app["schema-store"]->get("/schema/$this->type"));
         if (!$validation->valid) {
             throw new BadRequestHttpException(json_encode($validation->errors));
@@ -101,11 +71,7 @@ class GenericControllerProvider implements ControllerProviderInterface
             throw new ServiceUnavailableHttpException(null, "Failed to save resource");
         }
 
-        $response = $app->json(
-            $data,
-            Response::HTTP_OK,
-            array("Content-Type" => "application/json; profile=\"/schema/$this->type\"")
-        );
+        $response = $app->json($data);
 
         if ($isCreated) {
             $response->setStatusCode(Response::HTTP_CREATED);
