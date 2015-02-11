@@ -59,6 +59,9 @@ class GenericControllerProvider implements ControllerProviderInterface
         $requestJson = $request->getContent() ?: "{}";
         $data = json_decode($requestJson);
 
+        if ($id !== $data->id) {
+            throw new BadRequestHttpException("The `id` in the body must match the `id` in the URI");
+        }
         $validation = $app["validator"]->validate($data, $app["schema-store"]->get("/schema/$this->type"));
         if (!$validation->valid) {
             throw new BadRequestHttpException(json_encode($validation->errors));
@@ -71,14 +74,7 @@ class GenericControllerProvider implements ControllerProviderInterface
             throw new ServiceUnavailableHttpException(null, "Failed to save resource");
         }
 
-        $response = $app->json($data);
-
-        if ($isCreated) {
-            $response->setStatusCode(Response::HTTP_CREATED);
-            $response->headers->set("Location", $app["url_generator"]->generate($this->type, array("id" => $id)));
-        }
-
-        return $response;
+        return $app->json($data, $isCreated ? Response::HTTP_CREATED : Response::HTTP_OK);
     }
 
     public function delete($id)

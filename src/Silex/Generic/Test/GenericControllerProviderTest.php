@@ -113,7 +113,6 @@ class GenericControllerProviderTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(Response::HTTP_CREATED, $response->getStatusCode());
         $this->assertEquals("application/json; profile=\"/schema/foo\"", $response->headers->get("Content-Type"));
-        $this->assertEquals("/foo/$foo->id", $response->headers->get("Location"));
         $this->assertJsonStringEqualsJsonString("{\"id\":\"$foo->id\"}", $response->getContent());
     }
 
@@ -128,7 +127,8 @@ class GenericControllerProviderTest extends \PHPUnit_Framework_TestCase
             "HTTP_ACCEPT" => "application/json",
             "CONTENT_TYPE" => "application/json"
         );
-        $this->client->request("PUT", "/foo/4ee8e29d45851", array(), array(), $headers, '{"illegalField":"illegal"}');
+        $data = '{"id":"4ee8e29d45851","illegalField":"illegal"}';
+        $this->client->request("PUT", "/foo/4ee8e29d45851", array(), array(), $headers, $data);
         $response = $this->client->getResponse();
 
         $this->assertEquals(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
