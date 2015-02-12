@@ -26,6 +26,7 @@ class SchemaControllerProvider implements ControllerProviderInterface
             throw new NotFoundHttpException();
         }
 
+        $app["json-schema.describedBy"] = "http://json-schema.org/hyper-schema";
         return $app->json(
             $app["schemaService"]->fetch($path),
             Response::HTTP_OK,

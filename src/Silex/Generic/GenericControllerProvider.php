@@ -3,6 +3,7 @@
 namespace JDesrosiers\Silex\Generic;
 
 use Doctrine\Common\Cache\Cache;
+use JDesrosiers\Silex\Schema\AddSchema;
 use Silex\Application;
 use Silex\ControllerProviderInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -25,17 +26,15 @@ class GenericControllerProvider implements ControllerProviderInterface
 
     public function connect(Application $app)
     {
-        $app["twig.loader"]->addLoader(new Twig_Loader_Filesystem(__DIR__ . "/templates"));
-
         $controller = $app["controllers_factory"];
 
         $controller->get("/{id}", array($this, "get"))->bind($this->type);
         $controller->put("/{id}", array($this, "put"));
         $controller->delete("/{id}", array($this, "delete"));
 
+        $app["twig.loader"]->addLoader(new Twig_Loader_Filesystem(__DIR__ . "/templates"));
         $replacements = array("type" => $this->type, "title" => ucfirst($this->type));
         $controller->before(new AddSchema($this->type, $replacements));
-        $controller->after(new SetProfile("/schema/$this->type"));
 
         return $controller;
     }
@@ -51,6 +50,7 @@ class GenericControllerProvider implements ControllerProviderInterface
             throw new ServiceUnavailableHttpException(null, "Failed to retrieve resource");
         }
 
+        $app["json-schema.describedBy"] = "/schema/$this->type";
         return $app->json($resource);
     }
 
@@ -62,7 +62,8 @@ class GenericControllerProvider implements ControllerProviderInterface
         if ($id !== $data->id) {
             throw new BadRequestHttpException("The `id` in the body must match the `id` in the URI");
         }
-        $validation = $app["validator"]->validate($data, $app["schema-store"]->get("/schema/$this->type"));
+        $schema = $app["json-schema.schema-store"]->get("/schema/$this->type");
+        $validation = $app["json-schema.validator"]->validate($data, $schema);
         if (!$validation->valid) {
             throw new BadRequestHttpException(json_encode($validation->errors));
         }
@@ -74,6 +75,7 @@ class GenericControllerProvider implements ControllerProviderInterface
             throw new ServiceUnavailableHttpException(null, "Failed to save resource");
         }
 
+        $app["json-schema.describedBy"] = "/schema/$this->type";
         return $app->json($data, $isCreated ? Response::HTTP_CREATED : Response::HTTP_OK);
     }
 
