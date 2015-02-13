@@ -15,7 +15,7 @@ class DescribedByFilter
             if ($app["json-schema.correlationMechanism"] === "profile") {
                 $contentType = $response->headers->get("Content-Type");
                 $response->headers->set("Content-Type", "$contentType; profile=\"{$app["json-schema.describedBy"]}\"");
-            } else if ($app["json-schema.correlationMechanism"] === "link") {
+            } elseif ($app["json-schema.correlationMechanism"] === "link") {
                 $response->headers->set("Link", "<{$app["json-schema.describedBy"]}>; rel=\"describedBy\"", false);
             } else {
                 $errorMessage = "json-schema.correlationMechanism must be either \"profile\" or \"link\"";

@@ -8,6 +8,9 @@
         },
         "message": {
             "type": "string"
+        },
+        "trace": {
+            "type": "string"
         }
     }
 }

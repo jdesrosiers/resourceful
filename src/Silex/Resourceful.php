@@ -33,9 +33,7 @@ class Resourceful extends Application
 
         // App specific
         $this->register(new JsonSchemaServiceProvider());
-
         $this->register(new ErrorHandlerServiceProvider());
-
         $this["uniqid"] = function () {
             return uniqid();
         };
