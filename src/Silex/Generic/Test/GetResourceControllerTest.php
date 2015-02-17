@@ -15,9 +15,8 @@ class GetResourceControllerTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->app = new Resourceful();
+        $this->app = new Resourceful(array("rootPath" => __DIR__));
         $this->app["debug"] = true;
-        $this->app["rootPath"] = __DIR__;
 
         $this->service = $this->getMock("Doctrine\Common\Cache\Cache");
         $this->app->get("/foo/{id}", new GetResourceController($this->service, "/schema/foo"));

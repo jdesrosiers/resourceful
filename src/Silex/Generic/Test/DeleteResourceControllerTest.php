@@ -15,9 +15,8 @@ class DeleteResourceControllerTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->app = new Resourceful();
+        $this->app = new Resourceful(array("rootPath" => __DIR__));
         $this->app["debug"] = true;
-        $this->app["rootPath"] = __DIR__;
 
         $this->service = $this->getMock("Doctrine\Common\Cache\Cache");
         $this->app->delete("/foo/{id}", new DeleteResourceController($this->service, "/schema/foo"));

@@ -23,7 +23,8 @@ class GenericControllerProvider implements ControllerProviderInterface
     {
         $controller = $app["controllers_factory"];
 
-        $controller->get("/{id}", new GetResourceController($this->service, "/schema/$this->type"))->bind($this->type);
+        $controller->get("/{id}", new GetResourceController($this->service, "/schema/$this->type"))
+            ->bind("/schema/$this->type");
         $controller->put("/{id}", new PutResourceController($this->service, "/schema/$this->type"));
         $controller->delete("/{id}", new DeleteResourceController($this->service));
 

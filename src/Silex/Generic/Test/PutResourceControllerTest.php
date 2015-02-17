@@ -15,13 +15,12 @@ class PutResourceControllerTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->app = new Resourceful();
+        $this->app = new Resourceful(array("rootPath" => __DIR__));
         $this->app["debug"] = true;
-        $this->app["rootPath"] = __DIR__;
 
         $this->service = $this->getMock("Doctrine\Common\Cache\Cache");
         $this->app->put("/foo/{id}", new PutResourceController($this->service, "/schema/foo"));
-        $this->app["json-schema.schema-store"]->add("/schema/foo", $this->app["schemaService"]->fetch("foo"));
+        $this->app["json-schema.schema-store"]->add("/schema/foo", $this->app["schemaService"]->fetch("/schema/foo"));
 
         $this->client = new Client($this->app);
     }

@@ -6,7 +6,7 @@ Resourceful
 Resourceful is a simple framework designed for rapid prototyping REST/HTTP applications that are mostly CRUD operations.
 It is driven off of JSON Hyper-Schemas.  You use Hyper-Schemas to define your resources and their relationships with
 each other.  No coding other than writing Hyper-Schemas and registering new resources is required.  You only need to
-worry about your API and not it's implementation.  Good HTTP response codes and headers are managed automatically.
+worry about your API and not it's implementation.  Proper HTTP response codes and headers are managed automatically.
 
 Rapid Prototyping
 -----------------
@@ -26,9 +26,8 @@ Define your front controller.
 
 require __DIR__ . "/../vendor/autoload.php";
 
-$app = new JDesrosiers\Silex\Resourceful();
+$app = new JDesrosiers\Silex\Resourceful(array("rootPath" => __DIR__ . "/.."));
 $app["debug"] = true;
-$app["rootPath"] = __DIR__ . "/..";
 
 $app["index.title"] = "My API";
 $app["index.description"] = "This is my fantastic API";
@@ -85,9 +84,7 @@ that defines the resource in the response.
 
 ### Creating a Resource
 A resource can be created by making a PUT request on a URI that doesn't contain a resource.  Resource creation will
-always respond with `201 Created` and a `Location` header identifying URI of the new resource.  The `Location` header
-will always echo the request URI and the resource passed will be saved unmodified as it was passed in the request.  The
-new resource will be returned with the response.
+always respond with `201 Created`.  The new resource will be echoed in the response.
 
 ### Modifying a Resource
 A resource can be modified using a PUT request.  PUT requests do not do partial updates.  The resource passed will be
@@ -128,7 +125,7 @@ Jsonary is a generic Hyper-Schema browser.  It isn't perfect and it certainly is
 to view and manipulate any Hyper-Schema driven resource without the need to write any front-end code.
 
 ### Jsv4
-Jsv4 is a JSON Schema validator.  Resourceful uses it validate request JSON based on the Hyper-Schemas you write.
+Jsv4 is a JSON Schema validator.  Resourceful uses it to validate request JSON based on the Hyper-Schemas you write.
 
 ### silex-conneg-provider
 No silex REST/HTTP application is complete without the silex-conneg-provider or something like it.  This service
@@ -144,4 +141,4 @@ HTTP compliance.
 ### Doctrine Cache
 I chose to use Doctrine Cache for data storage.  They have a wide range of implementations, so you can choose
 how you want to store your data.  Some options include the filesystem, memcache, or redis.  If none of these meet your
-needs you can always define your own CacheProvider.
+needs you can always write your own `Doctrine\Common\Cache\Cache` implementation.

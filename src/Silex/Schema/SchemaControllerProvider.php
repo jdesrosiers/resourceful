@@ -2,10 +2,9 @@
 
 namespace JDesrosiers\Silex\Schema;
 
+use JDesrosiers\Silex\Generic\GetResourceController;
 use Silex\Application;
 use Silex\ControllerProviderInterface;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class SchemaControllerProvider implements ControllerProviderInterface
 {
@@ -13,24 +12,12 @@ class SchemaControllerProvider implements ControllerProviderInterface
     {
         $controller = $app["controllers_factory"];
 
-        $controller->get("/{path}", array($this, "get"))
+        $schema = "http://json-schema.org/hyper-schema";
+        $contentType = "application/schema+json";
+        $controller->get("/{path}", new GetResourceController($app["schemaService"], $schema, $contentType))
             ->assert("path", ".+")
             ->bind("schema");
 
         return $controller;
-    }
-
-    public function get(Application $app, $path)
-    {
-        if (!$app["schemaService"]->contains($path)) {
-            throw new NotFoundHttpException();
-        }
-
-        $app["json-schema.describedBy"] = "http://json-schema.org/hyper-schema";
-        return $app->json(
-            $app["schemaService"]->fetch($path),
-            Response::HTTP_OK,
-            array("Content-Type" => "application/schema+json")
-        );
     }
 }

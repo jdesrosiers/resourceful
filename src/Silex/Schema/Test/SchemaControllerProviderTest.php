@@ -26,11 +26,11 @@ class SchemaControllerProviderTest extends \PHPUnit_Framework_TestCase
     public function testGet()
     {
         $this->app["schemaService"]->method("contains")
-            ->with("foo")
+            ->with("/schema/foo")
             ->willReturn(true);
 
         $this->app["schemaService"]->method("fetch")
-            ->with("foo")
+            ->with("/schema/foo")
             ->willReturn(new \stdClass());
 
         $headers = array(
@@ -47,7 +47,7 @@ class SchemaControllerProviderTest extends \PHPUnit_Framework_TestCase
     public function testGetNotFound()
     {
         $this->app["schemaService"]->method("fetch")
-            ->with("bar")
+            ->with("/schema/bar")
             ->willReturn(false);
 
         $headers = array(

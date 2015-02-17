@@ -22,7 +22,7 @@ class ErrorHandlerTest extends \PHPUnit_Framework_TestCase
 
         $this->app["schemaService"] = $this->getMock("Doctrine\Common\Cache\Cache");
         $this->app["schemaService"]->method("contains")
-            ->with("error")
+            ->with("/schema/error")
             ->willReturn(true);
 
         $this->app->register(new JsonSchemaServiceProvider());

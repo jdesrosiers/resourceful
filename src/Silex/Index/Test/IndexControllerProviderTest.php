@@ -24,7 +24,7 @@ class IndexControllerProviderTest extends \PHPUnit_Framework_TestCase
 
         $this->app["schemaService"] = $this->getMock("Doctrine\Common\Cache\Cache");
         $this->app["schemaService"]->method("contains")
-            ->with("index")
+            ->with("/schema/index")
             ->willReturn(true);
 
         $this->app->register(new JsonSchemaServiceProvider());

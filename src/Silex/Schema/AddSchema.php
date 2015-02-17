@@ -18,13 +18,16 @@ class AddSchema
 
     public function __invoke(Request $request, Application $app)
     {
-        if (!$app["schemaService"]->contains($this->type)) {
+        if (!$app["schemaService"]->contains("/schema/$this->type")) {
             $app["schemaService"]->save(
                 $this->type,
                 json_decode($app["twig"]->render("$this->type.json.twig", $this->replacements))
             );
         }
 
-        $app["json-schema.schema-store"]->add("/schema/$this->type", $app["schemaService"]->fetch($this->type));
+        $app["json-schema.schema-store"]->add(
+            "/schema/$this->type",
+            $app["schemaService"]->fetch("/schema/$this->type")
+        );
     }
 }

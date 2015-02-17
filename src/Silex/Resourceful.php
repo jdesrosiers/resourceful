@@ -40,7 +40,7 @@ class Resourceful extends Application
 
         // Supporting Controllers
         $this["schemaService"] = $this->share(function (Application $app) {
-            return new FileCache("{$app["rootPath"]}/schema");
+            return new FileCache($app["rootPath"]);
         });
         $this->mount("/schema", new SchemaControllerProvider());
         $this->mount("/", new IndexControllerProvider());
