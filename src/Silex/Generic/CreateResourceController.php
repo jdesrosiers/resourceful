@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
 
-class PutResourceController
+class CreateResourceController
 {
     private $service;
     private $schema;
@@ -20,28 +20,25 @@ class PutResourceController
         $this->schema = $schema;
     }
 
-    public function __invoke(Application $app, Request $request, $id)
+    public function __invoke(Application $app, Request $request)
     {
         $requestJson = $request->getContent() ?: "{}";
         $data = json_decode($requestJson);
+        $data->id = $app["uniqid"];
 
-        if ($id !== $data->id) {
-            throw new BadRequestHttpException("The `id` in the body must match the `id` in the URI");
-        }
         $schema = $app["json-schema.schema-store"]->get($this->schema);
         $validation = $app["json-schema.validator"]->validate($data, $schema);
         if (!$validation->valid) {
             throw new BadRequestHttpException(json_encode($validation->errors));
         }
 
-        $isCreated = !$this->service->contains($request->getRequestUri());
-
-        $success = $this->service->save($request->getRequestUri(), $data);
+        $location = $app["url_generator"]->generate($this->schema, array("id" => $data->id));
+        $success = $this->service->save($location, $data);
         if ($success === false) {
             throw new ServiceUnavailableHttpException(null, "Failed to save resource");
         }
 
         $app["json-schema.describedBy"] = $this->schema;
-        return $app->json($data, $isCreated ? Response::HTTP_CREATED : Response::HTTP_OK);
+        return $app->json($data, Response::HTTP_CREATED, array("Location" => $location));
     }
 }

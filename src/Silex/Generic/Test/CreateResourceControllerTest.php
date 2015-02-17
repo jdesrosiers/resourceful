@@ -2,12 +2,12 @@
 
 namespace JDesrosiers\Silex\Generic\Test;
 
-use JDesrosiers\Silex\Generic\GetResourceController;
+use JDesrosiers\Silex\Generic\CreateResourceController;
 use JDesrosiers\Silex\Resourceful;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Client;
 
-class GetResourceControllerTest extends \PHPUnit_Framework_TestCase
+class CreateResourceControllerTest extends \PHPUnit_Framework_TestCase
 {
     private $app;
     private $service;
@@ -20,74 +20,70 @@ class GetResourceControllerTest extends \PHPUnit_Framework_TestCase
         $this->app["rootPath"] = __DIR__;
 
         $this->service = $this->getMock("Doctrine\Common\Cache\Cache");
-        $this->app->get("/foo/{id}", new GetResourceController($this->service, "/schema/foo"));
+        $this->app->get("/foo/{id}")->bind("/schema/foo");
+        $this->app->post("/foo/", new CreateResourceController($this->service, "/schema/foo"));
+        $this->app["json-schema.schema-store"]->add("/schema/foo", $this->app["schemaService"]->fetch("foo"));
 
         $this->client = new Client($this->app);
     }
 
-    public function testGet()
+    public function testCreate()
     {
         $foo = new \stdClass();
         $foo->id = "4ee8e29d45851";
 
-        $this->service->method("contains")
-            ->with("/foo/4ee8e29d45851")
-            ->willReturn(true);
-
-        $this->service->method("fetch")
-            ->with("/foo/4ee8e29d45851")
-            ->willReturn($foo);
+        $this->app["uniqid"] = $foo->id;
 
         $headers = array(
             "HTTP_ACCEPT" => "application/json",
+            "CONTENT_TYPE" => "application/json"
         );
-        $this->client->request("GET", "/foo/4ee8e29d45851", array(), array(), $headers);
+        $this->client->request("POST", "/foo/", array(), array(), $headers, "{}");
         $response = $this->client->getResponse();
 
-        $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
+        $this->assertEquals(Response::HTTP_CREATED, $response->getStatusCode());
         $this->assertEquals("application/json; profile=\"/schema/foo\"", $response->headers->get("Content-Type"));
-        $this->assertJsonStringEqualsJsonString('{"id":"4ee8e29d45851"}', $response->getContent());
+        $this->assertEquals("/foo/$foo->id", $response->headers->get("Location"));
+        $this->assertJsonStringEqualsJsonString("{\"id\":\"$foo->id\"}", $response->getContent());
     }
 
-    public function testGetNotFound()
+    public function testBadRequest()
     {
-        $this->service->method("contains")
-            ->with("/foo/4ee8e29d45851")
-            ->willReturn(false);
+        $errorMessage = '[{"code":303,"dataPath":"\/illegalField","schemaPath":"\/additionalProperties","message":"Additional properties not allowed"}]';
 
         $headers = array(
             "HTTP_ACCEPT" => "application/json",
+            "CONTENT_TYPE" => "application/json"
         );
-        $this->client->request("GET", "/foo/4ee8e29d45851", array(), array(), $headers);
+        $this->client->request("POST", "/foo/", array(), array(), $headers, '{"illegalField":"illegal"}');
         $response = $this->client->getResponse();
         $content = json_decode($response->getContent());
 
-        $this->assertEquals(Response::HTTP_NOT_FOUND, $response->getStatusCode());
+        $this->assertEquals(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
         $this->assertEquals("application/json; profile=\"/schema/error\"", $response->headers->get("Content-Type"));
         $this->assertEquals(0, $content->code);
-        $this->assertEquals("Not Found", $content->message);
+        $this->assertEquals($errorMessage, $content->message);
     }
 
-    public function testGetError()
+    public function testSaveError()
     {
-        $this->service->method("contains")
-            ->with("/foo/4ee8e29d45851")
-            ->willReturn(true);
+        $foo = new \stdClass();
+        $foo->id = "4ee8e29d45851";
 
-        $this->service->method("fetch")
-            ->with("/foo/4ee8e29d45851")
+        $this->service->method("save")
             ->willReturn(false);
 
         $headers = array(
             "HTTP_ACCEPT" => "application/json",
+            "CONTENT_TYPE" => "application/json"
         );
-        $this->client->request("GET", "/foo/4ee8e29d45851", array(), array(), $headers);
+        $this->client->request("POST", "/foo/", array(), array(), $headers, "{}");
         $response = $this->client->getResponse();
         $content = json_decode($response->getContent());
 
         $this->assertEquals(Response::HTTP_SERVICE_UNAVAILABLE, $response->getStatusCode());
         $this->assertEquals("application/json; profile=\"/schema/error\"", $response->headers->get("Content-Type"));
         $this->assertEquals(0, $content->code);
-        $this->assertEquals("Failed to retrieve resource", $content->message);
+        $this->assertEquals("Failed to save resource", $content->message);
     }
 }

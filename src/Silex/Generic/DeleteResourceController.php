@@ -3,6 +3,7 @@
 namespace JDesrosiers\Silex\Generic;
 
 use Doctrine\Common\Cache\Cache;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
 
@@ -15,9 +16,9 @@ class DeleteResourceController
         $this->service = $service;
     }
 
-    public function __invoke($id)
+    public function __invoke(Request $request)
     {
-        $success = $this->service->delete($id);
+        $success = $this->service->delete($request->getRequestURI());
         if ($success === false) {
             throw new ServiceUnavailableHttpException(null, "Failed to delete resource");
         }

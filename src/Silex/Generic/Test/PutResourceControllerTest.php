@@ -32,7 +32,7 @@ class PutResourceControllerTest extends \PHPUnit_Framework_TestCase
         $foo->id = "4ee8e29d45851";
 
         $this->service->method("contains")
-            ->with($foo->id)
+            ->with("/foo/$foo->id")
             ->willReturn(false);
 
         $headers = array(
@@ -51,7 +51,7 @@ class PutResourceControllerTest extends \PHPUnit_Framework_TestCase
     {
         $errorMessage = '[{"code":303,"dataPath":"\/illegalField","schemaPath":"\/additionalProperties","message":"Additional properties not allowed"}]';
         $this->service->method("contains")
-            ->with("4ee8e29d45851")
+            ->with("/foo/4ee8e29d45851")
             ->willReturn(true);
 
         $headers = array(
@@ -75,7 +75,7 @@ class PutResourceControllerTest extends \PHPUnit_Framework_TestCase
         $foo->id = "4ee8e29d45851";
 
         $this->service->method("contains")
-            ->with($foo->id)
+            ->with("/foo/$foo->id")
             ->willReturn(true);
 
         $headers = array(
@@ -97,7 +97,7 @@ class PutResourceControllerTest extends \PHPUnit_Framework_TestCase
         $foo->id = "4ee8e29d45851";
 
         $this->service->method("contains")
-            ->with($foo->id)
+            ->with("/foo/$foo->id")
             ->willReturn(false);
 
         $this->service->method("save")
