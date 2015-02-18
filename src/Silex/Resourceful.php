@@ -44,8 +44,5 @@ class Resourceful extends Application
         });
         $this->mount("/schema", new SchemaControllerProvider());
         $this->mount("/", new IndexControllerProvider());
-
-        // Initialize CORS support
-        $this->after($this["cors"]);
     }
 }

@@ -36,6 +36,7 @@ $app["index.description"] = "This is my fantastic API";
 
 // End Registering Controllers
 
+$app->after($app["cors"]);
 $app->run();
 ```
 
@@ -106,10 +107,11 @@ silex-conneg-provider service provider.
 
 ### Support for OPTIONS requests
 I don't think anyone cares about OPTIONS request support unless they need it for CORS, but it is good to have for HTTP
-compliance anyway.  Resourceful gets OPTIONS request support for free by using the silex-cors-provider.
+compliance anyway.  Resourceful gets OPTIONS request support from the silex-cors-provider.
 
 ### CORS Support
-Support for CORS is built in automatically via the silex-cors-provider service provider.
+CORS support is provided by the silex-cors-provider service provider. To enable CORS support, add the `cors` after
+middleware to your application.
 
 Supporting Projects
 -------------------
@@ -133,10 +135,7 @@ provider adds middleware that inspects a request's content negotiation headers a
 problem.
 
 ### silex-cors-provider
-I included the silex-cors-provider for CORS support because I prefer to have a Jsonary browser setup as an independent
-project.  CORS allows my project to communicate with the independently deployed Jsonary browser.  But, even you choose to
-install Jsonary in your application, the silex-cors-provider is still nice to have because it defines OPTIONS routes for
-HTTP compliance.
+The silex-cors-provider is primarily used for generating OPTIONS routes.  However, CORS support comes in handy as well.
 
 ### Doctrine Cache
 I chose to use Doctrine Cache for data storage.  They have a wide range of implementations, so you can choose
