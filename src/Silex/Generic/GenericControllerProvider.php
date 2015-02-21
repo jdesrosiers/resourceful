@@ -30,7 +30,7 @@ class GenericControllerProvider implements ControllerProviderInterface
 
         $app["twig.loader"]->addLoader(new Twig_Loader_Filesystem(__DIR__ . "/templates"));
         $replacements = array("type" => $this->type, "title" => ucfirst($this->type));
-        $controller->before(new AddSchema($this->type, $replacements));
+        $controller->before(new AddSchema($this->type, "generic", $replacements));
 
         return $controller;
     }

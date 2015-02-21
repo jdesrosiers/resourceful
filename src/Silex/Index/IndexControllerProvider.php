@@ -16,7 +16,7 @@ class IndexControllerProvider implements ControllerProviderInterface
         $controller->get("/", array($this, "get"));
 
         $app["twig.loader"]->addLoader(new Twig_Loader_Filesystem(__DIR__ . "/templates"));
-        $controller->before(new AddSchema("index"));
+        $controller->before(new AddSchema("index", "index"));
 
         return $controller;
     }

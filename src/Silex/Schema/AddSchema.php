@@ -8,11 +8,13 @@ use Symfony\Component\HttpFoundation\Request;
 class AddSchema
 {
     private $type;
+    private $template;
     private $replacements;
 
-    public function __construct($type, $replacements = array())
+    public function __construct($type, $template, $replacements = array())
     {
         $this->type = $type;
+        $this->template = $template;
         $this->replacements = $replacements;
     }
 
@@ -21,7 +23,7 @@ class AddSchema
         if (!$app["schemaService"]->contains("/schema/$this->type")) {
             $app["schemaService"]->save(
                 "/schema/$this->type",
-                json_decode($app["twig"]->render("$this->type.json.twig", $this->replacements))
+                json_decode($app["twig"]->render("$this->template.json.twig", $this->replacements))
             );
         }
 

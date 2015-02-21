@@ -17,7 +17,7 @@ class ErrorHandlerServiceProvider implements ServiceProviderInterface
     public function register(Application $app)
     {
         $app["twig.loader"]->addLoader(new Twig_Loader_Filesystem(__DIR__ . "/templates"));
-        $app->before(new AddSchema("error"));
+        $app->before(new AddSchema("error", "error"));
 
         $app->error(function (\Exception $e, $code) use ($app) {
             $error = array("code" => $e->getCode(), "message" => $e->getMessage());
