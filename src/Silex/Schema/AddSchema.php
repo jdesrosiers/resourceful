@@ -20,7 +20,7 @@ class AddSchema
     {
         if (!$app["schemaService"]->contains("/schema/$this->type")) {
             $app["schemaService"]->save(
-                $this->type,
+                "/schema/$this->type",
                 json_decode($app["twig"]->render("$this->type.json.twig", $this->replacements))
             );
         }
