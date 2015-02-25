@@ -3,6 +3,7 @@
 namespace JDesrosiers\Silex\Generic\Test;
 
 use JDesrosiers\Silex\Generic\PutResourceController;
+use JDesrosiers\Silex\Generic\TypeContext;
 use JDesrosiers\Silex\Resourceful;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Client;
@@ -19,7 +20,7 @@ class PutResourceControllerTest extends \PHPUnit_Framework_TestCase
         $this->app["debug"] = true;
 
         $this->service = $this->getMock("Doctrine\Common\Cache\Cache");
-        $this->app->put("/foo/{id}", new PutResourceController($this->service, "/schema/foo"));
+        $this->app->put("/foo/{id}", new PutResourceController(new TypeContext($this->service, "/schema/foo")));
         $this->app["json-schema.schema-store"]->add("/schema/foo", $this->app["schemaService"]->fetch("/schema/foo"));
 
         $this->client = new Client($this->app);

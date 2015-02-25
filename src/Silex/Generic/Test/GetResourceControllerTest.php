@@ -3,6 +3,7 @@
 namespace JDesrosiers\Silex\Generic\Test;
 
 use JDesrosiers\Silex\Generic\GetResourceController;
+use JDesrosiers\Silex\Generic\TypeContext;
 use JDesrosiers\Silex\Resourceful;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Client;
@@ -19,7 +20,7 @@ class GetResourceControllerTest extends \PHPUnit_Framework_TestCase
         $this->app["debug"] = true;
 
         $this->service = $this->getMock("Doctrine\Common\Cache\Cache");
-        $this->app->get("/foo/{id}", new GetResourceController($this->service, "/schema/foo"));
+        $this->app->get("/foo/{id}", new GetResourceController(new TypeContext($this->service, "/schema/foo")));
 
         $this->client = new Client($this->app);
     }

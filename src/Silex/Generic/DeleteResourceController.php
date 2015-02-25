@@ -2,7 +2,6 @@
 
 namespace JDesrosiers\Silex\Generic;
 
-use Doctrine\Common\Cache\Cache;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
@@ -11,9 +10,9 @@ class DeleteResourceController
 {
     private $service;
 
-    public function __construct(Cache $service)
+    public function __construct(TypeContext $type)
     {
-        $this->service = $service;
+        $this->service = $type->service;
     }
 
     public function __invoke(Request $request)

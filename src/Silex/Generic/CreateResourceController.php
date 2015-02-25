@@ -2,7 +2,7 @@
 
 namespace JDesrosiers\Silex\Generic;
 
-use Doctrine\Common\Cache\Cache;
+use JDesrosiers\Silex\Generic\TypeContext;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,10 +14,10 @@ class CreateResourceController
     private $service;
     private $schema;
 
-    public function __construct(Cache $service, $schema)
+    public function __construct(TypeContext $type)
     {
-        $this->service = $service;
-        $this->schema = $schema;
+        $this->service = $type->service;
+        $this->schema = $type->schema;
     }
 
     public function __invoke(Application $app, Request $request)

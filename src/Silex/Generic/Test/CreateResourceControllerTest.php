@@ -3,6 +3,7 @@
 namespace JDesrosiers\Silex\Generic\Test;
 
 use JDesrosiers\Silex\Generic\CreateResourceController;
+use JDesrosiers\Silex\Generic\TypeContext;
 use JDesrosiers\Silex\Resourceful;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Client;
@@ -20,7 +21,7 @@ class CreateResourceControllerTest extends \PHPUnit_Framework_TestCase
 
         $this->service = $this->getMock("Doctrine\Common\Cache\Cache");
         $this->app->get("/foo/{id}")->bind("/schema/foo");
-        $this->app->post("/foo/", new CreateResourceController($this->service, "/schema/foo"));
+        $this->app->post("/foo/", new CreateResourceController(new TypeContext($this->service, "/schema/foo")));
         $this->app["json-schema.schema-store"]->add("/schema/foo", $this->app["schemaService"]->fetch("/schema/foo"));
 
         $this->client = new Client($this->app);

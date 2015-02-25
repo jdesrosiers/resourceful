@@ -3,6 +3,7 @@
 namespace JDesrosiers\Silex\Schema;
 
 use JDesrosiers\Silex\Generic\GetResourceController;
+use JDesrosiers\Silex\Generic\TypeContext;
 use Silex\Application;
 use Silex\ControllerProviderInterface;
 
@@ -12,9 +13,8 @@ class SchemaControllerProvider implements ControllerProviderInterface
     {
         $controller = $app["controllers_factory"];
 
-        $schema = "http://json-schema.org/hyper-schema";
-        $contentType = "application/schema+json";
-        $controller->get("/{path}", new GetResourceController($app["schemaService"], $schema, $contentType))
+        $type = new TypeContext($app["schemaService"], "http://json-schema.org/hyper-schema");
+        $controller->get("/{path}", new GetResourceController($type, "application/schema+json"))
             ->assert("path", ".+")
             ->bind("schema");
 

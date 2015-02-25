@@ -2,7 +2,6 @@
 
 namespace JDesrosiers\Silex\Generic;
 
-use Doctrine\Common\Cache\Cache;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -14,10 +13,10 @@ class GetResourceController
     private $schema;
     private $contentType;
 
-    public function __construct(Cache $service, $schema, $contentType = "application/json")
+    public function __construct(TypeContext $type, $contentType = "application/json")
     {
-        $this->service = $service;
-        $this->schema = $schema;
+        $this->service = $type->service;
+        $this->schema = $type->schema;
         $this->contentType = $contentType;
     }
 
