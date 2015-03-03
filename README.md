@@ -29,10 +29,10 @@ require __DIR__ . "/../vendor/autoload.php";
 $app = new JDesrosiers\Silex\Resourceful(array("rootPath" => __DIR__ . "/.."));
 $app["debug"] = true;
 
-$app["index.title"] = "My API";
-$app["index.description"] = "This is my fantastic API";
+$app["data"] = new JDesrosiers\Doctrine\Cache\FileCache(__DIR__ . "/../data");
 
 // Start Registering Controllers
+$app->mount("/", new JDesrosiers\Silex\Index\IndexControllerProvider($app["data"]));
 
 // End Registering Controllers
 
@@ -52,7 +52,7 @@ links to this default index schema as you add resources.
 
 Adding a new resource to your application, requires only one line of code in your front controller.
 ```php
-$app->mount("/foo", new GenericControllerProvider("foo", new FilesystemCache(__DIR__ . "/../data/foo")));
+$app->mount("/foo", new GenericControllerProvider("foo", $app["data"]));
 ```
 
 This controller adds the "foo" resource using the GenericControllerProvider.  The first argument is the name of the

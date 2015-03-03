@@ -5,7 +5,6 @@ namespace JDesrosiers\Silex;
 use JDesrosiers\Doctrine\Cache\FileCache;
 use JDesrosiers\Silex\Error\ErrorHandlerServiceProvider;
 use JDesrosiers\Silex\Generic\TypeFactoryServiceProvider;
-use JDesrosiers\Silex\Index\IndexControllerProvider;
 use JDesrosiers\Silex\Provider\ContentNegotiationServiceProvider;
 use JDesrosiers\Silex\Provider\CorsServiceProvider;
 use JDesrosiers\Silex\Schema\JsonSchemaServiceProvider;
@@ -45,6 +44,5 @@ class Resourceful extends Application
             return new FileCache($app["rootPath"]);
         });
         $this->mount("/schema", new SchemaControllerProvider());
-        $this->mount("/", new IndexControllerProvider());
     }
 }

@@ -27,7 +27,7 @@ class FileCache implements Cache
             return false;
         }
 
-        $json = file_get_contents("$this->location/$id.json");
+        $json = file_get_contents($this->filename($id));
         if ($json === false) {
             return false;
         }
@@ -42,7 +42,7 @@ class FileCache implements Cache
 
     public function contains($id)
     {
-        return $this->filesystem->exists("$this->location/$id.json");
+        return $this->filesystem->exists($this->filename($id));
     }
 
     public function save($id, $data, $lifeTime = null)
@@ -53,7 +53,7 @@ class FileCache implements Cache
         }
 
         try {
-            $this->filesystem->dumpFile("$this->location/$id.json", $json);
+            $this->filesystem->dumpFile($this->filename($id), $json);
         } catch (IOException $ioe) {
             return false;
         }
@@ -64,7 +64,7 @@ class FileCache implements Cache
     public function delete($id)
     {
         try {
-            $this->filesystem->remove("$this->location/$id.json");
+            $this->filesystem->remove($this->filename($id));
         } catch (IOException $ioe) {
             return false;
         }
@@ -75,5 +75,14 @@ class FileCache implements Cache
     public function getStats()
     {
         return null;
+    }
+
+    protected function filename($id)
+    {
+        if (is_dir("$this->location/$id")) {
+            $id .= "index";
+        }
+
+        return "$this->location/$id.json";
     }
 }
