@@ -84,8 +84,10 @@ resource will use the JSON Hyper-Schema suggestion of including a `profile` attr
 that defines the resource in the response.
 
 ### Creating a Resource
-A resource can be created by making a PUT request on a URI that doesn't contain a resource.  Resource creation will
-always respond with `201 Created`.  The new resource will be echoed in the response.
+A resource can be created in two ways.  The most common way is to use POST.  When a resource is created using POST, 
+there will be a `Link` header pointing to the newly created resource.  A resource can also be created using a PUT
+request on a URI that doesn't contain a resource.  Resource creation will always respond with `201 Created`.  The new
+resource will be echoed in the response.
 
 ### Modifying a Resource
 A resource can be modified using a PUT request.  PUT requests do not do partial updates.  The resource passed will be
