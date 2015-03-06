@@ -19,7 +19,7 @@ class GenericControllerProvider implements ControllerProviderInterface
 
     public function connect(Application $app)
     {
-        list($type, $controller) = $app["typeFactory"]($this->type);
+        list($type, $controller) = $app["typeFactory"]($this->service, $this->type);
         $controller->get("/{id}", new GetResourceController($type))->bind($type->schema);
         $controller->put("/{id}", new PutResourceController($type));
         $controller->delete("/{id}", new DeleteResourceController($type));

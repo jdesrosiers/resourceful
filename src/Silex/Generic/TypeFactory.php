@@ -2,6 +2,7 @@
 
 namespace JDesrosiers\Silex\Generic;
 
+use Doctrine\Common\Cache\Cache;
 use JDesrosiers\Silex\Schema\AddSchema;
 use Silex\Application;
 use Twig_Loader_Filesystem;
@@ -15,7 +16,7 @@ class TypeFactory
         $this->app = $app;
     }
 
-    public function __invoke($type)
+    public function __invoke(Cache $service, $type)
     {
         $controller = $this->app["controllers_factory"];
 
@@ -23,7 +24,7 @@ class TypeFactory
         $replacements = array("type" => $type, "title" => ucfirst($type));
         $controller->before(new AddSchema($type, "generic", $replacements));
 
-        $context = new TypeContext($this->app["data"], "/schema/$type");
+        $context = new TypeContext($service, "/schema/$type");
 
         return array($context, $controller);
     }
