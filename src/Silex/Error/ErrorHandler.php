@@ -3,6 +3,7 @@
 namespace JDesrosiers\Silex\Error;
 
 use Silex\Application;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class ErrorHandler
 {
@@ -21,6 +22,6 @@ class ErrorHandler
         }
 
         $this->app["json-schema.describedBy"] = "/schema/error";
-        return $this->app->json($error);
+        return JsonResponse::create($error);
     }
 }

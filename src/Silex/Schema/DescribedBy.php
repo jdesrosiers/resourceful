@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
 
-class DescribedByFilter
+class DescribedBy
 {
     public function __invoke(Request $request, Response $response, Application $app)
     {

@@ -25,6 +25,6 @@ class JsonSchemaServiceProvider implements ServiceProviderInterface
             return new Jsv4Validator();
         });
 
-        $app->after(new DescribedByFilter());
+        $app->after(new DescribedBy());
     }
 }

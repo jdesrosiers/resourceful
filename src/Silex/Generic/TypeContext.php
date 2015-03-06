@@ -2,12 +2,14 @@
 
 namespace JDesrosiers\Silex\Generic;
 
+use Doctrine\Common\Cache\Cache;
+
 class TypeContext
 {
     private $service;
     private $schema;
 
-    public function __construct($service, $schema)
+    public function __construct(Cache $service, $schema)
     {
         $this->service = $service;
         $this->schema = $schema;

@@ -3,6 +3,7 @@
 namespace JDesrosiers\Silex\Generic;
 
 use Silex\Application;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -41,6 +42,6 @@ class PutResourceController
         }
 
         $app["json-schema.describedBy"] = $this->schema;
-        return $app->json($data, $isCreated ? Response::HTTP_CREATED : Response::HTTP_OK);
+        return JsonResponse::create($data, $isCreated ? Response::HTTP_CREATED : Response::HTTP_OK);
     }
 }

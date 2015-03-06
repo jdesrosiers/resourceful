@@ -4,6 +4,7 @@ namespace JDesrosiers\Silex\Generic;
 
 use JDesrosiers\Silex\Generic\TypeContext;
 use Silex\Application;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
@@ -39,6 +40,6 @@ class CreateResourceController
         }
 
         $app["json-schema.describedBy"] = $this->schema;
-        return $app->json($data, Response::HTTP_CREATED, array("Location" => $location));
+        return JsonResponse::create($data, Response::HTTP_CREATED, array("Location" => $location));
     }
 }
