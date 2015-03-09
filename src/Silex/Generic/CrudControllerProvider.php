@@ -3,8 +3,10 @@
 namespace JDesrosiers\Silex\Generic;
 
 use Doctrine\Common\Cache\Cache;
+use JDesrosiers\Silex\Schema\AddSchema;
 use Silex\Application;
 use Silex\ControllerProviderInterface;
+use Twig_Loader_Filesystem;
 
 class CrudControllerProvider implements ControllerProviderInterface
 {
@@ -19,11 +21,18 @@ class CrudControllerProvider implements ControllerProviderInterface
 
     public function connect(Application $app)
     {
-        list($type, $controller) = $app["typeFactory"]($this->service, $this->type);
-        $controller->get("/{id}", new GetResourceController($type))->bind($type->schema);
-        $controller->put("/{id}", new PutResourceController($type));
-        $controller->delete("/{id}", new DeleteResourceController($type));
-        $controller->post("/", new CreateResourceController($type));
+        $controller = $app["controllers_factory"];
+
+        $context = new TypeContext($this->service, "/schema/$this->type");
+
+        $app["twig.loader"]->addLoader(new Twig_Loader_Filesystem(__DIR__ . "/templates"));
+        $replacements = array("type" => $this->type, "title" => ucfirst($this->type));
+        $controller->before(new AddSchema($context->schema, "generic", $replacements));
+
+        $controller->get("/{id}", new GetResourceController($context))->bind($this->type);
+        $controller->put("/{id}", new PutResourceController($context));
+        $controller->delete("/{id}", new DeleteResourceController($context));
+        $controller->post("/", new CreateResourceController($context));
 
         return $controller;
     }

@@ -4,7 +4,6 @@ namespace JDesrosiers\Silex;
 
 use JDesrosiers\Doctrine\Cache\FileCache;
 use JDesrosiers\Silex\Error\ErrorHandlerServiceProvider;
-use JDesrosiers\Silex\Generic\TypeFactoryServiceProvider;
 use JDesrosiers\Silex\Provider\ContentNegotiationServiceProvider;
 use JDesrosiers\Silex\Provider\CorsServiceProvider;
 use JDesrosiers\Silex\Schema\JsonSchemaServiceProvider;
@@ -32,7 +31,6 @@ class Resourceful extends Application
         $this->register(new CorsServiceProvider());
 
         // App specific
-        $this->register(new TypeFactoryServiceProvider());
         $this->register(new JsonSchemaServiceProvider());
         $this->register(new ErrorHandlerServiceProvider());
         $this["uniqid"] = function () {
