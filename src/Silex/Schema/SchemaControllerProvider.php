@@ -14,8 +14,8 @@ class SchemaControllerProvider implements ControllerProviderInterface
         $controller = $app["controllers_factory"];
 
         $type = new TypeContext($app["schemaService"], "http://json-schema.org/hyper-schema");
-        $controller->get("/{path}", new GetResourceController($type, "application/schema+json"))
-            ->assert("path", ".+")
+        $controller->get("/{type}", new GetResourceController($type, "application/schema+json"))
+            ->assert("type", ".+")
             ->bind("schema");
 
         return $controller;

@@ -16,9 +16,11 @@ class ErrorHandlerServiceProvider implements ServiceProviderInterface
 
     public function register(Application $app)
     {
-        $app["twig.loader"]->addLoader(new Twig_Loader_Filesystem(__DIR__ . "/templates"));
-        $app->before(new AddSchema("/schema/error", "error"));
+        $schema = $app["url_generator"]->generate("schema", array("type" => "error"));
 
-        $app->error(new ErrorHandler($app));
+        $app["twig.loader"]->addLoader(new Twig_Loader_Filesystem(__DIR__ . "/templates"));
+        $app->before(new AddSchema($schema, "error"));
+
+        $app->error(new ErrorHandler($app, $schema));
     }
 }

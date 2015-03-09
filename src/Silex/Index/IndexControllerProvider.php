@@ -23,11 +23,12 @@ class IndexControllerProvider implements ControllerProviderInterface
     {
         $controller = $app["controllers_factory"];
 
-        $type = new TypeContext($this->service, "/schema/index");
-        $controller->get("/", new GetResourceController($type))->bind("index");
+        $schema = $app["url_generator"]->generate("schema", array("type" => "index"));
+        $context = new TypeContext($this->service, $schema);
+        $controller->get("/", new GetResourceController($context))->bind("index");
 
         $app["twig.loader"]->addLoader(new Twig_Loader_Filesystem(__DIR__ . "/templates"));
-        $controller->before(new AddSchema($type->schema, "index"));
+        $controller->before(new AddSchema($context->schema, "index"));
 
         return $controller;
     }

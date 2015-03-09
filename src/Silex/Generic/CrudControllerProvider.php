@@ -23,13 +23,14 @@ class CrudControllerProvider implements ControllerProviderInterface
     {
         $controller = $app["controllers_factory"];
 
-        $context = new TypeContext($this->service, "/schema/$this->type");
+        $schema = $app["url_generator"]->generate("schema", array("type" => $this->type));
+        $context = new TypeContext($this->service, $schema);
 
         $app["twig.loader"]->addLoader(new Twig_Loader_Filesystem(__DIR__ . "/templates"));
         $replacements = array("type" => $this->type, "title" => ucfirst($this->type));
         $controller->before(new AddSchema($context->schema, "generic", $replacements));
 
-        $controller->get("/{id}", new GetResourceController($context))->bind($this->type);
+        $controller->get("/{id}", new GetResourceController($context))->bind($context->schema);
         $controller->put("/{id}", new PutResourceController($context));
         $controller->delete("/{id}", new DeleteResourceController($context));
         $controller->post("/", new CreateResourceController($context));

@@ -8,10 +8,12 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 class ErrorHandler
 {
     private $app;
+    private $schema;
 
-    public function __construct(Application $app)
+    public function __construct(Application $app, $schema)
     {
         $this->app = $app;
+        $this->schema = $schema;
     }
 
     public function __invoke(\Exception $e, $code)
@@ -21,7 +23,7 @@ class ErrorHandler
             $error["trace"] = $e->getTraceAsString();
         }
 
-        $this->app["json-schema.describedBy"] = "/schema/error";
+        $this->app["json-schema.describedBy"] = $this->schema;
         return JsonResponse::create($error);
     }
 }

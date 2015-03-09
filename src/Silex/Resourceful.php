@@ -18,9 +18,9 @@ class Resourceful extends Application
     public function __construct($config = array())
     {
         parent::__construct($config);
+        ErrorHandler::register();
 
         // Middleware
-        ErrorHandler::register();
         $this->register(new UrlGeneratorServiceProvider());
         $this->register(new TwigServiceProvider());
         $this->register(new ContentNegotiationServiceProvider(), array(
@@ -29,10 +29,7 @@ class Resourceful extends Application
             "conneg.defaultFormat" => "json",
         ));
         $this->register(new CorsServiceProvider());
-
-        // App specific
         $this->register(new JsonSchemaServiceProvider());
-        $this->register(new ErrorHandlerServiceProvider());
         $this["uniqid"] = function () {
             return uniqid();
         };
@@ -42,5 +39,8 @@ class Resourceful extends Application
             return new FileCache($app["rootPath"]);
         });
         $this->mount("/schema", new SchemaControllerProvider());
+
+        // Error Handler
+        $this->register(new ErrorHandlerServiceProvider());
     }
 }
