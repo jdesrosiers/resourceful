@@ -10,6 +10,7 @@ use Symfony\Component\HttpKernel\Client;
 class SchemaControllerProviderTest extends \PHPUnit_Framework_TestCase
 {
     private $client;
+    private $schemaService;
 
     public function setUp()
     {
@@ -17,19 +18,19 @@ class SchemaControllerProviderTest extends \PHPUnit_Framework_TestCase
         $this->app["debug"] = true;
         $this->app["rootPath"] = __DIR__;
 
-        $this->app["schemaService"] = $this->getMock("Doctrine\Common\Cache\Cache");
-        $this->app->mount("/schema", new SchemaControllerProvider());
+        $this->schemaService = $this->getMock("Doctrine\Common\Cache\Cache");
+        $this->app->mount("/schema", new SchemaControllerProvider($this->schemaService));
 
         $this->client = new Client($this->app);
     }
 
     public function testGet()
     {
-        $this->app["schemaService"]->method("contains")
+        $this->schemaService->method("contains")
             ->with("/schema/foo")
             ->willReturn(true);
 
-        $this->app["schemaService"]->method("fetch")
+        $this->schemaService->method("fetch")
             ->with("/schema/foo")
             ->willReturn(new \stdClass());
 
@@ -46,7 +47,7 @@ class SchemaControllerProviderTest extends \PHPUnit_Framework_TestCase
 
     public function testGetNotFound()
     {
-        $this->app["schemaService"]->method("fetch")
+        $this->schemaService->method("fetch")
             ->with("/schema/bar")
             ->willReturn(false);
 

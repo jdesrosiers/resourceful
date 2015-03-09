@@ -10,7 +10,7 @@ class ErrorHandler
     private $app;
     private $schema;
 
-    public function __construct(Application $app, $schema)
+    public function __construct(Application $app, $schema = null)
     {
         $this->app = $app;
         $this->schema = $schema;
