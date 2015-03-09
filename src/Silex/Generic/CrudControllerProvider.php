@@ -6,7 +6,7 @@ use Doctrine\Common\Cache\Cache;
 use Silex\Application;
 use Silex\ControllerProviderInterface;
 
-class GenericControllerProvider implements ControllerProviderInterface
+class CrudControllerProvider implements ControllerProviderInterface
 {
     private $type;
     private $service;
