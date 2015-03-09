@@ -30,7 +30,9 @@ class ErrorHandlerTest extends \PHPUnit_Framework_TestCase
         $this->app->register(new JsonSchemaServiceProvider());
         $this->app->register(new TwigServiceProvider());
 
-        $this->app->get("/schema/{type}", function () {})->bind("schema");
+        $this->app->get("/schema/{type}", function () {
+            // No Op
+        })->bind("schema");
 
         $this->app->register(new ErrorHandlerServiceProvider());
 
