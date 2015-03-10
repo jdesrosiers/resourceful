@@ -26,17 +26,26 @@ Define your front controller.
 
 require __DIR__ . "/../vendor/autoload.php";
 
-$app = new JDesrosiers\Silex\Resourceful(array("rootPath" => __DIR__ . "/.."));
+$app = new JDesrosiers\Silex\Resourceful();
 $app["debug"] = true;
 
 $app["data"] = new JDesrosiers\Doctrine\Cache\FileCache(__DIR__ . "/../data");
+$app["schemaService"] = new JDesrosiers\Doctrine\Cache\FileCache(__DIR__ . "/..");;
+
+// Supporting Controllers
+$app->mount("/schema", new JDesrosiers\Silex\Schema\SchemaControllerProvider($app["schemaService"]));
+$app->mount("/", new JDesrosiers\Silex\Index\IndexControllerProvider($app["data"]));
 
 // Start Registering Controllers
-$app->mount("/", new JDesrosiers\Silex\Index\IndexControllerProvider($app["data"]));
 
 // End Registering Controllers
 
+// Error Handler
+$app->register(new ErrorHandlerServiceProvider());
+
+// Initialize CORS support
 $app->after($app["cors"]);
+
 $app->run();
 ```
 
@@ -52,7 +61,7 @@ links to this default index schema as you add resources.
 
 Adding a new resource to your application, requires only one line of code in your front controller.
 ```php
-$app->mount("/foo", new GenericControllerProvider("foo", $app["data"]));
+$app->mount("/foo", new JDesrosiers\Silex\Generic\CrudControllerProvider("foo", $app["data"]));
 ```
 
 This controller adds the "foo" resource using the GenericControllerProvider.  The first argument is the name of the

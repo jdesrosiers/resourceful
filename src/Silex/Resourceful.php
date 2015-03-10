@@ -2,12 +2,9 @@
 
 namespace JDesrosiers\Silex;
 
-use JDesrosiers\Doctrine\Cache\FileCache;
-use JDesrosiers\Silex\Error\ErrorHandlerServiceProvider;
 use JDesrosiers\Silex\Provider\ContentNegotiationServiceProvider;
 use JDesrosiers\Silex\Provider\CorsServiceProvider;
 use JDesrosiers\Silex\Schema\JsonSchemaServiceProvider;
-use JDesrosiers\Silex\Schema\SchemaControllerProvider;
 use Silex\Application;
 use Silex\Provider\TwigServiceProvider;
 use Silex\Provider\UrlGeneratorServiceProvider;
@@ -33,12 +30,5 @@ class Resourceful extends Application
         $this["uniqid"] = function () {
             return uniqid();
         };
-
-        // Supporting Controllers
-        $this["schemaService"] = new FileCache($this["rootPath"]);
-        $this->mount("/schema", new SchemaControllerProvider($this["schemaService"]));
-
-        // Error Handler
-        $this->register(new ErrorHandlerServiceProvider());
     }
 }
