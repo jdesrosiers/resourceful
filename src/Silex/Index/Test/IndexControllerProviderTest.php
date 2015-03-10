@@ -2,6 +2,7 @@
 
 namespace JDesrosiers\Silex\Index\Test;
 
+use JDesrosiers\Doctrine\Cache\FileCache;
 use JDesrosiers\Silex\Index\IndexControllerProvider;
 use JDesrosiers\Silex\Resourceful;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,8 +15,13 @@ class IndexControllerProviderTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->app = new Resourceful(array("rootPath" => __DIR__));
+        $this->app = new Resourceful();
         $this->app["debug"] = true;
+
+        $this->app["schemaService"] = new FileCache(__DIR__);
+        $this->app->get("/schema/{type}", function () {
+            // No Op
+        })->bind("schema");
 
         $this->service = $this->getMock("Doctrine\Common\Cache\Cache");
         $this->app->mount("/", new IndexControllerProvider($this->service));

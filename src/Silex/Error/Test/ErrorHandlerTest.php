@@ -2,11 +2,9 @@
 
 namespace JDesrosiers\Silex\Error\Test;
 
+use JDesrosiers\Doctrine\Cache\FileCache;
 use JDesrosiers\Silex\Error\ErrorHandlerServiceProvider;
-use JDesrosiers\Silex\Schema\JsonSchemaServiceProvider;
-use Silex\Application;
-use Silex\Provider\TwigServiceProvider;
-use Silex\Provider\UrlGeneratorServiceProvider;
+use JDesrosiers\Silex\Resourceful;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Client;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -18,33 +16,25 @@ class ErrorHandlerTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->app = new Application();
+        $this->app = new Resourceful();
         $this->app["debug"] = true;
 
-        $this->app["schemaService"] = $this->getMock("Doctrine\Common\Cache\Cache");
-        $this->app["schemaService"]->method("contains")
-            ->with("/schema/error")
-            ->willReturn(true);
-
-        $this->app->register(new UrlGeneratorServiceProvider());
-        $this->app->register(new JsonSchemaServiceProvider());
-        $this->app->register(new TwigServiceProvider());
-
+        $this->app["schemaService"] = new FileCache(__DIR__);
         $this->app->get("/schema/{type}", function () {
             // No Op
         })->bind("schema");
 
         $this->app->register(new ErrorHandlerServiceProvider());
 
-        $this->app->get("/foo", function () {
-            throw new NotFoundHttpException("Not Found", null, 4);
-        });
-
         $this->client = new Client($this->app);
     }
 
     public function testHandleError()
     {
+        $this->app->get("/foo", function () {
+            throw new NotFoundHttpException("Not Found", null, 4);
+        });
+
         $headers = array(
             "HTTP_ACCEPT" => "application/json",
         );

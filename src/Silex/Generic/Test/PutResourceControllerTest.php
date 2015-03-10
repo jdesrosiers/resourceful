@@ -2,6 +2,8 @@
 
 namespace JDesrosiers\Silex\Generic\Test;
 
+use JDesrosiers\Doctrine\Cache\FileCache;
+use JDesrosiers\Silex\Error\ErrorHandlerServiceProvider;
 use JDesrosiers\Silex\Generic\PutResourceController;
 use JDesrosiers\Silex\Generic\TypeContext;
 use JDesrosiers\Silex\Resourceful;
@@ -16,8 +18,14 @@ class PutResourceControllerTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->app = new Resourceful(array("rootPath" => __DIR__));
+        $this->app = new Resourceful();
         $this->app["debug"] = true;
+        $this->app["schemaService"] = new FileCache(__DIR__);
+        $this->app->get("/schema/{type}", function () {
+            // No Op
+        })->bind("schema");
+
+        $this->app->register(new ErrorHandlerServiceProvider());
 
         $this->service = $this->getMock("Doctrine\Common\Cache\Cache");
         $this->app->put("/foo/{id}", new PutResourceController(new TypeContext($this->service, "/schema/foo")));
