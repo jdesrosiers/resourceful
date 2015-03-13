@@ -2,7 +2,7 @@
 
 namespace JDesrosiers\Silex\Generic;
 
-use Silex\Application;
+use Doctrine\Common\Cache\Cache;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -11,17 +11,15 @@ use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
 class GetResourceController
 {
     private $service;
-    private $schema;
     private $contentType;
 
-    public function __construct(TypeContext $type, $contentType = "application/json")
+    public function __construct(Cache $service, $contentType = "application/json")
     {
-        $this->service = $type->service;
-        $this->schema = $type->schema;
+        $this->service = $service;
         $this->contentType = $contentType;
     }
 
-    public function __invoke(Application $app, Request $request)
+    public function __invoke(Request $request)
     {
         if (!$this->service->contains($request->getRequestUri())) {
             throw new NotFoundHttpException("Not Found");
@@ -32,7 +30,6 @@ class GetResourceController
             throw new ServiceUnavailableHttpException(null, "Failed to retrieve resource");
         }
 
-        $app["json-schema.describedBy"] = $this->schema;
         $response = JsonResponse::create($resource);
         $response->headers->set("Content-Type", $this->contentType);
 

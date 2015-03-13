@@ -2,28 +2,24 @@
 
 namespace JDesrosiers\Silex\Error;
 
-use Silex\Application;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 class ErrorHandler
 {
-    private $app;
-    private $schema;
+    private $debug;
 
-    public function __construct(Application $app, $schema = null)
+    public function __construct($debug)
     {
-        $this->app = $app;
-        $this->schema = $schema;
+        $this->debug = $debug;
     }
 
     public function __invoke(\Exception $e, $code)
     {
         $error = array("code" => $e->getCode(), "message" => $e->getMessage());
-        if ($this->app["debug"]) {
+        if ($this->debug) {
             $error["trace"] = $e->getTraceAsString();
         }
 
-        $this->app["json-schema.describedBy"] = $this->schema;
         return JsonResponse::create($error);
     }
 }

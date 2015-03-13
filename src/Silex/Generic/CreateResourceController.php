@@ -2,7 +2,7 @@
 
 namespace JDesrosiers\Silex\Generic;
 
-use JDesrosiers\Silex\Generic\TypeContext;
+use Doctrine\Common\Cache\Cache;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,10 +15,10 @@ class CreateResourceController
     private $service;
     private $schema;
 
-    public function __construct(TypeContext $type)
+    public function __construct(Cache $service, $schema)
     {
-        $this->service = $type->service;
-        $this->schema = $type->schema;
+        $this->service = $service;
+        $this->schema = $schema;
     }
 
     public function __invoke(Application $app, Request $request)
@@ -39,7 +39,6 @@ class CreateResourceController
             throw new ServiceUnavailableHttpException(null, "Failed to save resource");
         }
 
-        $app["json-schema.describedBy"] = $this->schema;
         return JsonResponse::create($data, Response::HTTP_CREATED, array("Location" => $location));
     }
 }

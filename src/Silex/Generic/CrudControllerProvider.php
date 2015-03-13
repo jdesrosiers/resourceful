@@ -4,6 +4,7 @@ namespace JDesrosiers\Silex\Generic;
 
 use Doctrine\Common\Cache\Cache;
 use JDesrosiers\Silex\Schema\AddSchema;
+use JDesrosiers\Silex\Schema\DescribedBy;
 use Silex\Application;
 use Silex\ControllerProviderInterface;
 use Twig_Loader_Filesystem;
@@ -24,16 +25,16 @@ class CrudControllerProvider implements ControllerProviderInterface
         $controller = $app["controllers_factory"];
 
         $schema = $app["url_generator"]->generate("schema", array("type" => $this->type));
-        $context = new TypeContext($this->service, $schema);
+        $controller->after(new DescribedBy($schema));
 
         $app["twig.loader"]->addLoader(new Twig_Loader_Filesystem(__DIR__ . "/templates"));
         $replacements = array("type" => $this->type, "title" => ucfirst($this->type));
-        $controller->before(new AddSchema($context->schema, "generic", $replacements));
+        $controller->before(new AddSchema($schema, "generic", $replacements));
 
-        $controller->get("/{id}", new GetResourceController($context))->bind($context->schema);
-        $controller->put("/{id}", new PutResourceController($context));
-        $controller->delete("/{id}", new DeleteResourceController($context));
-        $controller->post("/", new CreateResourceController($context));
+        $controller->get("/{id}", new GetResourceController($this->service))->bind($schema);
+        $controller->put("/{id}", new PutResourceController($this->service, $schema));
+        $controller->delete("/{id}", new DeleteResourceController($this->service));
+        $controller->post("/", new CreateResourceController($this->service, $schema));
 
         return $controller;
     }

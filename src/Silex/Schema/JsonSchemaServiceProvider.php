@@ -24,7 +24,5 @@ class JsonSchemaServiceProvider implements ServiceProviderInterface
         $app["json-schema.validator"] = $app->share(function () {
             return new Jsv4Validator();
         });
-
-        $app->after(new DescribedBy());
     }
 }

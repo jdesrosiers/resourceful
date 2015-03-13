@@ -3,9 +3,8 @@
 namespace JDesrosiers\Silex\Generic\Test;
 
 use JDesrosiers\Doctrine\Cache\FileCache;
-use JDesrosiers\Silex\Error\ErrorHandlerServiceProvider;
+use JDesrosiers\Silex\Error\ErrorHandler;
 use JDesrosiers\Silex\Generic\DeleteResourceController;
-use JDesrosiers\Silex\Generic\TypeContext;
 use JDesrosiers\Silex\Resourceful;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Client;
@@ -21,14 +20,11 @@ class DeleteResourceControllerTest extends \PHPUnit_Framework_TestCase
         $this->app = new Resourceful();
         $this->app["debug"] = true;
         $this->app["schemaService"] = new FileCache(__DIR__);
-        $this->app->get("/schema/{type}", function () {
-            // No Op
-        })->bind("schema");
-
-        $this->app->register(new ErrorHandlerServiceProvider());
 
         $this->service = $this->getMock("Doctrine\Common\Cache\Cache");
-        $this->app->delete("/foo/{id}", new DeleteResourceController(new TypeContext($this->service, "/schema/foo")));
+        $this->app->delete("/foo/{id}", new DeleteResourceController($this->service));
+
+        $this->app->error(new ErrorHandler(true));
 
         $this->client = new Client($this->app);
     }
@@ -58,7 +54,7 @@ class DeleteResourceControllerTest extends \PHPUnit_Framework_TestCase
         $content = json_decode($response->getContent());
 
         $this->assertEquals(Response::HTTP_SERVICE_UNAVAILABLE, $response->getStatusCode());
-        $this->assertEquals("application/json; profile=\"/schema/error\"", $response->headers->get("Content-Type"));
+        $this->assertEquals("application/json", $response->headers->get("Content-Type"));
         $this->assertEquals(0, $content->code);
         $this->assertEquals("Failed to delete resource", $content->message);
     }

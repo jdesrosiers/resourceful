@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
 
-class DescribedBy
+class DescribedByError
 {
     private $schema;
 
@@ -18,7 +18,7 @@ class DescribedBy
 
     public function __invoke(Request $request, Response $response, Application $app)
     {
-        if ($response->isOk() && !$response->isEmpty()) {
+        if (!$response->isOk()) {
             if ($app["json-schema.correlationMechanism"] === "profile") {
                 $contentType = $response->headers->get("Content-Type");
                 $response->headers->set("Content-Type", "$contentType; profile=\"$this->schema\"");
