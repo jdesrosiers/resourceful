@@ -30,8 +30,7 @@ class CreateResourceController
         $this->validate($app, $data);
 
         $location = $app["url_generator"]->generate($this->schema, array("id" => $data->id));
-        $success = $this->service->save($location, $data);
-        if ($success === false) {
+        if ($this->service->save($location, $data) === false) {
             throw new ServiceUnavailableHttpException(null, "Failed to save resource");
         }
 

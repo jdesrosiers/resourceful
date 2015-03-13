@@ -26,23 +26,21 @@ class PutResourceController
         $requestJson = $request->getContent() ?: "{}";
         $data = json_decode($requestJson);
 
-        if ($id !== $data->id) {
-            throw new BadRequestHttpException("The `id` in the body must match the `id` in the URI");
-        }
-        $this->validate($app, $data);
+        $this->validate($app, $id, $data);
 
         $isCreated = !$this->service->contains($request->getRequestUri());
-
-        $success = $this->service->save($request->getRequestUri(), $data);
-        if ($success === false) {
+        if ($this->service->save($request->getRequestUri(), $data) === false) {
             throw new ServiceUnavailableHttpException(null, "Failed to save resource");
         }
 
         return JsonResponse::create($data, $isCreated ? Response::HTTP_CREATED : Response::HTTP_OK);
     }
 
-    private function validate(Application $app, $data)
+    private function validate(Application $app, $id, $data)
     {
+        if ($id !== $data->id) {
+            throw new BadRequestHttpException("The `id` in the body must match the `id` in the URI");
+        }
         $schema = $app["json-schema.schema-store"]->get($this->schema);
         $validation = $app["json-schema.validator"]->validate($data, $schema);
         if (!$validation->valid) {
