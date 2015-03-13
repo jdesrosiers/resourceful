@@ -27,11 +27,7 @@ class CreateResourceController
         $data = json_decode($requestJson);
         $data->id = $app["uniqid"];
 
-        $schema = $app["json-schema.schema-store"]->get($this->schema);
-        $validation = $app["json-schema.validator"]->validate($data, $schema);
-        if (!$validation->valid) {
-            throw new BadRequestHttpException(json_encode($validation->errors));
-        }
+        $this->validate($app, $data);
 
         $location = $app["url_generator"]->generate($this->schema, array("id" => $data->id));
         $success = $this->service->save($location, $data);
@@ -40,5 +36,14 @@ class CreateResourceController
         }
 
         return JsonResponse::create($data, Response::HTTP_CREATED, array("Location" => $location));
+    }
+
+    private function validate(Application $app, $data)
+    {
+        $schema = $app["json-schema.schema-store"]->get($this->schema);
+        $validation = $app["json-schema.validator"]->validate($data, $schema);
+        if (!$validation->valid) {
+            throw new BadRequestHttpException(json_encode($validation->errors));
+        }
     }
 }

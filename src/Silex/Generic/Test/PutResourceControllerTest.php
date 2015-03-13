@@ -100,10 +100,6 @@ class PutResourceControllerTest extends \PHPUnit_Framework_TestCase
         $foo = new \stdClass();
         $foo->id = "4ee8e29d45851";
 
-        $this->service->method("contains")
-            ->with("/foo/$foo->id")
-            ->willReturn(false);
-
         $this->service->method("save")
             ->willReturn(false);
 

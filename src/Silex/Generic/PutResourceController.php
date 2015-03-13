@@ -29,11 +29,7 @@ class PutResourceController
         if ($id !== $data->id) {
             throw new BadRequestHttpException("The `id` in the body must match the `id` in the URI");
         }
-        $schema = $app["json-schema.schema-store"]->get($this->schema);
-        $validation = $app["json-schema.validator"]->validate($data, $schema);
-        if (!$validation->valid) {
-            throw new BadRequestHttpException(json_encode($validation->errors));
-        }
+        $this->validate($app, $data);
 
         $isCreated = !$this->service->contains($request->getRequestUri());
 
@@ -43,5 +39,14 @@ class PutResourceController
         }
 
         return JsonResponse::create($data, $isCreated ? Response::HTTP_CREATED : Response::HTTP_OK);
+    }
+
+    private function validate(Application $app, $data)
+    {
+        $schema = $app["json-schema.schema-store"]->get($this->schema);
+        $validation = $app["json-schema.validator"]->validate($data, $schema);
+        if (!$validation->valid) {
+            throw new BadRequestHttpException(json_encode($validation->errors));
+        }
     }
 }
