@@ -10,7 +10,7 @@
          syntaxCheck="false"
 >
     <testsuites>
-        <testsuite name="RestPrototype Test Suite">
+        <testsuite name="Resourceful Test Suite">
             <directory>src/*/*/Test</directory>
             <directory>src/*/Test</directory>
         </testsuite>

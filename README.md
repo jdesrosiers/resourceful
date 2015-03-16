@@ -64,7 +64,7 @@ Adding a new resource to your application, requires only one line of code in you
 $app->mount("/foo", new JDesrosiers\Silex\Generic\CrudControllerProvider("foo", $app["data"]));
 ```
 
-This controller adds the "foo" resource using the GenericControllerProvider.  The first argument is the name of the
+This controller adds the "foo" resource using the CrudControllerProvider.  The first argument is the name of the
 type.  The second argument is any Doctrine Cache implementation.  Storing files on the filesystem is usually
 good enough for a rapid prototype, but you can choose something like memcache or redis if you prefer.  A centralized
 data storage can be useful if you are collaborating with others on this application.

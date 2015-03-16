@@ -9,21 +9,14 @@ use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
 
 class DescribedBy
 {
-    private $schema;
-
-    public function __construct($schema)
-    {
-        $this->schema = $schema;
-    }
-
     public function __invoke(Request $request, Response $response, Application $app)
     {
-        if ($response->isOk() && !$response->isEmpty()) {
+        if ($app->offsetExists("json-schema.describedBy") && !$response->isEmpty()) {
             if ($app["json-schema.correlationMechanism"] === "profile") {
                 $contentType = $response->headers->get("Content-Type");
-                $response->headers->set("Content-Type", "$contentType; profile=\"$this->schema\"");
+                $response->headers->set("Content-Type", "$contentType; profile=\"{$app["json-schema.describedBy"]}\"");
             } elseif ($app["json-schema.correlationMechanism"] === "link") {
-                $response->headers->set("Link", "<$this->schema>; rel=\"describedBy\"", false);
+                $response->headers->set("Link", "<{$app["json-schema.describedBy"]}>; rel=\"describedBy\"", false);
             } else {
                 $errorMessage = "json-schema.correlationMechanism must be either \"profile\" or \"link\"";
                 throw new ServiceUnavailableHttpException(null, $errorMessage);

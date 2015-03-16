@@ -26,5 +26,7 @@ class AddSchema
                 json_decode($app["twig"]->render("$this->template.json.twig", $this->replacements))
             );
         }
+
+        $app["json-schema.schema-store"]->add($this->schema, $app["schemaService"]->fetch($this->schema));
     }
 }

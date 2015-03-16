@@ -18,8 +18,7 @@ class DeleteResourceController
 
     public function __invoke(Request $request)
     {
-        $success = $this->service->delete($request->getRequestURI());
-        if ($success === false) {
+        if ($this->service->delete($request->getRequestURI()) === false) {
             throw new ServiceUnavailableHttpException(null, "Failed to delete resource");
         }
 

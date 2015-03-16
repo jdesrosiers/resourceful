@@ -56,11 +56,7 @@ class SchemaControllerProviderTest extends \PHPUnit_Framework_TestCase
         );
         $this->client->request("GET", "/schema/bar", array(), array(), $headers);
         $response = $this->client->getResponse();
-//        $content = json_decode($response->getContent());
 
         $this->assertEquals(Response::HTTP_NOT_FOUND, $response->getStatusCode());
-        $this->assertEquals("application/json", $response->headers->get("Content-Type"));
-//        $this->assertEquals(0, $content->code);
-//        $this->assertEquals("Not Found", $content->message);
     }
 }

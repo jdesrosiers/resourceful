@@ -2,8 +2,10 @@
 
 namespace JDesrosiers\Silex;
 
+use JDesrosiers\Silex\Generic\ResourcesFactoryServiceProvider;
 use JDesrosiers\Silex\Provider\ContentNegotiationServiceProvider;
 use JDesrosiers\Silex\Provider\CorsServiceProvider;
+use JDesrosiers\Silex\Schema\DescribedBy;
 use JDesrosiers\Silex\Schema\JsonSchemaServiceProvider;
 use Silex\Application;
 use Silex\Provider\TwigServiceProvider;
@@ -26,9 +28,11 @@ class Resourceful extends Application
             "conneg.defaultFormat" => "json",
         ));
         $this->register(new CorsServiceProvider());
+        $this->register(new ResourcesFactoryServiceProvider());
         $this->register(new JsonSchemaServiceProvider());
         $this["uniqid"] = function () {
             return uniqid();
         };
+        $this->after(new DescribedBy());
     }
 }
