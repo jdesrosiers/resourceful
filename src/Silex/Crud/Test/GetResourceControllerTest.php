@@ -2,7 +2,7 @@
 
 namespace JDesrosiers\Silex\Crud\Test;
 
-use JDesrosiers\Silex\Error\ErrorHandler;
+use JDesrosiers\Silex\Error\JsonErrorHandler;
 use JDesrosiers\Silex\Crud\GetResourceController;
 use JDesrosiers\Silex\Resourceful;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,7 +22,7 @@ class GetResourceControllerTest extends \PHPUnit_Framework_TestCase
         $this->service = $this->getMock("Doctrine\Common\Cache\Cache");
         $this->app->get("/foo/{id}", new GetResourceController($this->service));
 
-        $this->app->error(new ErrorHandler(true));
+        $this->app->error(new JsonErrorHandler(true));
 
         $this->client = new Client($this->app);
     }

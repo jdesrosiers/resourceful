@@ -3,7 +3,7 @@
 namespace JDesrosiers\Silex\Crud\Test;
 
 use JDesrosiers\Doctrine\Cache\FileCache;
-use JDesrosiers\Silex\Error\ErrorHandler;
+use JDesrosiers\Silex\Error\JsonErrorHandler;
 use JDesrosiers\Silex\Crud\PutResourceController;
 use JDesrosiers\Silex\Resourceful;
 use Symfony\Component\HttpFoundation\Response;
@@ -25,7 +25,7 @@ class PutResourceControllerTest extends \PHPUnit_Framework_TestCase
         $this->app->put("/foo/{id}", new PutResourceController($this->service, "/schema/foo"));
         $this->app["json-schema.schema-store"]->add("/schema/foo", $this->app["schemaService"]->fetch("/schema/foo"));
 
-        $this->app->error(new ErrorHandler(true));
+        $this->app->error(new JsonErrorHandler(true));
 
         $this->client = new Client($this->app);
     }

@@ -2,7 +2,7 @@
 
 namespace JDesrosiers\Silex\Error\Test;
 
-use JDesrosiers\Silex\Error\ErrorHandler;
+use JDesrosiers\Silex\Error\JsonErrorHandler;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Client;
@@ -18,7 +18,7 @@ class ErrorHandlerTest extends \PHPUnit_Framework_TestCase
         $this->app = new Application();
         $this->app["debug"] = true;
 
-        $this->app->error(new ErrorHandler($this->app["debug"]));
+        $this->app->error(new JsonErrorHandler($this->app["debug"]));
 
         $this->client = new Client($this->app);
     }

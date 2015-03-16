@@ -21,7 +21,7 @@ class ErrorHandlerServiceProvider implements ServiceProviderInterface
         $app["twig.loader"]->addLoader(new Twig_Loader_Filesystem(__DIR__ . "/templates"));
         $app->before(new AddSchema($schema, "error"));
 
-        $app->error(new ErrorHandler($app["debug"]));
+        $app->error(new JsonErrorHandler($app["debug"]));
         $app->error(function () use ($app, $schema) {
             $app["json-schema.describedBy"] = $schema;
         });

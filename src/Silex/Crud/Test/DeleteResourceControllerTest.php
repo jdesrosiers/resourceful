@@ -3,7 +3,7 @@
 namespace JDesrosiers\Silex\Crud\Test;
 
 use JDesrosiers\Doctrine\Cache\FileCache;
-use JDesrosiers\Silex\Error\ErrorHandler;
+use JDesrosiers\Silex\Error\JsonErrorHandler;
 use JDesrosiers\Silex\Crud\DeleteResourceController;
 use JDesrosiers\Silex\Resourceful;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,7 +24,7 @@ class DeleteResourceControllerTest extends \PHPUnit_Framework_TestCase
         $this->service = $this->getMock("Doctrine\Common\Cache\Cache");
         $this->app->delete("/foo/{id}", new DeleteResourceController($this->service));
 
-        $this->app->error(new ErrorHandler(true));
+        $this->app->error(new JsonErrorHandler(true));
 
         $this->client = new Client($this->app);
     }

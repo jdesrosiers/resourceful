@@ -4,7 +4,7 @@ namespace JDesrosiers\Silex\Error;
 
 use Symfony\Component\HttpFoundation\JsonResponse;
 
-class ErrorHandler
+class JsonErrorHandler
 {
     private $debug;
 
