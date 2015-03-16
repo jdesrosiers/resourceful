@@ -1,6 +1,6 @@
 <?php
 
-namespace JDesrosiers\Silex\Generic;
+namespace JDesrosiers\Silex\Resource;
 
 use Silex\Application;
 use Silex\ServiceProviderInterface;

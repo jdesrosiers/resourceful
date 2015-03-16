@@ -18,7 +18,7 @@ class IndexControllerProviderTest extends \PHPUnit_Framework_TestCase
         $this->app = new Resourceful();
         $this->app["debug"] = true;
 
-        $this->app["schemaService"] = new FileCache(__DIR__);
+        $this->app["schemaService"] = $this->getMock("Doctrine\Common\Cache\Cache");
         $this->app->get("/schema/{type}", function () {
             // No Op
         })->bind("schema");

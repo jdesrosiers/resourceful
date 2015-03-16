@@ -1,6 +1,6 @@
 <?php
 
-namespace JDesrosiers\Silex\Schema;
+namespace JDesrosiers\Silex\JsonSchema;
 
 use Jsv4;
 

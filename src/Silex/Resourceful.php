@@ -2,11 +2,11 @@
 
 namespace JDesrosiers\Silex;
 
-use JDesrosiers\Silex\Generic\ResourcesFactoryServiceProvider;
+use JDesrosiers\Silex\Resource\ResourcesFactoryServiceProvider;
 use JDesrosiers\Silex\Provider\ContentNegotiationServiceProvider;
 use JDesrosiers\Silex\Provider\CorsServiceProvider;
-use JDesrosiers\Silex\Schema\DescribedBy;
-use JDesrosiers\Silex\Schema\JsonSchemaServiceProvider;
+use JDesrosiers\Silex\JsonSchema\DescribedBy;
+use JDesrosiers\Silex\JsonSchema\JsonSchemaServiceProvider;
 use Silex\Application;
 use Silex\Provider\TwigServiceProvider;
 use Silex\Provider\UrlGeneratorServiceProvider;
