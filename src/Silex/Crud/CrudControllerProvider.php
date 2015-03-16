@@ -1,6 +1,6 @@
 <?php
 
-namespace JDesrosiers\Silex\Generic;
+namespace JDesrosiers\Silex\Crud;
 
 use Doctrine\Common\Cache\Cache;
 use JDesrosiers\Silex\Schema\AddSchema;

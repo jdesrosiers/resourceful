@@ -1,10 +1,10 @@
 <?php
 
-namespace JDesrosiers\Silex\Generic\Test;
+namespace JDesrosiers\Silex\Crud\Test;
 
 use JDesrosiers\Doctrine\Cache\FileCache;
 use JDesrosiers\Silex\Error\ErrorHandler;
-use JDesrosiers\Silex\Generic\DeleteResourceController;
+use JDesrosiers\Silex\Crud\DeleteResourceController;
 use JDesrosiers\Silex\Resourceful;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Client;

@@ -1,9 +1,9 @@
 <?php
 
-namespace JDesrosiers\Silex\Generic\Test;
+namespace JDesrosiers\Silex\Crud\Test;
 
 use JDesrosiers\Silex\Error\ErrorHandler;
-use JDesrosiers\Silex\Generic\GetResourceController;
+use JDesrosiers\Silex\Crud\GetResourceController;
 use JDesrosiers\Silex\Resourceful;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Client;

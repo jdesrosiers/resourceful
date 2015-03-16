@@ -1,6 +1,6 @@
 <?php
 
-namespace JDesrosiers\Silex\Generic;
+namespace JDesrosiers\Silex\Crud;
 
 use Doctrine\Common\Cache\Cache;
 use Silex\Application;
@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
 
-class PutResourceController
+class CreateResourceController
 {
     private $service;
     private $schema;
@@ -21,26 +21,24 @@ class PutResourceController
         $this->schema = $schema;
     }
 
-    public function __invoke(Application $app, Request $request, $id)
+    public function __invoke(Application $app, Request $request)
     {
         $requestJson = $request->getContent() ?: "{}";
         $data = json_decode($requestJson);
+        $data->id = $app["uniqid"];
 
-        $this->validate($app, $id, $data);
+        $this->validate($app, $data);
 
-        $isCreated = !$this->service->contains($request->getRequestUri());
-        if ($this->service->save($request->getRequestUri(), $data) === false) {
+        $location = $app["url_generator"]->generate($this->schema, array("id" => $data->id));
+        if ($this->service->save($location, $data) === false) {
             throw new ServiceUnavailableHttpException(null, "Failed to save resource");
         }
 
-        return JsonResponse::create($data, $isCreated ? Response::HTTP_CREATED : Response::HTTP_OK);
+        return JsonResponse::create($data, Response::HTTP_CREATED, array("Location" => $location));
     }
 
-    private function validate(Application $app, $id, $data)
+    private function validate(Application $app, $data)
     {
-        if ($id !== $data->id) {
-            throw new BadRequestHttpException("The `id` in the body must match the `id` in the URI");
-        }
         $schema = $app["json-schema.schema-store"]->get($this->schema);
         $validation = $app["json-schema.validator"]->validate($data, $schema);
         if (!$validation->valid) {
