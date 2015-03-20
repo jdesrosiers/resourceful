@@ -7,6 +7,7 @@ use JDesrosiers\Silex\Controller\GetResourceController;
 use JDesrosiers\Silex\Schema\AddSchema;
 use Silex\Application;
 use Silex\ControllerProviderInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Twig_Loader_Filesystem;
 
 class IndexControllerProvider implements ControllerProviderInterface
@@ -25,6 +26,13 @@ class IndexControllerProvider implements ControllerProviderInterface
 
         $app["twig.loader"]->addLoader(new Twig_Loader_Filesystem(__DIR__ . "/templates"));
         $resource->before(new AddSchema($schema, "index"));
+
+        $resource->before(function (Request $request, Application $app) {
+            $index = $app["url_generator"]->generate("index");
+            if (!$this->service->contains($index)) {
+                $this->service->save($index, json_decode($app["twig"]->render("default.json.twig")));
+            }
+        });
 
         $resource->get("/", new GetResourceController($this->service))->bind("index");
 
