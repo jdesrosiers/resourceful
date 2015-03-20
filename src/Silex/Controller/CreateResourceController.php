@@ -1,6 +1,6 @@
 <?php
 
-namespace JDesrosiers\Silex\Crud;
+namespace JDesrosiers\Silex\Controller;
 
 use Doctrine\Common\Cache\Cache;
 use Silex\Application;

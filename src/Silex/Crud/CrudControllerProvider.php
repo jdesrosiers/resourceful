@@ -3,6 +3,10 @@
 namespace JDesrosiers\Silex\Crud;
 
 use Doctrine\Common\Cache\Cache;
+use JDesrosiers\Silex\Controller\CreateResourceController;
+use JDesrosiers\Silex\Controller\DeleteResourceController;
+use JDesrosiers\Silex\Controller\GetResourceController;
+use JDesrosiers\Silex\Controller\PutResourceController;
 use JDesrosiers\Silex\Schema\AddSchema;
 use Silex\Application;
 use Silex\ControllerProviderInterface;

@@ -2,13 +2,13 @@
 
 namespace JDesrosiers\Silex\Index\Test;
 
-use JDesrosiers\Doctrine\Cache\FileCache;
 use JDesrosiers\Silex\Index\IndexControllerProvider;
 use JDesrosiers\Silex\Resourceful;
+use PHPUnit_Framework_TestCase;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Client;
 
-class IndexControllerProviderTest extends \PHPUnit_Framework_TestCase
+class IndexControllerProviderTest extends PHPUnit_Framework_TestCase
 {
     private $app;
     private $client;

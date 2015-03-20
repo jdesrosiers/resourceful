@@ -1,14 +1,15 @@
 <?php
 
-namespace JDesrosiers\Silex\Crud\Test;
+namespace JDesrosiers\Silex\Controller\Test;
 
+use JDesrosiers\Silex\Controller\GetResourceController;
 use JDesrosiers\Silex\Error\JsonErrorHandler;
-use JDesrosiers\Silex\Crud\GetResourceController;
 use JDesrosiers\Silex\Resourceful;
+use PHPUnit_Framework_TestCase;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Client;
 
-class GetResourceControllerTest extends \PHPUnit_Framework_TestCase
+class GetResourceControllerTest extends PHPUnit_Framework_TestCase
 {
     private $app;
     private $service;

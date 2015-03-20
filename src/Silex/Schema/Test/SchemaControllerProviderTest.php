@@ -4,10 +4,11 @@ namespace JDesrosiers\Silex\Schema\Test;
 
 use JDesrosiers\Silex\Resourceful;
 use JDesrosiers\Silex\Schema\SchemaControllerProvider;
+use PHPUnit_Framework_TestCase;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Client;
 
-class SchemaControllerProviderTest extends \PHPUnit_Framework_TestCase
+class SchemaControllerProviderTest extends PHPUnit_Framework_TestCase
 {
     private $client;
     private $schemaService;

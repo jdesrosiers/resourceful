@@ -2,7 +2,7 @@
 
 namespace JDesrosiers\Silex\Schema;
 
-use JDesrosiers\Silex\Crud\GetResourceController;
+use JDesrosiers\Silex\Controller\GetResourceController;
 use Silex\Application;
 use Silex\ControllerProviderInterface;
 

@@ -1,15 +1,16 @@
 <?php
 
-namespace JDesrosiers\Silex\Crud\Test;
+namespace JDesrosiers\Silex\Controller\Test;
 
 use JDesrosiers\Doctrine\Cache\FileCache;
+use JDesrosiers\Silex\Controller\DeleteResourceController;
 use JDesrosiers\Silex\Error\JsonErrorHandler;
-use JDesrosiers\Silex\Crud\DeleteResourceController;
 use JDesrosiers\Silex\Resourceful;
+use PHPUnit_Framework_TestCase;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Client;
 
-class DeleteResourceControllerTest extends \PHPUnit_Framework_TestCase
+class DeleteResourceControllerTest extends PHPUnit_Framework_TestCase
 {
     private $app;
     private $service;

@@ -3,7 +3,7 @@
 namespace JDesrosiers\Silex\Index;
 
 use Doctrine\Common\Cache\Cache;
-use JDesrosiers\Silex\Crud\GetResourceController;
+use JDesrosiers\Silex\Controller\GetResourceController;
 use JDesrosiers\Silex\Schema\AddSchema;
 use Silex\Application;
 use Silex\ControllerProviderInterface;
