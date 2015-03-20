@@ -17,13 +17,13 @@ class JsonErrorHandlerServiceProvider implements ServiceProviderInterface
     public function register(Application $app)
     {
         $schema = $app["url_generator"]->generate("schema", array("type" => "error"));
+        $app->error(function () use ($app, $schema) {
+            $app["json-schema.describedBy"] = $schema;
+        });
 
         $app["twig.loader"]->addLoader(new Twig_Loader_Filesystem(__DIR__ . "/templates"));
         $app->before(new AddSchema($schema, "error"));
 
         $app->error(new JsonErrorHandler($app["debug"]));
-        $app->error(function () use ($app, $schema) {
-            $app["json-schema.describedBy"] = $schema;
-        });
     }
 }

@@ -27,6 +27,7 @@ class IndexControllerProvider implements ControllerProviderInterface
         $app["twig.loader"]->addLoader(new Twig_Loader_Filesystem(__DIR__ . "/templates"));
         $resource->before(new AddSchema($schema, "index"));
 
+        // Generate default Index resource
         $resource->before(function (Request $request, Application $app) {
             $index = $app["url_generator"]->generate("index");
             if (!$this->service->contains($index)) {

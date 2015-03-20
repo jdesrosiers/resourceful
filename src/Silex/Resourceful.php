@@ -2,11 +2,11 @@
 
 namespace JDesrosiers\Silex;
 
-use JDesrosiers\Silex\Resource\ResourcesFactoryServiceProvider;
-use JDesrosiers\Silex\Provider\ContentNegotiationServiceProvider;
-use JDesrosiers\Silex\Provider\CorsServiceProvider;
 use JDesrosiers\Silex\JsonSchema\DescribedBy;
 use JDesrosiers\Silex\JsonSchema\JsonSchemaServiceProvider;
+use JDesrosiers\Silex\Provider\ContentNegotiationServiceProvider;
+use JDesrosiers\Silex\Provider\CorsServiceProvider;
+use JDesrosiers\Silex\Resource\ResourcesFactoryServiceProvider;
 use Silex\Application;
 use Silex\Provider\TwigServiceProvider;
 use Silex\Provider\UrlGeneratorServiceProvider;
@@ -19,20 +19,26 @@ class Resourceful extends Application
         parent::__construct($config);
         ErrorHandler::register();
 
-        // Middleware
-        $this->register(new UrlGeneratorServiceProvider());
-        $this->register(new TwigServiceProvider());
+        // JSON/REST application
         $this->register(new ContentNegotiationServiceProvider(), array(
             "conneg.responseFormats" => array("json"),
             "conneg.requestFormats" => array("json"),
             "conneg.defaultFormat" => "json",
         ));
         $this->register(new CorsServiceProvider());
-        $this->register(new ResourcesFactoryServiceProvider());
+
+        // JSON Schema application
         $this->register(new JsonSchemaServiceProvider());
+        $this->register(new ResourcesFactoryServiceProvider());
+        $this->after(new DescribedBy());
+
+        // Default schema generation
+        $this->register(new UrlGeneratorServiceProvider());
+        $this->register(new TwigServiceProvider());
+
+        // CreateResourceController
         $this["uniqid"] = function () {
             return uniqid();
         };
-        $this->after(new DescribedBy());
     }
 }
