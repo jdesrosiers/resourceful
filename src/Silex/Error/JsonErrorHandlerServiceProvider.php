@@ -7,7 +7,7 @@ use Silex\Application;
 use Silex\ServiceProviderInterface;
 use Twig_Loader_Filesystem;
 
-class ErrorHandlerServiceProvider implements ServiceProviderInterface
+class JsonErrorHandlerServiceProvider implements ServiceProviderInterface
 {
     public function boot(Application $app)
     {
