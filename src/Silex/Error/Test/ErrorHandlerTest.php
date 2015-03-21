@@ -18,7 +18,7 @@ class ErrorHandlerTest extends \PHPUnit_Framework_TestCase
         $this->app = new Application();
         $this->app["debug"] = true;
 
-        $this->app->error(new JsonErrorHandler($this->app["debug"]));
+        $this->app->error(new JsonErrorHandler($this->app));
 
         $this->client = new Client($this->app);
     }

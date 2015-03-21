@@ -3,7 +3,6 @@
 namespace JDesrosiers\Silex\Controller\Test;
 
 use JDesrosiers\Silex\Controller\GetResourceController;
-use JDesrosiers\Silex\Error\JsonErrorHandler;
 use JDesrosiers\Silex\Resourceful;
 use PHPUnit_Framework_TestCase;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,10 +19,12 @@ class GetResourceControllerTest extends PHPUnit_Framework_TestCase
         $this->app = new Resourceful();
         $this->app["debug"] = true;
 
+        $this->app->get("/schema/{type}", function () {
+            // No Op
+        })->bind("schema");
+
         $this->service = $this->getMock("Doctrine\Common\Cache\Cache");
         $this->app->get("/foo/{id}", new GetResourceController($this->service));
-
-        $this->app->error(new JsonErrorHandler(true));
 
         $this->client = new Client($this->app);
     }
@@ -66,7 +67,7 @@ class GetResourceControllerTest extends PHPUnit_Framework_TestCase
         $content = json_decode($response->getContent());
 
         $this->assertEquals(Response::HTTP_NOT_FOUND, $response->getStatusCode());
-        $this->assertEquals("application/json", $response->headers->get("Content-Type"));
+        $this->assertEquals("application/json; profile=\"/schema/error\"", $response->headers->get("Content-Type"));
         $this->assertEquals(0, $content->code);
         $this->assertEquals("Not Found", $content->message);
     }
@@ -89,7 +90,7 @@ class GetResourceControllerTest extends PHPUnit_Framework_TestCase
         $content = json_decode($response->getContent());
 
         $this->assertEquals(Response::HTTP_SERVICE_UNAVAILABLE, $response->getStatusCode());
-        $this->assertEquals("application/json", $response->headers->get("Content-Type"));
+        $this->assertEquals("application/json; profile=\"/schema/error\"", $response->headers->get("Content-Type"));
         $this->assertEquals(0, $content->code);
         $this->assertEquals("Failed to retrieve resource", $content->message);
     }

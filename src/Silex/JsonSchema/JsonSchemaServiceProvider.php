@@ -10,7 +10,7 @@ class JsonSchemaServiceProvider implements ServiceProviderInterface
 {
     public function boot(Application $app)
     {
-        
+        $app->after(new DescribedBy());
     }
 
     public function register(Application $app)
@@ -24,5 +24,7 @@ class JsonSchemaServiceProvider implements ServiceProviderInterface
         $app["json-schema.validator"] = $app->share(function () {
             return new Jsv4Validator();
         });
+
+        $app["resources_factory"] = $app->protect(new ResourcesFactory($app));
     }
 }

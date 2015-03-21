@@ -4,7 +4,6 @@ namespace JDesrosiers\Silex\Controller\Test;
 
 use JDesrosiers\Doctrine\Cache\FileCache;
 use JDesrosiers\Silex\Controller\CreateResourceController;
-use JDesrosiers\Silex\Error\JsonErrorHandler;
 use JDesrosiers\Silex\Resourceful;
 use PHPUnit_Framework_TestCase;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,14 +19,16 @@ class CreateResourceControllerTest extends PHPUnit_Framework_TestCase
     {
         $this->app = new Resourceful();
         $this->app["debug"] = true;
+
         $this->app["schemaService"] = new FileCache(__DIR__);
+        $this->app->get("/schema/{type}", function () {
+            // No Op
+        })->bind("schema");
 
         $this->service = $this->getMock("Doctrine\Common\Cache\Cache");
         $this->app->get("/foo/{id}")->bind("/schema/foo");
         $this->app->post("/foo/", new CreateResourceController($this->service, "/schema/foo"));
         $this->app["json-schema.schema-store"]->add("/schema/foo", $this->app["schemaService"]->fetch("/schema/foo"));
-
-        $this->app->error(new JsonErrorHandler(true));
 
         $this->client = new Client($this->app);
     }
@@ -65,7 +66,7 @@ class CreateResourceControllerTest extends PHPUnit_Framework_TestCase
         $content = json_decode($response->getContent());
 
         $this->assertEquals(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
-        $this->assertEquals("application/json", $response->headers->get("Content-Type"));
+        $this->assertEquals("application/json; profile=\"/schema/error\"", $response->headers->get("Content-Type"));
         $this->assertEquals(0, $content->code);
         $this->assertEquals($errorMessage, $content->message);
     }
@@ -87,7 +88,7 @@ class CreateResourceControllerTest extends PHPUnit_Framework_TestCase
         $content = json_decode($response->getContent());
 
         $this->assertEquals(Response::HTTP_SERVICE_UNAVAILABLE, $response->getStatusCode());
-        $this->assertEquals("application/json", $response->headers->get("Content-Type"));
+        $this->assertEquals("application/json; profile=\"/schema/error\"", $response->headers->get("Content-Type"));
         $this->assertEquals(0, $content->code);
         $this->assertEquals("Failed to save resource", $content->message);
     }

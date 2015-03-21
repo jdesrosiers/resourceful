@@ -6,17 +6,17 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 class JsonErrorHandler
 {
-    private $debug;
+    private $app;
 
-    public function __construct($debug)
+    public function __construct($app)
     {
-        $this->debug = $debug;
+        $this->app = $app;
     }
 
     public function __invoke(\Exception $e, $code)
     {
         $error = array("code" => $e->getCode(), "message" => $e->getMessage());
-        if ($this->debug) {
+        if ($this->app["debug"]) {
             $error["trace"] = $e->getTraceAsString();
         }
 

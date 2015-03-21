@@ -2,11 +2,12 @@
 
 namespace JDesrosiers\Silex;
 
-use JDesrosiers\Silex\JsonSchema\DescribedBy;
+use JDesrosiers\Silex\Error\ErrorSchemaGenerator;
+use JDesrosiers\Silex\Error\JsonErrorHandler;
+use JDesrosiers\Silex\JsonSchema\DescribedByError;
 use JDesrosiers\Silex\JsonSchema\JsonSchemaServiceProvider;
 use JDesrosiers\Silex\Provider\ContentNegotiationServiceProvider;
 use JDesrosiers\Silex\Provider\CorsServiceProvider;
-use JDesrosiers\Silex\Resource\ResourcesFactoryServiceProvider;
 use Silex\Application;
 use Silex\Provider\TwigServiceProvider;
 use Silex\Provider\UrlGeneratorServiceProvider;
@@ -28,11 +29,13 @@ class Resourceful extends Application
         $this->register(new CorsServiceProvider());
 
         // JSON Schema application
-        $this->register(new JsonSchemaServiceProvider());
-        $this->register(new ResourcesFactoryServiceProvider());
-        $this->after(new DescribedBy());
+        $this->register(new JsonSchemaServiceProvider(), array(
+            "json-schema.errorSchema" => new ErrorSchemaGenerator(),
+        ));
+        $this->error(new DescribedByError($this));
+        $this->error(new JsonErrorHandler($this));
 
-        // Default schema generation
+        // Schema generation
         $this->register(new UrlGeneratorServiceProvider());
         $this->register(new TwigServiceProvider());
 
