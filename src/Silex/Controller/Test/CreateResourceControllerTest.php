@@ -4,8 +4,10 @@ namespace JDesrosiers\Silex\Controller\Test;
 
 use JDesrosiers\Doctrine\Cache\FileCache;
 use JDesrosiers\Silex\Controller\CreateResourceController;
-use JDesrosiers\Silex\Resourceful;
+use JDesrosiers\Silex\JsonSchema\JsonSchemaServiceProvider;
 use PHPUnit_Framework_TestCase;
+use Silex\Application;
+use Silex\Provider\UrlGeneratorServiceProvider;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Client;
 
@@ -17,8 +19,14 @@ class CreateResourceControllerTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->app = new Resourceful();
+        $this->app = new Application();
         $this->app["debug"] = true;
+
+        $this->app->register(new UrlGeneratorServiceProvider());
+        $this->app->register(new JsonSchemaServiceProvider());
+        $this->app["uniqid"] = function () {
+            return uniqid();
+        };
 
         $this->app["schemaService"] = new FileCache(__DIR__);
         $this->app->get("/schema/{type}", function () {
@@ -55,7 +63,10 @@ class CreateResourceControllerTest extends PHPUnit_Framework_TestCase
 
     public function testBadRequest()
     {
-        $errorMessage = '[{"code":303,"dataPath":"\/illegalField","schemaPath":"\/additionalProperties","message":"Additional properties not allowed"}]';
+        $this->app->error(function (\Exception $e, $code) {
+            $errorMessage = '[{"code":303,"dataPath":"\/illegalField","schemaPath":"\/additionalProperties","message":"Additional properties not allowed"}]';
+            $this->assertEquals($errorMessage, $e->getMessage());
+        });
 
         $headers = array(
             "HTTP_ACCEPT" => "application/json",
@@ -63,12 +74,8 @@ class CreateResourceControllerTest extends PHPUnit_Framework_TestCase
         );
         $this->client->request("POST", "/foo/", array(), array(), $headers, '{"illegalField":"illegal"}');
         $response = $this->client->getResponse();
-        $content = json_decode($response->getContent());
 
         $this->assertEquals(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
-        $this->assertEquals("application/json; profile=\"/schema/error\"", $response->headers->get("Content-Type"));
-        $this->assertEquals(0, $content->code);
-        $this->assertEquals($errorMessage, $content->message);
     }
 
     public function testSaveError()
@@ -79,17 +86,17 @@ class CreateResourceControllerTest extends PHPUnit_Framework_TestCase
         $this->service->method("save")
             ->willReturn(false);
 
+        $this->app->error(function (\Exception $e, $code) {
+            $this->assertEquals("Failed to save resource", $e->getMessage());
+        });
+
         $headers = array(
             "HTTP_ACCEPT" => "application/json",
             "CONTENT_TYPE" => "application/json"
         );
         $this->client->request("POST", "/foo/", array(), array(), $headers, "{}");
         $response = $this->client->getResponse();
-        $content = json_decode($response->getContent());
 
         $this->assertEquals(Response::HTTP_SERVICE_UNAVAILABLE, $response->getStatusCode());
-        $this->assertEquals("application/json; profile=\"/schema/error\"", $response->headers->get("Content-Type"));
-        $this->assertEquals(0, $content->code);
-        $this->assertEquals("Failed to save resource", $content->message);
     }
 }

@@ -1,0 +1,13 @@
+{
+    "$schema": "http://json-schema.org/draft-04/hyper-schema#",
+    "title": "Error",
+    "type": "object",
+    "properties": {
+        "code": {
+            "type": "integer"
+        },
+        "message": {
+            "type": "string"
+        }
+    }
+}

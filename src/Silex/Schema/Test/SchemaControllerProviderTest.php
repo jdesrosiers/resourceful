@@ -11,26 +11,25 @@ use Symfony\Component\HttpKernel\Client;
 class SchemaControllerProviderTest extends PHPUnit_Framework_TestCase
 {
     private $client;
-    private $schemaService;
 
     public function setUp()
     {
         $this->app = new Resourceful();
         $this->app["debug"] = true;
 
-        $this->schemaService = $this->getMock("Doctrine\Common\Cache\Cache");
-        $this->app->mount("/schema", new SchemaControllerProvider($this->schemaService));
+        $this->app["schemaService"] = $this->getMock("Doctrine\Common\Cache\Cache");
+        $this->app->mount("/schema", new SchemaControllerProvider($this->app["schemaService"]));
 
         $this->client = new Client($this->app);
     }
 
     public function testGet()
     {
-        $this->schemaService->method("contains")
+        $this->app["schemaService"]->method("contains")
             ->with("/schema/foo")
             ->willReturn(true);
 
-        $this->schemaService->method("fetch")
+        $this->app["schemaService"]->method("fetch")
             ->with("/schema/foo")
             ->willReturn(new \stdClass());
 
@@ -48,7 +47,7 @@ class SchemaControllerProviderTest extends PHPUnit_Framework_TestCase
 
     public function testGetNotFound()
     {
-        $this->schemaService->method("fetch")
+        $this->app["schemaService"]->method("fetch")
             ->with("/schema/bar")
             ->willReturn(false);
 
@@ -57,7 +56,10 @@ class SchemaControllerProviderTest extends PHPUnit_Framework_TestCase
         );
         $this->client->request("GET", "/schema/bar", array(), array(), $headers);
         $response = $this->client->getResponse();
+        $content = json_decode($response->getContent());
 
         $this->assertEquals(Response::HTTP_NOT_FOUND, $response->getStatusCode());
+        $this->assertEquals("application/json; profile=\"/schema/error\"", $response->headers->get("Content-Type"));
+        $this->assertEquals('Not Found', $content->message);
     }
 }

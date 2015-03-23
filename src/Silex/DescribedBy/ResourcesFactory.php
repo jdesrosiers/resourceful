@@ -1,6 +1,6 @@
 <?php
 
-namespace JDesrosiers\Silex\JsonSchema;
+namespace JDesrosiers\Silex\DescribedBy;
 
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;

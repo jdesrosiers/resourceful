@@ -3,12 +3,13 @@
 namespace JDesrosiers\Silex\Error\Test;
 
 use JDesrosiers\Silex\Error\JsonErrorHandler;
+use PHPUnit_Framework_TestCase;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Client;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-class ErrorHandlerTest extends \PHPUnit_Framework_TestCase
+class JsonErrorHandlerTest extends PHPUnit_Framework_TestCase
 {
     protected $app;
     protected $client;

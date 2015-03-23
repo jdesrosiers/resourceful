@@ -2,9 +2,9 @@
 
 namespace JDesrosiers\Silex;
 
-use JDesrosiers\Silex\Error\ErrorSchemaGenerator;
+use JDesrosiers\Silex\DescribedBy\DescribedByError;
+use JDesrosiers\Silex\DescribedBy\ResourcesFactory;
 use JDesrosiers\Silex\Error\JsonErrorHandler;
-use JDesrosiers\Silex\JsonSchema\DescribedByError;
 use JDesrosiers\Silex\JsonSchema\JsonSchemaServiceProvider;
 use JDesrosiers\Silex\Provider\ContentNegotiationServiceProvider;
 use JDesrosiers\Silex\Provider\CorsServiceProvider;
@@ -29,9 +29,10 @@ class Resourceful extends Application
         $this->register(new CorsServiceProvider());
 
         // JSON Schema application
-        $this->register(new JsonSchemaServiceProvider(), array(
-            "json-schema.errorSchema" => new ErrorSchemaGenerator(),
-        ));
+        $this->register(new JsonSchemaServiceProvider());
+        $this["resources_factory"] = $this->protect(new ResourcesFactory($this));
+
+        // Error Handling
         $this->error(new DescribedByError($this));
         $this->error(new JsonErrorHandler($this));
 
