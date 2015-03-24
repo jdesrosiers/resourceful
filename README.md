@@ -29,8 +29,8 @@ require __DIR__ . "/../vendor/autoload.php";
 $app = new JDesrosiers\Resourceful\Resourceful();
 $app["debug"] = true;
 
-$app["data"] = new JDesrosiers\Doctrine\Cache\FileCache(__DIR__ . "/../data");
-$app["schemaService"] = new JDesrosiers\Doctrine\Cache\FileCache(__DIR__ . "/..");;
+$app["data"] = new JDesrosiers\Resourceful\FileCache\FileCache(__DIR__ . "/../data");
+$app["schemaService"] = new JDesrosiers\Resourceful\FileCache\FileCache(__DIR__ . "/..");;
 
 // Supporting Controllers
 $app->mount("/schema", new JDesrosiers\Resourceful\Schema\SchemaControllerProvider($app["schemaService"]));

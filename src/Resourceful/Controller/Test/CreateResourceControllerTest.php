@@ -2,9 +2,9 @@
 
 namespace JDesrosiers\Resourceful\Controller\Test;
 
-use JDesrosiers\Doctrine\Cache\FileCache;
 use JDesrosiers\Resourceful\Controller\CreateResourceController;
-use JDesrosiers\Resourceful\JsonSchema\JsonSchemaServiceProvider;
+use JDesrosiers\Resourceful\FileCache\FileCache;
+use JDesrosiers\Silex\Provider\JsonSchema\JsonSchemaServiceProvider;
 use PHPUnit_Framework_TestCase;
 use Silex\Application;
 use Silex\Provider\UrlGeneratorServiceProvider;

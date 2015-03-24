@@ -1,6 +1,6 @@
 <?php
 
-namespace JDesrosiers\Resourceful\JsonSchema;
+namespace JDesrosiers\Silex\Provider\JsonSchema;
 
 use SchemaStore;
 use Silex\Application;

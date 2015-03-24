@@ -1,6 +1,6 @@
 <?php
 
-namespace JDesrosiers\Doctrine\Cache;
+namespace JDesrosiers\Resourceful\FileCache;
 
 use Doctrine\Common\Cache\Cache;
 use Symfony\Component\Filesystem\Exception\IOException;

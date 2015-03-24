@@ -3,7 +3,7 @@
 namespace JDesrosiers\Resourceful\Controller\Test;
 
 use JDesrosiers\Resourceful\Controller\GetResourceController;
-use JDesrosiers\Resourceful\JsonSchema\JsonSchemaServiceProvider;
+use JDesrosiers\Silex\Provider\JsonSchema\JsonSchemaServiceProvider;
 use PHPUnit_Framework_TestCase;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Response;
