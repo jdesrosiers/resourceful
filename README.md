@@ -26,22 +26,22 @@ Define your front controller.
 
 require __DIR__ . "/../vendor/autoload.php";
 
-$app = new JDesrosiers\Silex\Resourceful();
+$app = new JDesrosiers\Resourceful\Resourceful();
 $app["debug"] = true;
 
 $app["data"] = new JDesrosiers\Doctrine\Cache\FileCache(__DIR__ . "/../data");
 $app["schemaService"] = new JDesrosiers\Doctrine\Cache\FileCache(__DIR__ . "/..");;
 
 // Supporting Controllers
-$app->mount("/schema", new JDesrosiers\Silex\Schema\SchemaControllerProvider($app["schemaService"]));
-$app->mount("/", new JDesrosiers\Silex\Index\IndexControllerProvider($app["data"]));
+$app->mount("/schema", new JDesrosiers\Resourceful\Schema\SchemaControllerProvider($app["schemaService"]));
+$app->mount("/", new JDesrosiers\Resourceful\Index\IndexControllerProvider($app["data"]));
 
 // Start Registering Controllers
 
 // End Registering Controllers
 
 // Error Handler
-$app->register(new JDesrosiers\Silex\Error\ErrorHandlerServiceProvider());
+$app->register(new JDesrosiers\Resourceful\Error\ErrorHandlerServiceProvider());
 
 // Initialize CORS support
 $app->after($app["cors"]);
@@ -61,7 +61,7 @@ links to this default index schema as you add resources.
 
 Adding a new resource to your application, requires only one line of code in your front controller.
 ```php
-$app->mount("/foo", new JDesrosiers\Silex\Crud\CrudControllerProvider("foo", $app["data"]));
+$app->mount("/foo", new JDesrosiers\Resourceful\Crud\CrudControllerProvider("foo", $app["data"]));
 ```
 
 This controller adds the "foo" resource using the CrudControllerProvider.  The first argument is the name of the
