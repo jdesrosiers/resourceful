@@ -1,6 +1,6 @@
 <?php
 
-namespace JDesrosiers\Resourceful\Schema;
+namespace JDesrosiers\Resourceful\SchemaControllerProvider;
 
 use JDesrosiers\Resourceful\Controller\GetResourceController;
 use Silex\Application;

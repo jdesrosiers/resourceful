@@ -1,8 +1,8 @@
 <?php
 
-namespace JDesrosiers\Resourceful\Index\Test;
+namespace JDesrosiers\Resourceful\IndexControllerProvider\Test;
 
-use JDesrosiers\Resourceful\Index\IndexControllerProvider;
+use JDesrosiers\Resourceful\IndexControllerProvider\IndexControllerProvider;
 use JDesrosiers\Resourceful\Resourceful;
 use PHPUnit_Framework_TestCase;
 use Symfony\Component\HttpFoundation\Response;

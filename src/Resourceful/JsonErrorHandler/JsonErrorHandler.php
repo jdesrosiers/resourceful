@@ -1,6 +1,6 @@
 <?php
 
-namespace JDesrosiers\Resourceful\Error;
+namespace JDesrosiers\Resourceful\JsonErrorHandler;
 
 use Symfony\Component\HttpFoundation\JsonResponse;
 

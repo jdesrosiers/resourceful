@@ -1,6 +1,6 @@
 <?php
 
-namespace JDesrosiers\Resourceful\Schema;
+namespace JDesrosiers\Resourceful\SchemaControllerProvider;
 
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;

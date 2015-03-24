@@ -1,13 +1,13 @@
 <?php
 
-namespace JDesrosiers\Resourceful\Crud;
+namespace JDesrosiers\Resourceful\CrudControllerProvider;
 
 use Doctrine\Common\Cache\Cache;
 use JDesrosiers\Resourceful\Controller\CreateResourceController;
 use JDesrosiers\Resourceful\Controller\DeleteResourceController;
 use JDesrosiers\Resourceful\Controller\GetResourceController;
 use JDesrosiers\Resourceful\Controller\PutResourceController;
-use JDesrosiers\Resourceful\Schema\AddSchema;
+use JDesrosiers\Resourceful\SchemaControllerProvider\AddSchema;
 use Silex\Application;
 use Silex\ControllerProviderInterface;
 use Twig_Loader_Filesystem;

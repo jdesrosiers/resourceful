@@ -4,7 +4,7 @@ namespace JDesrosiers\Resourceful;
 
 use JDesrosiers\Resourceful\DescribedBy\DescribedByError;
 use JDesrosiers\Resourceful\DescribedBy\ResourcesFactory;
-use JDesrosiers\Resourceful\Error\JsonErrorHandler;
+use JDesrosiers\Resourceful\JsonErrorHandler\JsonErrorHandler;
 use JDesrosiers\Silex\Provider\ContentNegotiationServiceProvider;
 use JDesrosiers\Silex\Provider\CorsServiceProvider;
 use JDesrosiers\Silex\Provider\JsonSchema\JsonSchemaServiceProvider;

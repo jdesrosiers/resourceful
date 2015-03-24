@@ -1,10 +1,10 @@
 <?php
 
-namespace JDesrosiers\Resourceful\Index;
+namespace JDesrosiers\Resourceful\IndexControllerProvider;
 
 use Doctrine\Common\Cache\Cache;
 use JDesrosiers\Resourceful\Controller\GetResourceController;
-use JDesrosiers\Resourceful\Schema\AddSchema;
+use JDesrosiers\Resourceful\SchemaControllerProvider\AddSchema;
 use Silex\Application;
 use Silex\ControllerProviderInterface;
 use Symfony\Component\HttpFoundation\Request;

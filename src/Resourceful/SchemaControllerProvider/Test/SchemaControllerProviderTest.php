@@ -1,9 +1,9 @@
 <?php
 
-namespace JDesrosiers\Resourceful\Schema\Test;
+namespace JDesrosiers\Resourceful\SchemaControllerProvider\Test;
 
 use JDesrosiers\Resourceful\Resourceful;
-use JDesrosiers\Resourceful\Schema\SchemaControllerProvider;
+use JDesrosiers\Resourceful\SchemaControllerProvider\SchemaControllerProvider;
 use PHPUnit_Framework_TestCase;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Client;
