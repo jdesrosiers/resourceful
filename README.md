@@ -1,6 +1,7 @@
 Resourceful
 ===========
 [![Build Status](https://travis-ci.org/jdesrosiers/resourceful.svg)](https://travis-ci.org/jdesrosiers/resourceful)
+[![Code Coverage](https://scrutinizer-ci.com/g/jdesrosiers/resourceful/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/jdesrosiers/resourceful/?branch=master)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/jdesrosiers/resourceful/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/jdesrosiers/resourceful/?branch=master)
 
 Resourceful is a simple framework designed for rapid prototyping REST/HTTP applications that are mostly CRUD operations.

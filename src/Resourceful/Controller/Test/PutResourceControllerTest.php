@@ -120,4 +120,25 @@ class PutResourceControllerTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals(Response::HTTP_SERVICE_UNAVAILABLE, $response->getStatusCode());
     }
+
+    public function testIdsMatch()
+    {
+        $this->service->method("contains")
+            ->with("/foo/4ee8e29d45851")
+            ->willReturn(true);
+
+        $this->app->error(function (\Exception $e, $code) {
+            $errorMessage = "The `id` in the body must match the `id` in the URI";
+            $this->assertEquals($errorMessage, $e->getMessage());
+        });
+
+        $headers = array(
+            "HTTP_ACCEPT" => "application/json",
+            "CONTENT_TYPE" => "application/json"
+        );
+        $this->client->request("PUT", "/foo/4ee8e29d45851", array(), array(), $headers, '{"id":"bar"}');
+        $response = $this->client->getResponse();
+
+        $this->assertEquals(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+    }
 }
