@@ -1,6 +1,15 @@
 filter:
     excluded_paths: [vendor/*]
 
+build:
+    tests:
+        override:
+            -
+                command: 'vendor/bin/phpunit --coverage-clover=coverage'
+                coverage:
+                    file: 'coverage'
+                    format: 'php-clover'
+
 tools:
     php_mess_detector: true
     php_cpd:

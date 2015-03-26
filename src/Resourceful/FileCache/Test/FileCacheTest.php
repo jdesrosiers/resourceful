@@ -63,4 +63,9 @@ class FileCacheTest extends \PHPUnit_Framework_TestCase
     {
         $this->service->delete("foo");
     }
+
+    public function testGetStats()
+    {
+        $this->assertNull($this->service->getStats());
+    }
 }

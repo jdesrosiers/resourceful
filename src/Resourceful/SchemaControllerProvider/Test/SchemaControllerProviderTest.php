@@ -10,6 +10,7 @@ use Symfony\Component\HttpKernel\Client;
 
 class SchemaControllerProviderTest extends PHPUnit_Framework_TestCase
 {
+    private $app;
     private $client;
 
     public function setUp()
