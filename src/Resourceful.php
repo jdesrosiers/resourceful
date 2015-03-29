@@ -7,7 +7,7 @@ use JDesrosiers\Resourceful\DescribedBy\ResourcesFactory;
 use JDesrosiers\Resourceful\JsonErrorHandler\JsonErrorHandler;
 use JDesrosiers\Silex\Provider\ContentNegotiationServiceProvider;
 use JDesrosiers\Silex\Provider\CorsServiceProvider;
-use JDesrosiers\Silex\Provider\JsonSchema\JsonSchemaServiceProvider;
+use JDesrosiers\Silex\Provider\JsonSchemaServiceProvider;
 use Silex\Application;
 use Silex\Provider\TwigServiceProvider;
 use Silex\Provider\UrlGeneratorServiceProvider;

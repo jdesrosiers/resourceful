@@ -4,7 +4,7 @@ namespace JDesrosiers\Resourceful\Controller\Test;
 
 use JDesrosiers\Resourceful\Controller\CreateResourceController;
 use JDesrosiers\Resourceful\FileCache\FileCache;
-use JDesrosiers\Silex\Provider\JsonSchema\JsonSchemaServiceProvider;
+use JDesrosiers\Silex\Provider\JsonSchemaServiceProvider;
 use PHPUnit_Framework_TestCase;
 use Silex\Application;
 use Silex\Provider\UrlGeneratorServiceProvider;
