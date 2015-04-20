@@ -7,7 +7,7 @@ use JDesrosiers\Resourceful\Controller\CreateResourceController;
 use JDesrosiers\Resourceful\Controller\DeleteResourceController;
 use JDesrosiers\Resourceful\Controller\GetResourceController;
 use JDesrosiers\Resourceful\Controller\PutResourceController;
-use JDesrosiers\Resourceful\SchemaControllerProvider\AddSchema;
+use JDesrosiers\Resourceful\ResourcefulServiceProvider\AddSchema;
 use Silex\Application;
 use Silex\ControllerProviderInterface;
 use Twig_Loader_Filesystem;

@@ -4,7 +4,7 @@ namespace JDesrosiers\Resourceful\IndexControllerProvider;
 
 use Doctrine\Common\Cache\Cache;
 use JDesrosiers\Resourceful\Controller\GetResourceController;
-use JDesrosiers\Resourceful\SchemaControllerProvider\AddSchema;
+use JDesrosiers\Resourceful\ResourcefulServiceProvider\AddSchema;
 use Silex\Application;
 use Silex\ControllerProviderInterface;
 use Symfony\Component\HttpFoundation\Request;

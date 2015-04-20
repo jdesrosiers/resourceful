@@ -2,9 +2,7 @@
 
 namespace JDesrosiers\Resourceful;
 
-use JDesrosiers\Resourceful\DescribedBy\DescribedByError;
-use JDesrosiers\Resourceful\DescribedBy\ResourcesFactory;
-use JDesrosiers\Resourceful\JsonErrorHandler\JsonErrorHandler;
+use JDesrosiers\Resourceful\ResourcefulServiceProvider\ResourcefulServiceProvider;
 use JDesrosiers\Silex\Provider\ContentNegotiationServiceProvider;
 use JDesrosiers\Silex\Provider\CorsServiceProvider;
 use JDesrosiers\Silex\Provider\JsonSchemaServiceProvider;
@@ -30,11 +28,7 @@ class Resourceful extends Application
 
         // JSON Schema application
         $this->register(new JsonSchemaServiceProvider());
-        $this["resources_factory"] = $this->protect(new ResourcesFactory($this));
-
-        // Error Handling
-        $this->error(new DescribedByError($this));
-        $this->error(new JsonErrorHandler($this));
+        $this->register(new ResourcefulServiceProvider());
 
         // Schema generation
         $this->register(new UrlGeneratorServiceProvider());
