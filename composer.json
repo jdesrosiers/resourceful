@@ -8,7 +8,7 @@
         "geraintluff/jsv4": "~1.0",
         "jdesrosiers/silex-conneg-provider": "~0.1",
         "jdesrosiers/silex-cors-provider": "~0.1",
-        "jdesrosiers/silex-json-schema-provider": "0.1.*",
+        "jdesrosiers/silex-json-schema-provider": "~0.1",
         "silex/silex": "~1.2",
         "symfony/filesystem": "~2.6",
         "twig/twig": "~1.17"

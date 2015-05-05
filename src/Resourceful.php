@@ -33,10 +33,5 @@ class Resourceful extends Application
         // Schema generation
         $this->register(new UrlGeneratorServiceProvider());
         $this->register(new TwigServiceProvider());
-
-        // CreateResourceController
-        $this["uniqid"] = function () {
-            return uniqid();
-        };
     }
 }
