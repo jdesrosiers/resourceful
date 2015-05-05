@@ -1,6 +1,6 @@
 Resourceful
 ===========
-[![Build Status](https://travis-ci.org/jdesrosiers/resourceful.svg)](https://travis-ci.org/jdesrosiers/resourceful)
+[![Build Status](https://travis-ci.org/jdesrosiers/resourceful.svg?branch=master)](https://travis-ci.org/jdesrosiers/resourceful)
 [![Code Coverage](https://scrutinizer-ci.com/g/jdesrosiers/resourceful/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/jdesrosiers/resourceful/?branch=master)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/jdesrosiers/resourceful/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/jdesrosiers/resourceful/?branch=master)
 
@@ -8,11 +8,6 @@ Resourceful is a simple framework designed for rapid prototyping REST/HTTP appli
 It is driven off of JSON Hyper-Schemas.  You use Hyper-Schemas to define your resources and their relationships with
 each other.  No coding other than writing Hyper-Schemas and registering new resources is required.  You only need to
 worry about your API and not it's implementation.  Proper HTTP response codes and headers are managed automatically.
-
-Rapid Prototyping
------------------
-I've tried to make Resourceful as flexible as possible, but it's primary goal is rapid prototyping, so it may not have the
-flexibility needed for a production quality application.
 
 How it Works
 ------------
@@ -30,19 +25,19 @@ require __DIR__ . "/../vendor/autoload.php";
 $app = new JDesrosiers\Resourceful\Resourceful();
 $app["debug"] = true;
 
+$app->register(new JDesrosiers\Resourceful\ResourcefulServiceProvider\ResourcefulServiceProvider(), array(
+    "resourceful.schemaStore" => new JDesrosiers\Resourceful\FileCache\FileCache(__DIR__ . "/.."),
+));
+
 $app["data"] = new JDesrosiers\Resourceful\FileCache\FileCache(__DIR__ . "/../data");
-$app["schemaService"] = new JDesrosiers\Resourceful\FileCache\FileCache(__DIR__ . "/..");;
 
 // Supporting Controllers
-$app->mount("/schema", new JDesrosiers\Resourceful\Schema\SchemaControllerProvider($app["schemaService"]));
-$app->mount("/", new JDesrosiers\Resourceful\Index\IndexControllerProvider($app["data"]));
+$app->mount("/schema", new JDesrosiers\Resourceful\SchemaControllerProvider\SchemaControllerProvider());
+$app->mount("/", new JDesrosiers\Resourceful\IndexControllerProvider\IndexControllerProvider($app["data"]));
 
 // Start Registering Controllers
 
 // End Registering Controllers
-
-// Error Handler
-$app->register(new JDesrosiers\Resourceful\Error\ErrorHandlerServiceProvider());
 
 // Initialize CORS support
 $app->after($app["cors"]);
@@ -50,29 +45,29 @@ $app->after($app["cors"]);
 $app->run();
 ```
 
-That's it.  You are ready to get started.  Run the application using the builtin PHP server.
+That's it.  You are ready to get started.  Run the application using the built-in PHP server.
 ```
 > php -S localhost:8000 front.php
 ```
 
 You can use the json browser implementation at
-http://json-browser.s3-website-us-west-1.amazonaws.com/?url=http%3A//localhost%3A8000/.  You should see a default index.
-A folder called schema is created on this first run and a default index schema is created.  You are expected to add
-links to this default index schema as you add resources.
+http://json-browser.s3-website-us-west-1.amazonaws.com/?url=http%3A//localhost%3A8000/.  On the first run, a folder
+called schema is created and a default index schema and resource is created.  You are expected to add
+links to this default index schema as you add resources.  These links wil give your users a place to start.
 
 Adding a new resource to your application, requires only one line of code in your front controller.
 ```php
-$app->mount("/foo", new JDesrosiers\Resourceful\Crud\CrudControllerProvider("foo", $app["data"]));
+$app->mount("/foo", new JDesrosiers\Resourceful\CrudControllerProvider\CrudControllerProvider("foo", $app["data"]));
 ```
 
-This controller adds the "foo" resource using the CrudControllerProvider.  The first argument is the name of the
-type.  The second argument is any Doctrine Cache implementation.  Storing files on the filesystem is usually
-good enough for a rapid prototype, but you can choose something like memcache or redis if you prefer.  A centralized
-data storage can be useful if you are collaborating with others on this application.
+This adds the "foo" resource using the CrudControllerProvider.  The first argument is the name of the type.  The second
+argument is any Doctrine Cache implementation.  Storing files on the filesystem is usually good enough for a rapid
+prototype, but you can choose something like memcache or redis if you prefer.  A centralized
+data storage can be useful if you are collaborating with others on this prototype.
 
-Once the resource is registered, a good next step is to add a link to your index to create a "foo".  Refresh your
+Once the resource is registered, a good next step is to add a link in your index schema to create a "foo".  Refresh your
 Jsonary browser and you should see the link you added to the index.  Also, a default "foo" schema was generated in your
-`/schema` folder.  Fill out your "foo" schema how you like and then use the index link you created to create a "foo".
+`/schema` folder.  Fill out your "foo" schema how you like and then use the index link you added to create a "foo".
 All CRUD operations are available for the resource.
 
 Thats all.  Just keep adding resources and links between those resources to make a useful API.

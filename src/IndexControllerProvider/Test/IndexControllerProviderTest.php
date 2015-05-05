@@ -4,6 +4,8 @@ namespace JDesrosiers\Resourceful\IndexControllerProvider\Test;
 
 use JDesrosiers\Resourceful\IndexControllerProvider\IndexControllerProvider;
 use JDesrosiers\Resourceful\Resourceful;
+use JDesrosiers\Resourceful\ResourcefulServiceProvider\ResourcefulServiceProvider;
+use JDesrosiers\Resourceful\SchemaControllerProvider\SchemaControllerProvider;
 use PHPUnit_Framework_TestCase;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Client;
@@ -18,10 +20,11 @@ class IndexControllerProviderTest extends PHPUnit_Framework_TestCase
         $this->app = new Resourceful();
         $this->app["debug"] = true;
 
-        $this->app["schemaService"] = $this->getMock("Doctrine\Common\Cache\Cache");
-        $this->app->get("/schema/{type}", function () {
-            // No Op
-        })->bind("schema");
+        $this->app->register(new ResourcefulServiceProvider(), array(
+            "resourceful.schemaStore" => $this->getMock("Doctrine\Common\Cache\Cache"),
+        ));
+
+        $this->app->mount("/schema", new SchemaControllerProvider());
 
         $this->service = $this->getMock("Doctrine\Common\Cache\Cache");
         $this->app->mount("/", new IndexControllerProvider($this->service));

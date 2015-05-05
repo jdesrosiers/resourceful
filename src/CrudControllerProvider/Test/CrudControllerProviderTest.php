@@ -4,6 +4,7 @@ namespace JDesrosiers\Resourceful\CrudControllerProvider;
 
 use JDesrosiers\Resourceful\CrudControllerProvider\CrudControllerProvider;
 use JDesrosiers\Resourceful\Resourceful;
+use JDesrosiers\Resourceful\ResourcefulServiceProvider\ResourcefulServiceProvider;
 use JDesrosiers\Resourceful\SchemaControllerProvider\SchemaControllerProvider;
 use PHPUnit_Framework_TestCase;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,8 +21,11 @@ class CrudControllerProviderTest extends PHPUnit_Framework_TestCase
         $this->app = new Resourceful();
         $this->app["debug"] = true;
 
-        $this->app["schemaService"] = $this->getMock("Doctrine\Common\Cache\Cache");
-        $this->app->mount("/schema", new SchemaControllerProvider($this->app["schemaService"]));
+        $this->app->register(new ResourcefulServiceProvider(), array(
+            "resourceful.schemaStore" => $this->getMock("Doctrine\Common\Cache\Cache"),
+        ));
+
+        $this->app->mount("/schema", new SchemaControllerProvider());
 
         $this->service = $this->getMock("Doctrine\Common\Cache\Cache");
         $this->app->mount("/foo", new CrudControllerProvider("foo", $this->service));

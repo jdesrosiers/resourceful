@@ -3,7 +3,6 @@
 namespace JDesrosiers\Resourceful\Controller\Test;
 
 use JDesrosiers\Resourceful\Controller\DeleteResourceController;
-use JDesrosiers\Silex\Provider\JsonSchemaServiceProvider;
 use PHPUnit_Framework_TestCase;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,11 +18,6 @@ class DeleteResourceControllerTest extends PHPUnit_Framework_TestCase
     {
         $this->app = new Application();
         $this->app["debug"] = true;
-        $this->app->register(new JsonSchemaServiceProvider());
-
-        $this->app->get("/schema/{type}", function () {
-            // No Op
-        })->bind("schema");
 
         $this->service = $this->getMock("Doctrine\Common\Cache\Cache");
         $this->app->delete("/foo/{id}", new DeleteResourceController($this->service));

@@ -23,9 +23,6 @@ class PutResourceControllerTest extends PHPUnit_Framework_TestCase
         $this->app->register(new JsonSchemaServiceProvider());
 
         $this->app["schemaService"] = new FileCache(__DIR__);
-        $this->app->get("/schema/{type}", function () {
-            // No Op
-        })->bind("schema");
 
         $this->service = $this->getMock("Doctrine\Common\Cache\Cache");
         $this->app->put("/foo/{id}", new PutResourceController($this->service, "/schema/foo"));

@@ -2,7 +2,6 @@
 
 namespace JDesrosiers\Resourceful;
 
-use JDesrosiers\Resourceful\ResourcefulServiceProvider\ResourcefulServiceProvider;
 use JDesrosiers\Silex\Provider\ContentNegotiationServiceProvider;
 use JDesrosiers\Silex\Provider\CorsServiceProvider;
 use JDesrosiers\Silex\Provider\JsonSchemaServiceProvider;
@@ -28,7 +27,6 @@ class Resourceful extends Application
 
         // JSON Schema application
         $this->register(new JsonSchemaServiceProvider());
-        $this->register(new ResourcefulServiceProvider());
 
         // Schema generation
         $this->register(new UrlGeneratorServiceProvider());

@@ -20,13 +20,13 @@ class AddSchema
 
     public function __invoke(Request $request, Application $app)
     {
-        if (!$app["schemaService"]->contains($this->schema)) {
-            $app["schemaService"]->save(
+        if (!$app["resourceful.schemaStore"]->contains($this->schema)) {
+            $app["resourceful.schemaStore"]->save(
                 $this->schema,
                 json_decode($app["twig"]->render("$this->template.json.twig", $this->replacements))
             );
         }
 
-        $app["json-schema.schema-store"]->add($this->schema, $app["schemaService"]->fetch($this->schema));
+        $app["json-schema.schema-store"]->add($this->schema, $app["resourceful.schemaStore"]->fetch($this->schema));
     }
 }

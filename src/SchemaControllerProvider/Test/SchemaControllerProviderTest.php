@@ -3,6 +3,7 @@
 namespace JDesrosiers\Resourceful\SchemaControllerProvider\Test;
 
 use JDesrosiers\Resourceful\Resourceful;
+use JDesrosiers\Resourceful\ResourcefulServiceProvider\ResourcefulServiceProvider;
 use JDesrosiers\Resourceful\SchemaControllerProvider\SchemaControllerProvider;
 use PHPUnit_Framework_TestCase;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,19 +19,22 @@ class SchemaControllerProviderTest extends PHPUnit_Framework_TestCase
         $this->app = new Resourceful();
         $this->app["debug"] = true;
 
-        $this->app["schemaService"] = $this->getMock("Doctrine\Common\Cache\Cache");
-        $this->app->mount("/schema", new SchemaControllerProvider($this->app["schemaService"]));
+        $this->app->register(new ResourcefulServiceProvider(), array(
+            "resourceful.schemaStore" => $this->getMock("Doctrine\Common\Cache\Cache"),
+        ));
+
+        $this->app->mount("/schema", new SchemaControllerProvider());
 
         $this->client = new Client($this->app);
     }
 
     public function testGet()
     {
-        $this->app["schemaService"]->method("contains")
+        $this->app["resourceful.schemaStore"]->method("contains")
             ->with("/schema/foo")
             ->willReturn(true);
 
-        $this->app["schemaService"]->method("fetch")
+        $this->app["resourceful.schemaStore"]->method("fetch")
             ->with("/schema/foo")
             ->willReturn(new \stdClass());
 
@@ -48,7 +52,7 @@ class SchemaControllerProviderTest extends PHPUnit_Framework_TestCase
 
     public function testGetNotFound()
     {
-        $this->app["schemaService"]->method("fetch")
+        $this->app["resourceful.schemaStore"]->method("fetch")
             ->with("/schema/bar")
             ->willReturn(false);
 

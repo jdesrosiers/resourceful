@@ -18,9 +18,12 @@ class DescribedByError
     {
         $schema = $this->app["url_generator"]->generate("schema", array("type" => "error"));
 
-        if (!$this->app["schemaService"]->contains($schema)) {
+        if (!$this->app["resourceful.schemaStore"]->contains($schema)) {
             $this->app["twig.loader"]->addLoader(new Twig_Loader_Filesystem(__DIR__ . "/templates"));
-            $this->app["schemaService"]->save($schema, json_decode($this->app["twig"]->render("error.json.twig")));
+            $this->app["resourceful.schemaStore"]->save(
+                $schema,
+                json_decode($this->app["twig"]->render("error.json.twig"))
+            );
         }
 
         $this->app["json-schema.describedBy"] = $schema;
