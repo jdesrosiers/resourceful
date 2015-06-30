@@ -20,7 +20,7 @@ class AddSchema
 
     public function __invoke(Request $request, Application $app)
     {
-        if (!$app["resourceful.schemaStore"]->contains($this->schema)) {
+        if ($app["debug"] && !$app["resourceful.schemaStore"]->contains($this->schema)) {
             $app["resourceful.schemaStore"]->save(
                 $this->schema,
                 json_decode($app["twig"]->render("$this->template.json.twig", $this->replacements))

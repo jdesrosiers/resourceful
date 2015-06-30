@@ -30,7 +30,7 @@ class CrudControllerProvider implements ControllerProviderInterface
 
         $app["twig.loader"]->addLoader(new Twig_Loader_Filesystem(__DIR__ . "/templates"));
         $replacements = array("type" => $this->type, "title" => ucfirst($this->type));
-        $resource->before(new AddSchema($schema, "crud", $replacements));
+        $app->before(new AddSchema($schema, "crud", $replacements));
 
         $resource->get("/{id}", new GetResourceController($this->service))->bind($schema);
         $resource->put("/{id}", new PutResourceController($this->service, $schema));

@@ -31,11 +31,9 @@ class SchemaControllerProviderTest extends PHPUnit_Framework_TestCase
     public function testGet()
     {
         $this->app["resourceful.schemaStore"]->method("contains")
-            ->with("/schema/foo")
             ->willReturn(true);
 
         $this->app["resourceful.schemaStore"]->method("fetch")
-            ->with("/schema/foo")
             ->willReturn(new \stdClass());
 
         $headers = array(
@@ -53,8 +51,7 @@ class SchemaControllerProviderTest extends PHPUnit_Framework_TestCase
     public function testGetNotFound()
     {
         $this->app["resourceful.schemaStore"]->method("fetch")
-            ->with("/schema/bar")
-            ->willReturn(false);
+            ->will($this->returnValueMap(array("/schema/error" => true)));
 
         $headers = array(
             "HTTP_ACCEPT" => "application/json",
