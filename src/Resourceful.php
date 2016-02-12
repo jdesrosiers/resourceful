@@ -8,7 +8,7 @@ use JDesrosiers\Silex\Provider\JsonSchemaServiceProvider;
 use Silex\Application;
 use Silex\Provider\TwigServiceProvider;
 use Silex\Provider\UrlGeneratorServiceProvider;
-use Symfony\Component\HttpKernel\Debug\ErrorHandler;
+use Symfony\Component\Debug\ErrorHandler;
 
 class Resourceful extends Application
 {

@@ -26,7 +26,7 @@ $app = new JDesrosiers\Resourceful\Resourceful();
 $app["debug"] = true;
 
 $app->register(new JDesrosiers\Resourceful\ResourcefulServiceProvider\ResourcefulServiceProvider(), array(
-    "resourceful.schemaStore" => new JDesrosiers\Resourceful\FileCache\FileCache(__DIR__ . "/.."),
+    "resourceful.schemaStore" => new JDesrosiers\Resourceful\FileCache\FileCache(__DIR__ . "/../data"),
 ));
 
 $app["data"] = new JDesrosiers\Resourceful\FileCache\FileCache(__DIR__ . "/../data");
