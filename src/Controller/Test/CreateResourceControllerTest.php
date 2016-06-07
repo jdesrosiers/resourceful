@@ -7,7 +7,7 @@ use JDesrosiers\Resourceful\FileCache\FileCache;
 use JDesrosiers\Silex\Provider\JsonSchemaServiceProvider;
 use PHPUnit_Framework_TestCase;
 use Silex\Application;
-use Silex\Provider\UrlGeneratorServiceProvider;
+use Silex\Provider\RoutingServiceProvider;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Client;
 
@@ -22,7 +22,7 @@ class CreateResourceControllerTest extends PHPUnit_Framework_TestCase
         $this->app = new Application();
         $this->app["debug"] = true;
 
-        $this->app->register(new UrlGeneratorServiceProvider());
+        $this->app->register(new RoutingServiceProvider());
         $this->app->register(new JsonSchemaServiceProvider());
         $this->app["uniqid"] = function () {
             return uniqid();

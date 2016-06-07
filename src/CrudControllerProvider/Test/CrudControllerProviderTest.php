@@ -26,6 +26,7 @@ class CrudControllerProviderTest extends PHPUnit_Framework_TestCase
         ));
 
         $this->app->mount("/schema", new SchemaControllerProvider());
+        $this->app->flush();
 
         $this->service = $this->getMock("Doctrine\Common\Cache\Cache");
         $this->app->mount("/foo", new CrudControllerProvider("foo", $this->service));

@@ -6,11 +6,11 @@
     "require": {
         "doctrine/cache": "~1.4",
         "geraintluff/jsv4": "~1.0",
-        "jdesrosiers/silex-conneg-provider": "~0.1",
-        "jdesrosiers/silex-cors-provider": "~0.1",
-        "jdesrosiers/silex-json-schema-provider": "~0.1",
-        "silex/silex": "~1.2",
-        "symfony/filesystem": "~2.6",
+        "jdesrosiers/silex-conneg-provider": "~1.0",
+        "jdesrosiers/silex-cors-provider": "~1.0",
+        "jdesrosiers/silex-json-schema-provider": "~1.0",
+        "silex/silex": "~2.0",
+        "symfony/filesystem": "~3.0",
         "twig/twig": "~1.17"
     },
     "require-dev": {

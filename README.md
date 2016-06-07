@@ -35,6 +35,7 @@ $app["data"] = new JDesrosiers\Resourceful\FileCache\FileCache(__DIR__ . "/../da
 $app->mount("/schema", new JDesrosiers\Resourceful\SchemaControllerProvider\SchemaControllerProvider());
 $app->mount("/", new JDesrosiers\Resourceful\IndexControllerProvider\IndexControllerProvider($app["data"]));
 
+$app->flush();
 // Start Registering Controllers
 
 // End Registering Controllers

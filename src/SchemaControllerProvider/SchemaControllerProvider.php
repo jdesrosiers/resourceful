@@ -3,8 +3,8 @@
 namespace JDesrosiers\Resourceful\SchemaControllerProvider;
 
 use JDesrosiers\Resourceful\Controller\GetResourceController;
+use Silex\Api\ControllerProviderInterface;
 use Silex\Application;
-use Silex\ControllerProviderInterface;
 
 class SchemaControllerProvider implements ControllerProviderInterface
 {

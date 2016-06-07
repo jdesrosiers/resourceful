@@ -5,8 +5,8 @@ namespace JDesrosiers\Resourceful\IndexControllerProvider;
 use Doctrine\Common\Cache\Cache;
 use JDesrosiers\Resourceful\Controller\GetResourceController;
 use JDesrosiers\Resourceful\ResourcefulServiceProvider\AddSchema;
+use Silex\Api\ControllerProviderInterface;
 use Silex\Application;
-use Silex\ControllerProviderInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Twig_Loader_Filesystem;
 

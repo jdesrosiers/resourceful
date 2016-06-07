@@ -3,11 +3,13 @@
 namespace JDesrosiers\Resourceful\ResourcefulServiceProvider;
 
 use JDesrosiers\Resourceful\JsonErrorHandler\JsonErrorHandler;
+use Pimple\Container;
+use Pimple\ServiceProviderInterface;
+use Silex\Api\BootableProviderInterface;
 use Silex\Application;
-use Silex\ServiceProviderInterface;
 use Twig_Loader_Filesystem;
 
-class ResourcefulServiceProvider implements ServiceProviderInterface
+class ResourcefulServiceProvider implements ServiceProviderInterface, BootableProviderInterface
 {
     public function boot(Application $app)
     {
@@ -18,7 +20,7 @@ class ResourcefulServiceProvider implements ServiceProviderInterface
         $app->before(new AddSchema($schema, "error"));
     }
 
-    public function register(Application $app)
+    public function register(Container $app)
     {
         $app["resources_factory"] = $app->protect(new ResourcesFactory($app));
 
