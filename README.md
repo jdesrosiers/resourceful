@@ -20,7 +20,7 @@ Define your front controller.
 ```php
 <?php
 
-require __DIR__ . "/../vendor/autoload.php";
+require __DIR__ . "/vendor/autoload.php";
 
 $app = new JDesrosiers\Resourceful\Resourceful();
 $app["debug"] = true;
@@ -33,9 +33,9 @@ $app["data"] = new JDesrosiers\Resourceful\FileCache\FileCache(__DIR__ . "/../da
 
 // Supporting Controllers
 $app->mount("/schema", new JDesrosiers\Resourceful\SchemaControllerProvider\SchemaControllerProvider());
+$app->flush();
 $app->mount("/", new JDesrosiers\Resourceful\IndexControllerProvider\IndexControllerProvider($app["data"]));
 
-$app->flush();
 // Start Registering Controllers
 
 // End Registering Controllers
