@@ -2,12 +2,11 @@
 
 namespace JDesrosiers\Resourceful;
 
+use JDesrosiers\Resourceful\JsonErrorHandler\JsonErrorHandler;
 use JDesrosiers\Silex\Provider\ContentNegotiationServiceProvider;
 use JDesrosiers\Silex\Provider\CorsServiceProvider;
 use JDesrosiers\Silex\Provider\JsonSchemaServiceProvider;
 use Silex\Application;
-use Silex\Provider\RoutingServiceProvider;
-use Silex\Provider\TwigServiceProvider;
 use Symfony\Component\Debug\ErrorHandler;
 
 class Resourceful extends Application
@@ -28,8 +27,7 @@ class Resourceful extends Application
         // JSON Schema application
         $this->register(new JsonSchemaServiceProvider());
 
-        // Schema generation
-        $this->register(new RoutingServiceProvider());
-        $this->register(new TwigServiceProvider());
+        // Error Handling
+        $this->error(new JsonErrorHandler($this));
     }
 }

@@ -6,6 +6,7 @@ use JDesrosiers\Resourceful\Resourceful;
 use JDesrosiers\Resourceful\ResourcefulServiceProvider\ResourcefulServiceProvider;
 use JDesrosiers\Resourceful\SchemaControllerProvider\SchemaControllerProvider;
 use PHPUnit_Framework_TestCase;
+use Silex\Provider\TwigServiceProvider;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Client;
 
@@ -19,6 +20,7 @@ class SchemaControllerProviderTest extends PHPUnit_Framework_TestCase
         $this->app = new Resourceful();
         $this->app["debug"] = true;
 
+        $this->app->register(new TwigServiceProvider());
         $this->app->register(new ResourcefulServiceProvider(), array(
             "resourceful.schemaStore" => $this->getMock("Doctrine\Common\Cache\Cache"),
         ));
