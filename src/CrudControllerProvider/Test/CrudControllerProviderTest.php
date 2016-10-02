@@ -24,13 +24,13 @@ class CrudControllerProviderTest extends PHPUnit_Framework_TestCase
 
         $this->app->register(new TwigServiceProvider());
         $this->app->register(new ResourcefulServiceProvider(), array(
-            "resourceful.schemaStore" => $this->getMock("Doctrine\Common\Cache\Cache"),
+            "resourceful.schemaStore" => $this->getMockBuilder("Doctrine\Common\Cache\Cache")->getMock(),
         ));
 
         $this->app->mount("/schema", new SchemaControllerProvider());
         $this->app->flush();
 
-        $this->service = $this->getMock("Doctrine\Common\Cache\Cache");
+        $this->service = $this->getMockBuilder("Doctrine\Common\Cache\Cache")->getMock();
         $this->app->mount("/foo", new CrudControllerProvider("foo", $this->service));
 
         $this->client = new Client($this->app);

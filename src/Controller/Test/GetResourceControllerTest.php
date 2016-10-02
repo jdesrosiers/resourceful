@@ -19,7 +19,7 @@ class GetResourceControllerTest extends PHPUnit_Framework_TestCase
         $this->app = new Application();
         $this->app["debug"] = true;
 
-        $this->service = $this->getMock("Doctrine\Common\Cache\Cache");
+        $this->service = $this->getMockBuilder("Doctrine\Common\Cache\Cache")->getMock();
         $this->app->get("/foo/{id}", new GetResourceController($this->service));
 
         $this->client = new Client($this->app);

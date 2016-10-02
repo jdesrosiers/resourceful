@@ -30,7 +30,7 @@ class CreateResourceControllerTest extends PHPUnit_Framework_TestCase
 
         $this->app["schemaService"] = new FileCache(__DIR__);
 
-        $this->service = $this->getMock("Doctrine\Common\Cache\Cache");
+        $this->service = $this->getMockBuilder("Doctrine\Common\Cache\Cache")->getMock();
         $this->app->get("/foo/{id}")->bind("/schema/foo");
         $this->app->post("/foo/", new CreateResourceController($this->service, "/schema/foo"));
         $this->app["json-schema.schema-store"]->add("/schema/foo", $this->app["schemaService"]->fetch("/schema/foo"));

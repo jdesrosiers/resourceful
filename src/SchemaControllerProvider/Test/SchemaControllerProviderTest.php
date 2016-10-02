@@ -22,7 +22,7 @@ class SchemaControllerProviderTest extends PHPUnit_Framework_TestCase
 
         $this->app->register(new TwigServiceProvider());
         $this->app->register(new ResourcefulServiceProvider(), array(
-            "resourceful.schemaStore" => $this->getMock("Doctrine\Common\Cache\Cache"),
+            "resourceful.schemaStore" => $this->getMockBuilder("Doctrine\Common\Cache\Cache")->getMock(),
         ));
 
         $this->app->mount("/schema", new SchemaControllerProvider());
