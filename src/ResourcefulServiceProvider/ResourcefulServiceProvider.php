@@ -28,10 +28,5 @@ class ResourcefulServiceProvider implements ServiceProviderInterface, BootablePr
     public function register(Container $app)
     {
         $app["resources_factory"] = $app->protect(new ResourcesFactory($app));
-
-        // CreateResourceController
-        $app["uniqid"] = function () {
-            return uniqid();
-        };
     }
 }
