@@ -30,10 +30,10 @@ class JsonErrorHandlerTest extends PHPUnit_Framework_TestCase
             throw new NotFoundHttpException("Not Found", null, 4);
         });
 
-        $headers = array(
+        $headers = [
             "HTTP_ACCEPT" => "application/json",
-        );
-        $this->client->request("GET", "/foo", array(), array(), $headers);
+        ];
+        $this->client->request("GET", "/foo", [], [], $headers);
         $response = $this->client->getResponse();
         $content = json_decode($response->getContent());
 

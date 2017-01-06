@@ -38,10 +38,10 @@ class GetResourceControllerTest extends PHPUnit_Framework_TestCase
             ->with("/foo/4ee8e29d45851")
             ->willReturn($foo);
 
-        $headers = array(
+        $headers = [
             "HTTP_ACCEPT" => "application/json",
-        );
-        $this->client->request("GET", "/foo/4ee8e29d45851", array(), array(), $headers);
+        ];
+        $this->client->request("GET", "/foo/4ee8e29d45851", [], [], $headers);
         $response = $this->client->getResponse();
 
         $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
@@ -59,10 +59,10 @@ class GetResourceControllerTest extends PHPUnit_Framework_TestCase
             $this->assertEquals("Not Found", $e->getMessage());
         });
 
-        $headers = array(
+        $headers = [
             "HTTP_ACCEPT" => "application/json",
-        );
-        $this->client->request("GET", "/foo/4ee8e29d45851", array(), array(), $headers);
+        ];
+        $this->client->request("GET", "/foo/4ee8e29d45851", [], [], $headers);
         $response = $this->client->getResponse();
 
         $this->assertEquals(Response::HTTP_NOT_FOUND, $response->getStatusCode());
@@ -82,10 +82,10 @@ class GetResourceControllerTest extends PHPUnit_Framework_TestCase
             $this->assertEquals("Failed to retrieve resource", $e->getMessage());
         });
 
-        $headers = array(
+        $headers = [
             "HTTP_ACCEPT" => "application/json",
-        );
-        $this->client->request("GET", "/foo/4ee8e29d45851", array(), array(), $headers);
+        ];
+        $this->client->request("GET", "/foo/4ee8e29d45851", [], [], $headers);
         $response = $this->client->getResponse();
 
         $this->assertEquals(Response::HTTP_SERVICE_UNAVAILABLE, $response->getStatusCode());

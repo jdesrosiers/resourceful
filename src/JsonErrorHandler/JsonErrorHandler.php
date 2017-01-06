@@ -15,7 +15,7 @@ class JsonErrorHandler
 
     public function __invoke(\Exception $e, $code)
     {
-        $error = array("code" => $e->getCode(), "message" => $e->getMessage());
+        $error = ["code" => $e->getCode(), "message" => $e->getMessage()];
         if ($this->app["debug"]) {
             $error["trace"] = $e->getTraceAsString();
         }

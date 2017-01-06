@@ -15,13 +15,13 @@ class ResourcefulServiceProvider implements ServiceProviderInterface, BootablePr
     public function boot(Application $app)
     {
         // Error Handling
-        $schema = $app["url_generator"]->generate("schema", array("type" => "error"));
+        $schema = $app["url_generator"]->generate("schema", ["type" => "error"]);
 
         $app["twig.loader"]->addLoader(new Twig_Loader_Filesystem(__DIR__ . "/templates"));
         $app->before(new AddSchema($schema, "error"));
 
         $app->error(function (\Exception $e, $code) use ($app) {
-            $app["json-schema.describedBy"] = $app["url_generator"]->generate("schema", array("type" => "error"));
+            $app["json-schema.describedBy"] = $app["url_generator"]->generate("schema", ["type" => "error"]);
         }, self::ERROR_HANDLER_PRIORITY);
     }
 

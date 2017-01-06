@@ -23,9 +23,9 @@ class IndexControllerProviderTest extends PHPUnit_Framework_TestCase
         $this->app["debug"] = true;
 
         $this->app->register(new TwigServiceProvider());
-        $this->app->register(new ResourcefulServiceProvider(), array(
+        $this->app->register(new ResourcefulServiceProvider(), [
             "resourceful.schemaStore" => $this->getMockBuilder("Doctrine\Common\Cache\Cache")->getMock(),
-        ));
+        ]);
 
         $this->app->mount("/schema", new SchemaControllerProvider());
         $this->app->flush();
@@ -48,10 +48,10 @@ class IndexControllerProviderTest extends PHPUnit_Framework_TestCase
             ->with("/")
             ->willReturn(json_decode($index));
 
-        $headers = array(
+        $headers = [
             "HTTP_ACCEPT" => "application/json",
-        );
-        $this->client->request("GET", "/", array(), array(), $headers);
+        ];
+        $this->client->request("GET", "/", [], [], $headers);
         $response = $this->client->getResponse();
 
         $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());

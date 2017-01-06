@@ -45,11 +45,11 @@ class CreateResourceControllerTest extends PHPUnit_Framework_TestCase
 
         $this->app["uniqid"] = $foo->id;
 
-        $headers = array(
+        $headers = [
             "HTTP_ACCEPT" => "application/json",
             "CONTENT_TYPE" => "application/json"
-        );
-        $this->client->request("POST", "/foo/", array(), array(), $headers, "{}");
+        ];
+        $this->client->request("POST", "/foo/", [], [], $headers, "{}");
         $response = $this->client->getResponse();
 
         $this->assertEquals(Response::HTTP_CREATED, $response->getStatusCode());
@@ -65,11 +65,11 @@ class CreateResourceControllerTest extends PHPUnit_Framework_TestCase
             $this->assertEquals($errorMessage, $e->getMessage());
         });
 
-        $headers = array(
+        $headers = [
             "HTTP_ACCEPT" => "application/json",
             "CONTENT_TYPE" => "application/json"
-        );
-        $this->client->request("POST", "/foo/", array(), array(), $headers, '{"illegalField":"illegal"}');
+        ];
+        $this->client->request("POST", "/foo/", [], [], $headers, '{"illegalField":"illegal"}');
         $response = $this->client->getResponse();
 
         $this->assertEquals(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
@@ -87,11 +87,11 @@ class CreateResourceControllerTest extends PHPUnit_Framework_TestCase
             $this->assertEquals("Failed to save resource", $e->getMessage());
         });
 
-        $headers = array(
+        $headers = [
             "HTTP_ACCEPT" => "application/json",
             "CONTENT_TYPE" => "application/json"
-        );
-        $this->client->request("POST", "/foo/", array(), array(), $headers, "{}");
+        ];
+        $this->client->request("POST", "/foo/", [], [], $headers, "{}");
         $response = $this->client->getResponse();
 
         $this->assertEquals(Response::HTTP_SERVICE_UNAVAILABLE, $response->getStatusCode());

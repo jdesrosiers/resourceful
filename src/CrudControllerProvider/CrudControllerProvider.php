@@ -25,11 +25,11 @@ class CrudControllerProvider implements ControllerProviderInterface
 
     public function connect(Application $app)
     {
-        $schema = $app["url_generator"]->generate("schema", array("type" => $this->type));
+        $schema = $app["url_generator"]->generate("schema", ["type" => $this->type]);
         $resource = $app["resources_factory"]($schema);
 
         $app["twig.loader"]->addLoader(new Twig_Loader_Filesystem(__DIR__ . "/templates"));
-        $replacements = array("type" => $this->type, "title" => ucfirst($this->type));
+        $replacements = ["type" => $this->type, "title" => ucfirst($this->type)];
         $app->before(new AddSchema($schema, "crud", $replacements));
 
         $resource->get("/{id}", new GetResourceController($this->service))->bind($schema);

@@ -27,10 +27,10 @@ class DeleteResourceControllerTest extends PHPUnit_Framework_TestCase
 
     public function testDelete()
     {
-        $headers = array(
+        $headers = [
             "HTTP_ACCEPT" => "application/json",
-        );
-        $this->client->request("DELETE", "/foo/4ee8e29d45851", array(), array(), $headers);
+        ];
+        $this->client->request("DELETE", "/foo/4ee8e29d45851", [], [], $headers);
         $response = $this->client->getResponse();
 
         $this->assertEquals(Response::HTTP_NO_CONTENT, $response->getStatusCode());
@@ -46,10 +46,10 @@ class DeleteResourceControllerTest extends PHPUnit_Framework_TestCase
             $this->assertEquals("Failed to delete resource", $e->getMessage());
         });
 
-        $headers = array(
+        $headers = [
             "HTTP_ACCEPT" => "application/json",
-        );
-        $this->client->request("DELETE", "/foo/4ee8e29d45851", array(), array(), $headers);
+        ];
+        $this->client->request("DELETE", "/foo/4ee8e29d45851", [], [], $headers);
         $response = $this->client->getResponse();
 
         $this->assertEquals(Response::HTTP_SERVICE_UNAVAILABLE, $response->getStatusCode());

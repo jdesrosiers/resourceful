@@ -11,17 +11,17 @@ use Symfony\Component\Debug\ErrorHandler;
 
 class Resourceful extends Application
 {
-    public function __construct($config = array())
+    public function __construct($config = [])
     {
         parent::__construct($config);
         ErrorHandler::register();
 
         // JSON/REST application
-        $this->register(new ContentNegotiationServiceProvider(), array(
-            "conneg.responseFormats" => array("json"),
-            "conneg.requestFormats" => array("json"),
+        $this->register(new ContentNegotiationServiceProvider(), [
+            "conneg.responseFormats" => ["json"],
+            "conneg.requestFormats" => ["json"],
             "conneg.defaultFormat" => "json",
-        ));
+        ]);
         $this->register(new CorsServiceProvider());
 
         // JSON Schema application

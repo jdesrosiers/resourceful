@@ -23,9 +23,9 @@ class CrudControllerProviderTest extends PHPUnit_Framework_TestCase
         $this->app["debug"] = true;
 
         $this->app->register(new TwigServiceProvider());
-        $this->app->register(new ResourcefulServiceProvider(), array(
+        $this->app->register(new ResourcefulServiceProvider(), [
             "resourceful.schemaStore" => $this->getMockBuilder("Doctrine\Common\Cache\Cache")->getMock(),
-        ));
+        ]);
 
         $this->app->mount("/schema", new SchemaControllerProvider());
         $this->app->flush();
@@ -42,10 +42,10 @@ class CrudControllerProviderTest extends PHPUnit_Framework_TestCase
             ->with("/foo/4ee8e29d45851")
             ->willReturn(true);
 
-        $headers = array(
+        $headers = [
             "HTTP_ACCEPT" => "application/json",
-        );
-        $this->client->request("GET", "/foo/4ee8e29d45851", array(), array(), $headers);
+        ];
+        $this->client->request("GET", "/foo/4ee8e29d45851", [], [], $headers);
         $response = $this->client->getResponse();
 
         $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
@@ -54,10 +54,10 @@ class CrudControllerProviderTest extends PHPUnit_Framework_TestCase
 
     public function testErrorHandling()
     {
-        $headers = array(
+        $headers = [
             "HTTP_ACCEPT" => "application/json",
-        );
-        $this->client->request("GET", "/foo/4ee8e29d45851", array(), array(), $headers);
+        ];
+        $this->client->request("GET", "/foo/4ee8e29d45851", [], [], $headers);
         $response = $this->client->getResponse();
 
         $this->assertEquals(Response::HTTP_NOT_FOUND, $response->getStatusCode());
@@ -73,11 +73,11 @@ class CrudControllerProviderTest extends PHPUnit_Framework_TestCase
             ->with("/foo/$foo->id")
             ->willReturn(true);
 
-        $headers = array(
+        $headers = [
             "HTTP_ACCEPT" => "application/json",
             "CONTENT_TYPE" => "application/json"
-        );
-        $this->client->request("PUT", "/foo/$foo->id", array(), array(), $headers, "{\"id\":\"$foo->id\"}");
+        ];
+        $this->client->request("PUT", "/foo/$foo->id", [], [], $headers, "{\"id\":\"$foo->id\"}");
         $response = $this->client->getResponse();
 
         $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
@@ -88,10 +88,10 @@ class CrudControllerProviderTest extends PHPUnit_Framework_TestCase
 
     public function testDelete()
     {
-        $headers = array(
+        $headers = [
             "HTTP_ACCEPT" => "application/json",
-        );
-        $this->client->request("DELETE", "/foo/4ee8e29d45851", array(), array(), $headers);
+        ];
+        $this->client->request("DELETE", "/foo/4ee8e29d45851", [], [], $headers);
         $response = $this->client->getResponse();
 
         $this->assertEquals(Response::HTTP_NO_CONTENT, $response->getStatusCode());
@@ -106,11 +106,11 @@ class CrudControllerProviderTest extends PHPUnit_Framework_TestCase
 
         $this->app["uniqid"] = $foo->id;
 
-        $headers = array(
+        $headers = [
             "HTTP_ACCEPT" => "application/json",
             "CONTENT_TYPE" => "application/json"
-        );
-        $this->client->request("POST", "/foo/", array(), array(), $headers, "{}");
+        ];
+        $this->client->request("POST", "/foo/", [], [], $headers, "{}");
         $response = $this->client->getResponse();
 
         $this->assertEquals(Response::HTTP_CREATED, $response->getStatusCode());

@@ -40,11 +40,11 @@ class PutResourceControllerTest extends PHPUnit_Framework_TestCase
             ->with("/foo/$foo->id")
             ->willReturn(false);
 
-        $headers = array(
+        $headers = [
             "HTTP_ACCEPT" => "application/json",
             "CONTENT_TYPE" => "application/json"
-        );
-        $this->client->request("PUT", "/foo/$foo->id", array(), array(), $headers, "{\"id\":\"$foo->id\"}");
+        ];
+        $this->client->request("PUT", "/foo/$foo->id", [], [], $headers, "{\"id\":\"$foo->id\"}");
         $response = $this->client->getResponse();
 
         $this->assertEquals(Response::HTTP_CREATED, $response->getStatusCode());
@@ -63,12 +63,12 @@ class PutResourceControllerTest extends PHPUnit_Framework_TestCase
             $this->assertEquals($errorMessage, $e->getMessage());
         });
 
-        $headers = array(
+        $headers = [
             "HTTP_ACCEPT" => "application/json",
             "CONTENT_TYPE" => "application/json"
-        );
+        ];
         $data = '{"id":"4ee8e29d45851","illegalField":"illegal"}';
-        $this->client->request("PUT", "/foo/4ee8e29d45851", array(), array(), $headers, $data);
+        $this->client->request("PUT", "/foo/4ee8e29d45851", [], [], $headers, $data);
         $response = $this->client->getResponse();
 
         $this->assertEquals(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
@@ -83,11 +83,11 @@ class PutResourceControllerTest extends PHPUnit_Framework_TestCase
             ->with("/foo/$foo->id")
             ->willReturn(true);
 
-        $headers = array(
+        $headers = [
             "HTTP_ACCEPT" => "application/json",
             "CONTENT_TYPE" => "application/json"
-        );
-        $this->client->request("PUT", "/foo/$foo->id", array(), array(), $headers, "{\"id\":\"$foo->id\"}");
+        ];
+        $this->client->request("PUT", "/foo/$foo->id", [], [], $headers, "{\"id\":\"$foo->id\"}");
         $response = $this->client->getResponse();
 
         $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
@@ -108,11 +108,11 @@ class PutResourceControllerTest extends PHPUnit_Framework_TestCase
             $this->assertEquals("Failed to save resource", $e->getMessage());
         });
 
-        $headers = array(
+        $headers = [
             "HTTP_ACCEPT" => "application/json",
             "CONTENT_TYPE" => "application/json"
-        );
-        $this->client->request("PUT", "/foo/$foo->id", array(), array(), $headers, "{\"id\":\"$foo->id\"}");
+        ];
+        $this->client->request("PUT", "/foo/$foo->id", [], [], $headers, "{\"id\":\"$foo->id\"}");
         $response = $this->client->getResponse();
 
         $this->assertEquals(Response::HTTP_SERVICE_UNAVAILABLE, $response->getStatusCode());
@@ -129,11 +129,11 @@ class PutResourceControllerTest extends PHPUnit_Framework_TestCase
             $this->assertEquals($errorMessage, $e->getMessage());
         });
 
-        $headers = array(
+        $headers = [
             "HTTP_ACCEPT" => "application/json",
             "CONTENT_TYPE" => "application/json"
-        );
-        $this->client->request("PUT", "/foo/4ee8e29d45851", array(), array(), $headers, '{"id":"bar"}');
+        ];
+        $this->client->request("PUT", "/foo/4ee8e29d45851", [], [], $headers, '{"id":"bar"}');
         $response = $this->client->getResponse();
 
         $this->assertEquals(Response::HTTP_BAD_REQUEST, $response->getStatusCode());

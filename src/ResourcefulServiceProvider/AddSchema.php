@@ -11,7 +11,7 @@ class AddSchema
     private $template;
     private $replacements;
 
-    public function __construct($schema, $template, $replacements = array())
+    public function __construct($schema, $template, $replacements = [])
     {
         $this->schema = $schema;
         $this->template = $template;

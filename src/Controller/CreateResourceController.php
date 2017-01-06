@@ -29,12 +29,12 @@ class CreateResourceController
 
         $this->validate($app, $data);
 
-        $location = $app["url_generator"]->generate($this->schema, array("id" => $data->id));
+        $location = $app["url_generator"]->generate($this->schema, ["id" => $data->id]);
         if ($this->service->save($location, $data) === false) {
             throw new ServiceUnavailableHttpException(null, "Failed to save resource");
         }
 
-        return JsonResponse::create($data, Response::HTTP_CREATED, array("Location" => $location));
+        return JsonResponse::create($data, Response::HTTP_CREATED, ["Location" => $location]);
     }
 
     private function validate(Application $app, $data)
