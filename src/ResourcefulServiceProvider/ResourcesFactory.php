@@ -21,7 +21,7 @@ class ResourcesFactory
         $resource = $this->app["controllers_factory"];
 
         $resource->before(function (Request $request, Application $app) use ($schema) {
-            $app["json-schema.schema-store"]->add($schema, $app["resourceful.schemaStore"]->fetch($schema));
+            $app["json-schema.schema-store"]->add($schema, $app["resourceful.schemas"]->fetch($schema));
         });
 
         $resource->after(function (Request $request, Response $response, Application $app) use ($schema) {

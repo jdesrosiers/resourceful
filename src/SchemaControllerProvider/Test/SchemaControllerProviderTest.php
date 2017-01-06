@@ -22,7 +22,7 @@ class SchemaControllerProviderTest extends PHPUnit_Framework_TestCase
 
         $this->app->register(new TwigServiceProvider());
         $this->app->register(new ResourcefulServiceProvider(), [
-            "resourceful.schemaStore" => $this->getMockBuilder("Doctrine\Common\Cache\Cache")->getMock(),
+            "resourceful.schemas" => $this->getMockBuilder("Doctrine\Common\Cache\Cache")->getMock(),
         ]);
 
         $this->app->mount("/schema", new SchemaControllerProvider());
@@ -32,10 +32,10 @@ class SchemaControllerProviderTest extends PHPUnit_Framework_TestCase
 
     public function testGet()
     {
-        $this->app["resourceful.schemaStore"]->method("contains")
+        $this->app["resourceful.schemas"]->method("contains")
             ->willReturn(true);
 
-        $this->app["resourceful.schemaStore"]->method("fetch")
+        $this->app["resourceful.schemas"]->method("fetch")
             ->willReturn(new \stdClass());
 
         $headers = [
@@ -52,7 +52,7 @@ class SchemaControllerProviderTest extends PHPUnit_Framework_TestCase
 
     public function testGetNotFound()
     {
-        $this->app["resourceful.schemaStore"]->method("fetch")
+        $this->app["resourceful.schemas"]->method("fetch")
             ->will($this->returnValueMap(["/schema/error" => true]));
 
         $headers = [

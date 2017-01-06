@@ -24,7 +24,7 @@ class IndexControllerProviderTest extends PHPUnit_Framework_TestCase
 
         $this->app->register(new TwigServiceProvider());
         $this->app->register(new ResourcefulServiceProvider(), [
-            "resourceful.schemaStore" => $this->getMockBuilder("Doctrine\Common\Cache\Cache")->getMock(),
+            "resourceful.schemas" => $this->getMockBuilder("Doctrine\Common\Cache\Cache")->getMock(),
         ]);
 
         $this->app->mount("/schema", new SchemaControllerProvider());

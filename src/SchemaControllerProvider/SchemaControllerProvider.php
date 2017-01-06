@@ -12,7 +12,7 @@ class SchemaControllerProvider implements ControllerProviderInterface
     {
         $resource = $app["resources_factory"]("http://json-schema.org/hyper-schema");
 
-        $resource->get("/{type}", new GetResourceController($app["resourceful.schemaStore"], "application/schema+json"))
+        $resource->get("/{type}", new GetResourceController($app["resourceful.schemas"], "application/schema+json"))
             ->assert("type", ".+")
             ->bind("schema");
 

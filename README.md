@@ -27,7 +27,7 @@ $app["debug"] = true;
 
 $app->register(new Silex\Provider\TwigServiceProvider());
 $app->register(new JDesrosiers\Resourceful\ResourcefulServiceProvider\ResourcefulServiceProvider(), array(
-    "resourceful.schemaStore" => new JDesrosiers\Resourceful\FileCache\FileCache(__DIR__ . "/../data"),
+    "resourceful.schemas" => new JDesrosiers\Resourceful\FileCache\FileCache(__DIR__ . "/../data"),
 ));
 
 $app["data"] = new JDesrosiers\Resourceful\FileCache\FileCache(__DIR__ . "/../data");
