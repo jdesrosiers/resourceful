@@ -2,6 +2,7 @@
 
 namespace JDesrosiers\Resourceful\ResourcefulServiceProvider;
 
+use JDesrosiers\Resourceful\FileCache\FileCache;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 use Silex\Api\BootableProviderInterface;
@@ -28,5 +29,8 @@ class ResourcefulServiceProvider implements ServiceProviderInterface, BootablePr
     public function register(Container $app)
     {
         $app["resources_factory"] = $app->protect(new ResourcesFactory($app));
+        $app["resourceful.schemaStore"] = function (Container $app) {
+            return new FileCache($app["resourceful.schema-dir"]);
+        };
     }
 }
