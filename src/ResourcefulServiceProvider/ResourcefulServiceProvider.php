@@ -7,6 +7,7 @@ use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 use Silex\Api\BootableProviderInterface;
 use Silex\Application;
+use Silex\Provider\TwigServiceProvider;
 use Twig_Loader_Filesystem;
 
 class ResourcefulServiceProvider implements ServiceProviderInterface, BootableProviderInterface
@@ -28,6 +29,9 @@ class ResourcefulServiceProvider implements ServiceProviderInterface, BootablePr
 
     public function register(Container $app)
     {
+        $twigProvider = new TwigServiceProvider();
+        $twigProvider->register($app);
+
         $app["resources_factory"] = $app->protect(new ResourcesFactory($app));
         $app["resourceful.schemas"] = function (Container $app) {
             return new FileCache($app["resourceful.schema-dir"]);
