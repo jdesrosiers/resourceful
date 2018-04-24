@@ -24,6 +24,7 @@ class SchemaControllerProviderTest extends PHPUnit_Framework_TestCase
         ]);
 
         $this->app->mount("/schema", new SchemaControllerProvider());
+        $this->app->flush();
 
         $this->client = new Client($this->app);
     }
