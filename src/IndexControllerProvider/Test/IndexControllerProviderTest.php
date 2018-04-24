@@ -53,7 +53,8 @@ class IndexControllerProviderTest extends PHPUnit_Framework_TestCase
         $response = $this->client->getResponse();
 
         $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
-        $this->assertEquals("application/json; profile=\"/schema/index\"", $response->headers->get("Content-Type"));
+        $this->assertEquals("application/json", $response->headers->get("Content-Type"));
+        $this->assertEquals("</schema/index>; rel=\"describedby\"", $response->headers->get("Link"));
         $this->assertJsonStringEqualsJsonString($index, $response->getContent());
     }
 }

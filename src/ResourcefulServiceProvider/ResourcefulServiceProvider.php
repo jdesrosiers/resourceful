@@ -33,6 +33,7 @@ class ResourcefulServiceProvider implements ServiceProviderInterface, BootablePr
         $twigProvider->register($app);
 
         $app["resources_factory"] = $app->protect(new ResourcesFactory($app));
+        $app["resourceful.defaultSchemaVersion"] = "http://json-schema.org/hyper-schema";
         $app["resourceful.schemas"] = function (Container $app) {
             return new FileCache($app["resourceful.schema-dir"]);
         };

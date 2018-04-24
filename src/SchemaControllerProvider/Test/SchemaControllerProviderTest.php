@@ -34,6 +34,28 @@ class SchemaControllerProviderTest extends PHPUnit_Framework_TestCase
         $this->app["resourceful.schemas"]->method("contains")
             ->willReturn(true);
 
+        $schema = new \stdClass();
+        $schema->{'$schema'} = "http://json-schema.org/draft-04/hyper-schema";
+        $this->app["resourceful.schemas"]->method("fetch")
+            ->willReturn($schema);
+
+        $headers = [
+            "HTTP_ACCEPT" => "application/json",
+        ];
+        $this->client->request("GET", "/schema/foo", [], [], $headers);
+        $response = $this->client->getResponse();
+
+        $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
+        $this->assertEquals("application/schema+json", $response->headers->get("Content-Type"));
+        $this->assertEquals("<http://json-schema.org/draft-04/hyper-schema>; rel=\"describedby\"", $response->headers->get("Link"));
+        $this->assertJsonStringEqualsJsonString(json_encode($schema), $response->getContent());
+    }
+
+    public function testGetWithDefaultSchema()
+    {
+        $this->app["resourceful.schemas"]->method("contains")
+            ->willReturn(true);
+
         $this->app["resourceful.schemas"]->method("fetch")
             ->willReturn(new \stdClass());
 
@@ -44,8 +66,8 @@ class SchemaControllerProviderTest extends PHPUnit_Framework_TestCase
         $response = $this->client->getResponse();
 
         $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
-        $expectedContentType = "application/schema+json; profile=\"http://json-schema.org/hyper-schema\"";
-        $this->assertEquals($expectedContentType, $response->headers->get("Content-Type"));
+        $this->assertEquals("application/schema+json", $response->headers->get("Content-Type"));
+        $this->assertEquals("<http://json-schema.org/hyper-schema>; rel=\"describedby\"", $response->headers->get("Link"));
         $this->assertJsonStringEqualsJsonString('{}', $response->getContent());
     }
 
@@ -62,7 +84,8 @@ class SchemaControllerProviderTest extends PHPUnit_Framework_TestCase
         $content = json_decode($response->getContent());
 
         $this->assertEquals(Response::HTTP_NOT_FOUND, $response->getStatusCode());
-        $this->assertEquals("application/json; profile=\"/schema/error\"", $response->headers->get("Content-Type"));
+        $this->assertEquals("application/json", $response->headers->get("Content-Type"));
+        $this->assertEquals("</schema/error>; rel=\"describedby\"", $response->headers->get("Link"));
         $this->assertEquals('Not Found', $content->message);
     }
 }
