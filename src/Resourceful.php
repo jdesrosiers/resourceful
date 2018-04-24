@@ -29,7 +29,7 @@ class Resourceful extends Application
 
         // Error Handling
         $this->error(new JsonErrorHandler($this));
-        
+
         // CreateResourceController
         $this["uniqid"] = function () {
             return uniqid();

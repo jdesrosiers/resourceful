@@ -25,6 +25,9 @@ class PutResourceController
     {
         $requestJson = $request->getContent() ?: "{}";
         $data = json_decode($requestJson);
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            throw new BadRequestHttpException("Invalid JSON: " . json_last_error_msg());
+        }
 
         $this->validate($app, $id, $data);
 

@@ -25,6 +25,10 @@ class CreateResourceController
     {
         $requestJson = $request->getContent() ?: "{}";
         $data = json_decode($requestJson);
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            throw new BadRequestHttpException("Invalid JSON: " . json_last_error_msg());
+        }
+
         $data->id = $app["uniqid"];
 
         $this->validate($app, $data);

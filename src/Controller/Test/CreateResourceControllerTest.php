@@ -75,6 +75,22 @@ class CreateResourceControllerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
     }
 
+    public function testInvalidJson()
+    {
+        $this->app->error(function (\Exception $e, $code) {
+            $this->assertEquals("Invalid JSON: Syntax error", $e->getMessage());
+        });
+
+        $headers = [
+            "HTTP_ACCEPT" => "application/json",
+            "CONTENT_TYPE" => "application/json"
+        ];
+        $this->client->request("POST", "/foo/", [], [], $headers, 'invalid json');
+        $response = $this->client->getResponse();
+
+        $this->assertEquals(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+    }
+
     public function testSaveError()
     {
         $foo = new \stdClass();

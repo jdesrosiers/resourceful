@@ -74,6 +74,27 @@ class PutResourceControllerTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
     }
 
+    public function testInvalidJson()
+    {
+        $this->service->method("contains")
+            ->with("/foo/4ee8e29d45851")
+            ->willReturn(true);
+
+        $this->app->error(function (\Exception $e, $code) {
+            $this->assertEquals("Invalid JSON: Syntax error", $e->getMessage());
+        });
+
+        $headers = [
+            "HTTP_ACCEPT" => "application/json",
+            "CONTENT_TYPE" => "application/json"
+        ];
+        $data = 'invalid json';
+        $this->client->request("PUT", "/foo/4ee8e29d45851", [], [], $headers, $data);
+        $response = $this->client->getResponse();
+
+        $this->assertEquals(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+    }
+
     public function testUpdate()
     {
         $foo = new \stdClass();
