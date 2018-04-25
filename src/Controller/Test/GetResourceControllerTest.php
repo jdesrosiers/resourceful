@@ -3,8 +3,8 @@
 namespace JDesrosiers\Resourceful\Controller\Test;
 
 use JDesrosiers\Resourceful\Controller\GetResourceController;
+use JDesrosiers\Resourceful\Resourceful;
 use PHPUnit_Framework_TestCase;
-use Silex\Application;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Client;
 
@@ -16,7 +16,7 @@ class GetResourceControllerTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->app = new Application();
+        $this->app = new Resourceful();
         $this->app["debug"] = true;
 
         $this->service = $this->getMockBuilder("Doctrine\Common\Cache\Cache")->getMock();
@@ -46,6 +46,7 @@ class GetResourceControllerTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
         $this->assertEquals("application/json", $response->headers->get("Content-Type"));
+        $this->assertEquals("GET", $response->headers->get("Allow"));
         $this->assertJsonStringEqualsJsonString('{"id":"4ee8e29d45851"}', $response->getContent());
     }
 
@@ -66,6 +67,7 @@ class GetResourceControllerTest extends PHPUnit_Framework_TestCase
         $response = $this->client->getResponse();
 
         $this->assertEquals(Response::HTTP_NOT_FOUND, $response->getStatusCode());
+        $this->assertFalse($response->headers->has("Allow"));
     }
 
     public function testGetError()
@@ -89,5 +91,6 @@ class GetResourceControllerTest extends PHPUnit_Framework_TestCase
         $response = $this->client->getResponse();
 
         $this->assertEquals(Response::HTTP_SERVICE_UNAVAILABLE, $response->getStatusCode());
+        $this->assertFalse($response->headers->has("Allow"));
     }
 }

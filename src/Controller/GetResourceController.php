@@ -3,6 +3,7 @@
 namespace JDesrosiers\Resourceful\Controller;
 
 use Doctrine\Common\Cache\Cache;
+use JDesrosiers\Resourceful\Resourceful;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -19,7 +20,7 @@ class GetResourceController
         $this->contentType = $contentType;
     }
 
-    public function __invoke(Request $request)
+    public function __invoke(Resourceful $app, Request $request)
     {
         if (!$this->service->contains($request->getRequestUri())) {
             throw new NotFoundHttpException("Not Found");
@@ -33,6 +34,6 @@ class GetResourceController
         $response = JsonResponse::create($resource);
         $response->headers->set("Content-Type", $this->contentType);
 
-        return $response;
+        return $app["allow"]($request, $response, $app);
     }
 }

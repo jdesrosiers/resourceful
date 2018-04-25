@@ -4,9 +4,9 @@ namespace JDesrosiers\Resourceful\Controller\Test;
 
 use JDesrosiers\Resourceful\Controller\PutResourceController;
 use JDesrosiers\Resourceful\FileCache\FileCache;
+use JDesrosiers\Resourceful\Resourceful;
 use JDesrosiers\Silex\Provider\JsonSchemaServiceProvider;
 use PHPUnit_Framework_TestCase;
-use Silex\Application;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Client;
 
@@ -18,7 +18,7 @@ class PutResourceControllerTest extends PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->app = new Application();
+        $this->app = new Resourceful();
         $this->app["debug"] = true;
         $this->app->register(new JsonSchemaServiceProvider());
 
@@ -49,6 +49,7 @@ class PutResourceControllerTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals(Response::HTTP_CREATED, $response->getStatusCode());
         $this->assertEquals("application/json", $response->headers->get("Content-Type"));
+        $this->assertEquals("PUT", $response->headers->get("Allow"));
         $this->assertJsonStringEqualsJsonString("{\"id\":\"$foo->id\"}", $response->getContent());
     }
 
@@ -72,6 +73,7 @@ class PutResourceControllerTest extends PHPUnit_Framework_TestCase
         $response = $this->client->getResponse();
 
         $this->assertEquals(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        $this->assertFalse($response->headers->has("Allow"));
     }
 
     public function testInvalidJson()
@@ -93,6 +95,7 @@ class PutResourceControllerTest extends PHPUnit_Framework_TestCase
         $response = $this->client->getResponse();
 
         $this->assertEquals(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        $this->assertFalse($response->headers->has("Allow"));
     }
 
     public function testUpdate()
@@ -113,6 +116,7 @@ class PutResourceControllerTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals(Response::HTTP_OK, $response->getStatusCode());
         $this->assertEquals("application/json", $response->headers->get("Content-Type"));
+        $this->assertEquals("PUT", $response->headers->get("Allow"));
         $this->assertFalse($response->headers->has("Location"));
         $this->assertJsonStringEqualsJsonString("{\"id\":\"$foo->id\"}", $response->getContent());
     }
@@ -137,6 +141,7 @@ class PutResourceControllerTest extends PHPUnit_Framework_TestCase
         $response = $this->client->getResponse();
 
         $this->assertEquals(Response::HTTP_SERVICE_UNAVAILABLE, $response->getStatusCode());
+        $this->assertFalse($response->headers->has("Allow"));
     }
 
     public function testIdsMatch()
@@ -158,5 +163,6 @@ class PutResourceControllerTest extends PHPUnit_Framework_TestCase
         $response = $this->client->getResponse();
 
         $this->assertEquals(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        $this->assertFalse($response->headers->has("Allow"));
     }
 }

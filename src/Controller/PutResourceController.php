@@ -3,7 +3,7 @@
 namespace JDesrosiers\Resourceful\Controller;
 
 use Doctrine\Common\Cache\Cache;
-use Silex\Application;
+use JDesrosiers\Resourceful\Resourceful;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,7 +21,7 @@ class PutResourceController
         $this->schema = $schema;
     }
 
-    public function __invoke(Application $app, Request $request, $id)
+    public function __invoke(Resourceful $app, Request $request, $id)
     {
         $requestJson = $request->getContent() ?: "{}";
         $data = json_decode($requestJson);
@@ -36,10 +36,11 @@ class PutResourceController
             throw new ServiceUnavailableHttpException(null, "Failed to save resource");
         }
 
-        return JsonResponse::create($data, $isCreated ? Response::HTTP_CREATED : Response::HTTP_OK);
+        $response = JsonResponse::create($data, $isCreated ? Response::HTTP_CREATED : Response::HTTP_OK);
+        return $app["allow"]($request, $response, $app);
     }
 
-    private function validate(Application $app, $id, $data)
+    private function validate(Resourceful $app, $id, $data)
     {
         if ($id !== $data->id) {
             throw new BadRequestHttpException("The `id` in the body must match the `id` in the URI");
