@@ -42,7 +42,7 @@ class PutResourceController
 
     private function validate(Resourceful $app, $id, $data)
     {
-        if ($id !== $data->id) {
+        if (!property_exists($data, "id") || $id !== $data->id) {
             throw new BadRequestHttpException("The `id` in the body must match the `id` in the URI");
         }
         $schema = $app["json-schema.schema-store"]->get($this->schema);
