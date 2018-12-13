@@ -80,7 +80,7 @@ class FileCache implements Cache
     protected function filename($id)
     {
         if (is_dir("$this->location/$id")) {
-            $id .= "index";
+            $id .= "/index";
         }
 
         return "$this->location/$id.json";
