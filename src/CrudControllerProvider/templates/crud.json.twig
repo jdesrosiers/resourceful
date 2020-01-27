@@ -4,15 +4,22 @@
     "type": "object",
     "properties": {
         "id": {
-            "type": "string",
-            "readOnly": true,
-            "links": [{ "rel": "full", "href": "/{{ type }}/{$}" }]
+            "allOf": [
+                { "$ref": "#/definitions/id" },
+                { "readOnly": true }
+            ]
         }
     },
     "required": ["id"],
+    "definitions": {
+        "id": {
+            "type": "string",
+            "links": [{ "rel": "full", "href": "/{{ type }}/{$}" }]
+        }
+    }
     "links": [
         { "rel": "instances", "href": "/{{ type }}/" },
         { "rel": "delete", "href": "/{{ type }}/{id}" },
-        { "rel": "put", "href": "/{{ type }}/{id}" }
+        { "rel": "edit", "href": "/{{ type }}/{id}" }
     ]
 }
