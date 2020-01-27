@@ -5,25 +5,13 @@
     "properties": {
         "id": {
             "type": "string",
-            "links": [
-                {
-                    "rel": "full",
-                    "href": "/{{ type }}/{$}"
-                }
-            ]
+            "readOnly": true,
+            "links": [{ "rel": "full", "href": "/{{ type }}/{$}" }]
         }
     },
     "required": ["id"],
     "links": [
-        {
-            "rel": "delete",
-            "method": "DELETE",
-            "href": "/{{ type }}/{id}"
-        },
-        {
-            "rel": "put",
-            "method": "PUT",
-            "href": "/{{ type }}/{id}"
-        }
+        { "rel": "delete", "href": "/{{ type }}/{id}" },
+        { "rel": "put", "href": "/{{ type }}/{id}" }
     ]
 }
